@@ -1,100 +1,289 @@
 <template>
-  <ProfileModal :is-visible="showModal" @close="showModal = false">
-    <template #default>
-      <div class="profile-modal-content">
-        <div class="user-info">
-          <p class="user-name">Nama Pengguna</p>
-          <p class="user-email">email@example.com</p>
-          <p class="user-phone">0812-3456-7890</p>
+  <header class="navbar">
+    <div class="navbar-container">
+      <a href="#" class="logo">
+        <div class="logo-icon">
+          <img src="/img/logo.png" alt="Gas Mancing Logo" class="logo-image-file" />
         </div>
-
-        <div class="action-section">
-          <a href="#" class="profile-action-item">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-fish"><path d="M12.58 6.57C12.73 5.92 12.39 5.23 11.75 5.09a7.99 7.99 0 00-6.75-2.09c-.93.24-1.6.43-2.07.64C2.37 4 1.3 5.42 1 6.57l2.25 4.14c.15.28.42.48.74.55l3.52.79c.14.03.29.05.44.05s.3-.02.44-.05l3.52-.79a.83.83 0 00.74-.55z"></path><path d="M17.25 10.3c.09-.34.14-.68.14-1.03 0-.74-.23-1.44-.64-2.02l-2.73-3.83c-.31-.44-.79-.7-1.3-.7s-.99.26-1.3.7l-2.73 3.83c-.41.58-.64 1.28-.64 2.02 0 .35.05.69.14 1.03l2.27 4.19c.15.28.42.48.74.55l3.52.79c.14.03.29.05.44.05s.3-.02.44-.05l3.52-.79c.32-.07.59-.27.74-.55l2.27-4.19c.09-.34.14-.68.14-1.03 0-.74-.23-1.44-.64-2.02l-2.73-3.83c-.31-.44-.79-.7-1.3-.7s-.99.26-1.3.7z"></path></svg>
-            <span>Log Out</span>
-          </a>
-          <a href="#" class="profile-action-item">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-fish"><path d="M12.58 6.57C12.73 5.92 12.39 5.23 11.75 5.09a7.99 7.99 0 00-6.75-2.09c-.93.24-1.6.43-2.07.64C2.37 4 1.3 5.42 1 6.57l2.25 4.14c.15.28.42.48.74.55l3.52.79c.14.03.29.05.44.05s.3-.02.44-.05l3.52-.79a.83.83 0 00.74-.55z"></path><path d="M17.25 10.3c.09-.34.14-.68.14-1.03 0-.74-.23-1.44-.64-2.02l-2.73-3.83c-.31-.44-.79-.7-1.3-.7s-.99.26-1.3.7l-2.73 3.83c-.41.58-.64 1.28-.64 2.02 0 .35.05.69.14 1.03l2.27 4.19c.15.28.42.48.74.55l3.52.79c.14.03.29.05.44.05s.3-.02.44-.05l3.52-.79c.32-.07.59-.27.74-.55l2.27-4.19c.09-.34.14-.68.14-1.03 0-.74-.23-1.44-.64-2.02l-2.73-3.83c-.31-.44-.79-.7-1.3-.7s-.99.26-1.3.7z"></path></svg>
-            <span>Edit Profile</span>
-          </a>
-        </div>
+        <span class="logo-text">Gas Mancing</span>
+      </a>
+      <button class="menu-toggle" @click="isMenuOpen = !isMenuOpen">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="menu-desktop">
+        <a href="#" class="menu-item active">Beranda</a>
+        <a href="#" class="menu-item">Pesanan Saya</a>
+        <a href="#" class="menu-item">Ensiklopedia</a>
+      </nav>
+      <div class="auth-buttons">
+        <button class="btn-masuk">Masuk</button>
+        <button class="btn-daftar">Daftar</button>
       </div>
-      </template>
-  </ProfileModal>
+    </div>
+  </header>
 
-  </template>
+  <nav :class="['menu-mobile', { active: isMenuOpen }]">
+    <button class="menu-close" @click="isMenuOpen = false">&times;</button>
+    <a href="#" class="menu-item active">Beranda</a>
+    <a href="#" class="menu-item">Pesanan Saya</a>
+    <a href="#" class="menu-item">Ensiklopedia</a>
+    <div class="menu-auth">
+      <button class="btn-masuk">Masuk</button>
+      <button class="btn-daftar">Daftar</button>
+    </div>
+  </nav>
+</template>
 
 <script setup>
-import { ref } from 'vue';
-import ProfileModal from './ProfileModal.vue';
+import { ref } from 'vue'
 
-const showModal = ref(false);
-
-// Contoh data, ganti dengan data dinamis Anda
-const userName = ref("Nama Pengguna");
-const userEmail = ref("email@example.com");
-const userPhone = ref("0812-3456-7890");
-
-// ... fungsi lainnya ...
+// State untuk Menu Mobile
+const isMenuOpen = ref(false)
 </script>
 
 <style scoped>
-/* Tambahkan style untuk konten modal Anda di sini */
-.profile-modal-content {
-  display: flex;
-  flex-direction: column;
+/* Pindahkan semua style Navbar, Menu, dan Tombol Auth dari main.css ke sini */
+
+.logo-image-file {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
 }
 
-.user-info {
-  padding-bottom: 15px;
-  border-bottom: 1px solid #eee;
-  margin-bottom: 15px;
-  text-align: left; /* Align teks ke kiri */
+/* --- NAVBAR STYLES --- */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: linear-gradient(180deg, rgba(19, 62, 135, 0.95) 0%, rgba(19, 62, 135, 0.85) 100%);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.user-info p {
-  margin: 0 0 8px 0; /* Sesuaikan margin antar info */
-  font-size: 16px;
-  color: #333;
-}
-
-.user-name {
-  font-weight: 600;
-  color: #1a202c;
-}
-
-.user-email, .user-phone {
-  color: #555;
-}
-
-.action-section {
-  display: flex;
-  flex-direction: column;
-}
-
-.profile-action-item {
+.navbar-container {
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 18px 20px;
   display: flex;
   align-items: center;
-  gap: 10px; /* Jarak antara ikon dan teks */
-  padding: 10px 0;
-  color: #3498db; /* Warna teks link */
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--white);
+  font-weight: 700;
+  font-size: 24px;
+  white-space: nowrap;
   text-decoration: none;
-  font-weight: 500;
-  font-size: 16px;
-  transition: background-color 0.2s, color 0.2s;
-  border-radius: 4px;
 }
 
-.profile-action-item:hover {
-  background-color: #f0f8ff; /* Latar belakang saat hover */
-  color: #2980b9;
+.logo-icon {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
 }
 
-.icon-fish {
-  stroke: #3498db; /* Warna ikon */
+.logo-text {
+  font-size: 20px;
 }
 
-.profile-action-item:hover .icon-fish {
-  stroke: #2980b9; /* Warna ikon saat hover */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 101;
+}
+
+.menu-toggle span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: var(--white);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.menu-desktop {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  flex: 1;
+  justify-content: center;
+}
+
+.menu-item {
+  color: var(--white);
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 400;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+.menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu-item.active {
+  font-weight: 600;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.btn-masuk,
+.btn-daftar {
+  padding: 10px 24px;
+  font-size: 18px;
+  font-weight: 400;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  white-space: nowrap;
+}
+
+.btn-masuk {
+  background-color: transparent;
+  color: var(--white);
+  border: 2px solid var(--btn-blue);
+}
+
+.btn-masuk:hover {
+  background-color: rgba(96, 139, 193, 0.2);
+}
+
+.btn-daftar {
+  background-color: var(--btn-blue);
+  color: var(--white);
+}
+
+.btn-daftar:hover {
+  background-color: #4f7aa8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* --- MOBILE MENU STYLES --- */
+.menu-mobile {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 280px;
+  height: 100vh;
+  background: linear-gradient(180deg, var(--bay-of-many) 0%, #0d2d5e 100%);
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  transition: right 0.3s ease;
+  flex-direction: column;
+  padding: 80px 30px 30px;
+  overflow-y: auto;
+}
+
+.menu-mobile.active {
+  right: 0;
+}
+
+.menu-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 36px;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.menu-close:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu-mobile .menu-item {
+  display: block;
+  padding: 15px 20px;
+  font-size: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.menu-auth {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.menu-auth .btn-masuk,
+.menu-auth .btn-daftar {
+  width: 100%;
+  text-align: center;
+}
+
+/* --- RESPONSIVE NAVBAR --- */
+@media (max-width: 1024px) {
+  .navbar-container {
+    padding: 15px 20px;
+  }
+  .menu-desktop {
+    display: none;
+  }
+  .menu-toggle {
+    display: flex;
+  }
+  .menu-mobile {
+    display: flex;
+  }
+  .auth-buttons {
+    display: none;
+  }
+  .logo-text {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-container {
+    padding: 12px 15px;
+  }
+  .logo {
+    font-size: 16px;
+  }
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .navbar-container {
+    max-width: 1920px;
+  }
 }
 </style>

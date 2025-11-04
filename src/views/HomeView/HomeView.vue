@@ -1,15 +1,37 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+// 1. Impor useRouter untuk navigasi
+import { useRouter } from 'vue-router'
 import Modal from '../../components/Modal.vue'
 
+// Inisialisasi Router
+const router = useRouter()
+
+// 🌟 BARU: State untuk input lokasi pencarian
+const searchKeyword = ref('') 
+
+// 🌟 MODIFIKASI: Fungsi navigasi yang membawa data pencarian
+const goToSearch = () => {
+    const keyword = searchKeyword.value.trim()
+    
+    // Navigasi ke rute /search dan kirim data sebagai query parameter 'location'
+    router.push({ 
+        name: 'search', // Pastikan rute ini terdaftar di router/index.js
+        query: { 
+            location: keyword || 'Semua Lokasi' 
+        }
+    }) 
+}
+
+// Data dan Logika Modal (tetap)
 const showModal = ref(false)
 
 function openModal() {
   showModal.value = true
 }
 
+// Data dan Logika Carousel (tetap)
 const carouselContainer = ref(null)
-
 const isAtStart = ref(true)
 const isAtEnd = ref(false)
 
@@ -125,7 +147,7 @@ onMounted(() => {
             <img src="/img/people.png" alt="Jumlah Orang" class="search-icon">
             <input type="number" class="search-input-custom" placeholder="Jumlah Orang" min="1" />
           </div>
-          <button class="search-button-custom">
+          <button class="search-button-custom" @click="goToSearch">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="28" height="28">
               <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>

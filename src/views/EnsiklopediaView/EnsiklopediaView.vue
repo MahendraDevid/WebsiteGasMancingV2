@@ -6,49 +6,49 @@ const items = ref([
     id: 1, 
     title: 'Ikan Nila',
     description: 'Ikan air tawar yang populer untuk dipancing. Mudah ditemukan di danau dan sungai.',
-    image: '/img/ikan-nila.jpg'
+    image: '/img/fish.png'
   },
   { 
     id: 2, 
     title: 'Ikan Mas',
     description: 'Ikan air tawar yang banyak dibudidayakan. Sangat cocok untuk pemancing pemula.',
-    image: '/img/ikan-mas.jpg'
+    image: '/img/fishs.png'
   },
   { 
     id: 3, 
     title: 'Ikan Lele',
     description: 'Ikan air tawar yang aktif di malam hari. Memiliki kumis sebagai ciri khasnya.',
-    image: '/img/ikan-lele.jpg'
+    image: '/img/fishss.png'
   },
   { 
     id: 4, 
     title: 'Ikan Patin',
     description: 'Ikan air tawar dengan daging yang lembut. Sering ditemukan di sungai besar.',
-    image: '/img/ikan-patin.jpg'
+    image: '/img/fishsss.png'
   },
   { 
     id: 5, 
     title: 'Ikan Bawal',
     description: 'Ikan dengan bentuk pipih yang populer. Dapat ditemukan di air tawar dan laut.',
-    image: '/img/ikan-bawal.jpg'
+    image: '/img/fishssss.png'
   },
   { 
     id: 6, 
     title: 'Ikan Gurame',
     description: 'Ikan air tawar berukuran besar. Merupakan ikan favorit untuk acara mancing keluarga.',
-    image: '/img/ikan-gurame.jpg'
+    image: '/img/fishsssss.png'
   },
   { 
     id: 7, 
     title: 'Ikan Mujair',
     description: 'Ikan air tawar yang mudah berkembang biak. Sering dijumpai di kolam dan waduk.',
-    image: '/img/ikan-mujair.jpg'
+    image: '/img/fishssssss.png'
   },
   { 
     id: 8, 
     title: 'Ikan Gabus',
     description: 'Ikan predator air tawar yang kuat. Dikenal sebagai ikan yang menantang untuk dipancing.',
-    image: '/img/ikan-gabus.jpg'
+    image: '/img/fishsssssss.png'
   },
 ])
 </script>

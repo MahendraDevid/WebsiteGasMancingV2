@@ -1,19 +1,28 @@
+<script setup>
+import { ref } from 'vue'
+// 1. Impor RouterLink untuk penggunaan di template
+import { RouterLink } from 'vue-router'
+
+const isMenuOpen = ref(false)
+</script>
+
 <template>
   <header class="navbar">
     <div class="navbar-container">
-      <a href="/" class="logo">
+      <router-link to="/" class="logo">
         <div class="logo-icon">
           <img src="/img/logo.png" alt="Gas Mancing Logo" class="logo-image-file" />
         </div>
         <span class="logo-text">Gas Mancing</span>
-      </a>
+      </router-link>
       <button class="menu-toggle" @click="isMenuOpen = !isMenuOpen">
         <span></span><span></span><span></span>
       </button>
       <nav class="menu-desktop">
-        <a href="/" class="menu-item active">Beranda</a>
+        <!-- 🌟 PERBAIKAN: Menghapus 'Pencarian' dan mengembalikan 'Pesanan Saya' -->
+        <router-link to="/" class="menu-item">Beranda</router-link>
         <a href="#" class="menu-item">Pesanan Saya</a>
-        <a href="/ensiklopedia" class="menu-item">Ensiklopedia</a>
+        <router-link to="/ensiklopedia" class="menu-item">Ensiklopedia</router-link>
       </nav>
       <div class="auth-buttons">
         <button class="btn-masuk">Masuk</button>
@@ -24,22 +33,18 @@
 
   <nav :class="['menu-mobile', { active: isMenuOpen }]">
     <button class="menu-close" @click="isMenuOpen = false">&times;</button>
-    <a href="/" class="menu-item active">Beranda</a>
-    <a href="#" class="menu-item">Pesanan Saya</a>
-    <a href="/ensiklopedia" class="menu-item">Ensiklopedia</a>
+    
+    <!-- 🌟 PERBAIKAN: Menghapus 'Pencarian' dan mengembalikan 'Pesanan Saya' -->
+    <router-link to="/" class="menu-item" @click="isMenuOpen = false">Beranda</router-link>
+    <a href="#" class="menu-item" @click="isMenuOpen = false">Pesanan Saya</a>
+    <router-link to="/ensiklopedia" class="menu-item" @click="isMenuOpen = false">Ensiklopedia</router-link>
+    
     <div class="menu-auth">
       <button class="btn-masuk">Masuk</button>
       <button class="btn-daftar">Daftar</button>
     </div>
   </nav>
 </template>
-
-<script setup>
-import { ref } from 'vue'
-
-// State untuk Menu Mobile
-const isMenuOpen = ref(false)
-</script>
 
 <style scoped>
 /* Pindahkan semua style Navbar, Menu, dan Tombol Auth dari main.css ke sini */
@@ -53,7 +58,7 @@ const isMenuOpen = ref(false)
 
 /* --- NAVBAR STYLES --- */
 .navbar {
-  position: fixed;
+  position: fixed; /* Menggunakan 'fixed' agar selalu di atas */
   top: 0;
   left: 0;
   right: 0;
@@ -138,7 +143,8 @@ const isMenuOpen = ref(false)
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.menu-item.active {
+/* Style untuk link yang aktif (menggunakan class dari Vue Router) */
+.menu-item.router-link-exact-active {
   font-weight: 600;
   background-color: rgba(255, 255, 255, 0.15);
 }
@@ -287,3 +293,4 @@ const isMenuOpen = ref(false)
   }
 }
 </style>
+

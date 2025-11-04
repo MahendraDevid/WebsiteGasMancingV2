@@ -1,6 +1,5 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
 
-/* --- FONT DEFINITIONS --- */
 @font-face {
   font-family: "SF Pro Display";
   font-style: normal;
@@ -29,7 +28,6 @@
   src: local("SF Pro Display Bold"), local("SFProDisplay-Bold");
 }
 
-/* --- GLOBAL RESET & VARIABLES --- */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -66,10 +64,10 @@ body {
   overflow-x: hidden;
 }
 
-.homepage {
-  background-color: var(--bg-blue);
-  min-height: 100vh;
-  width: 100%;
-  overflow-x: hidden;
-  position: relative;
-}
+/* SEMUA STYLE .navbar, .navbar-container, .logo, .menu-item, .btn-masuk, .menu-mobile, .footer, .footer-content, dll.
+  DIHAPUS DARI SINI KARENA SUDAH PINDAH KE KOMPONEN MASING-MASING.
+  
+  Style global (seperti .homepage, .hero-section, .cards-grid) 
+  seharusnya berada di CSS per-halaman (seperti HomeView.style.css) 
+  atau dipindahkan ke sini jika benar-benar global.
+*/

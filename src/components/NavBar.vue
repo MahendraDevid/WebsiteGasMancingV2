@@ -1,7 +1,7 @@
 <template>
   <header class="navbar">
     <div class="navbar-container">
-      <a href="#" class="logo">
+      <a href="/" class="logo">
         <div class="logo-icon">
           <img src="/img/logo.png" alt="Gas Mancing Logo" class="logo-image-file" />
         </div>
@@ -11,9 +11,9 @@
         <span></span><span></span><span></span>
       </button>
       <nav class="menu-desktop">
-        <a href="#" class="menu-item active">Beranda</a>
+        <a href="/" class="menu-item active">Beranda</a>
         <a href="#" class="menu-item">Pesanan Saya</a>
-        <a href="#" class="menu-item">Ensiklopedia</a>
+        <a href="/ensiklopedia" class="menu-item">Ensiklopedia</a>
       </nav>
       <div class="auth-buttons">
         <button class="btn-masuk">Masuk</button>
@@ -24,9 +24,9 @@
 
   <nav :class="['menu-mobile', { active: isMenuOpen }]">
     <button class="menu-close" @click="isMenuOpen = false">&times;</button>
-    <a href="#" class="menu-item active">Beranda</a>
+    <a href="/" class="menu-item active">Beranda</a>
     <a href="#" class="menu-item">Pesanan Saya</a>
-    <a href="#" class="menu-item">Ensiklopedia</a>
+    <a href="/ensiklopedia" class="menu-item">Ensiklopedia</a>
     <div class="menu-auth">
       <button class="btn-masuk">Masuk</button>
       <button class="btn-daftar">Daftar</button>

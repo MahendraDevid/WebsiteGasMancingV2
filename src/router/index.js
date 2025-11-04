@@ -14,6 +14,11 @@ const router = createRouter({
       name: 'ensiklopedia',
       component: () => import('../views/EnsiklopediaView/EnsiklopediaView.vue'),
     },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('../views/Profile/Profile.vue'),
+    },
   ],
 })
 

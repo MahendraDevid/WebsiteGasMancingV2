@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from 'vue'
-import Modal from '../components/Modal.vue' // adjust path if needed
+import { ref, onMounted } from 'vue' // <-- FIX: onMounted ditambahkan
+import Modal from '../components/Modal.vue'
 
 const showModal = ref(false)
 
@@ -14,7 +14,7 @@ const carouselContainer = ref(null)
 // Logika untuk menggeser carousel
 const scrollCarousel = (direction) => {
   if (carouselContainer.value) {
-    const scrollAmount = carouselContainer.value.clientWidth / 3; // Geser sebesar sepertiga lebar container
+    const scrollAmount = carouselContainer.value.clientWidth / 3;
     carouselContainer.value.scrollBy({
       left: direction * scrollAmount,
       behavior: 'smooth'
@@ -62,7 +62,6 @@ onMounted(() => {
   <div class="homepage">
     <header class="navbar">
       <div class="navbar-container">
-        
 
         <button class="menu-toggle" @click="isMenuOpen = !isMenuOpen">
           <span></span>
@@ -77,19 +76,15 @@ onMounted(() => {
         </nav>
 
         <div class="auth-buttons">
-    <!-- Masuk button triggers modal -->
-    <button class="btn-masuk" @click="openModal">Masuk</button>
-    <button class="btn-daftar">Daftar</button>
-  </div>
-
-  </div>
-
-  <Modal v-if="showModal" @close="showModal = false" />
+          <button class="btn-masuk" @click="openModal">Masuk</button>
+          <button class="btn-daftar">Daftar</button>
+        </div>
 
       </div>
-    </header>
 
-    <nav :class="['menu-mobile', { active: isMenuOpen }]">
+      <Modal v-if="showModal" @close="showModal = false" />
+
+    </header> <nav :class="['menu-mobile', { active: isMenuOpen }]">
       <button class="menu-close" @click="isMenuOpen = false">&times;</button>
       <a href="#" class="menu-item active">Beranda</a>
       <a href="#" class="menu-item">Pesanan Saya</a>
@@ -111,20 +106,41 @@ onMounted(() => {
       <section class="search-section">
         <div class="search-container-custom">
           <div class="search-field-custom">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="search-icon">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
             <input type="text" class="search-input-custom" placeholder="Mau mancing dimana?" />
           </div>
           <div class="search-field-custom">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-            <input type="text" class="search-input-custom" placeholder="Tanggal Mancing" onfocus="(this.type='date')" onblur="(this.type='text')" />
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="search-icon">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <input type="text" class="search-input-custom" placeholder="Tanggal Mancing" onfocus="(this.type='date')"
+              onblur="(this.type='text')" />
           </div>
           <div class="search-field-custom">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="search-icon">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
             <input type="number" class="search-input-custom" placeholder="Jumlah Orang" min="1" />
           </div>
           <button class="search-button-custom">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="28" height="28">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" width="28" height="28">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>
           </button>
         </div>
@@ -134,7 +150,7 @@ onMounted(() => {
         <div class="section-title">
           <h2 class="section-title-text">Tempat Pemancingan Populer</h2>
         </div>
-        
+
         <div class="cards-grid">
           <div class="card">
             <div class="card-content">
@@ -142,13 +158,17 @@ onMounted(() => {
               <h3 class="card-title">Danau Pemancingan Asri</h3>
               <div class="card-location">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
-                  <path fill-rule="evenodd" d="M8 1.75a3.25 3.25 0 0 0-3.25 3.25c0 3.106 3.25 7.75 3.25 7.75s3.25-4.644 3.25-7.75A3.25 3.25 0 0 0 8 1.75Zm0 4.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd"
+                    d="M8 1.75a3.25 3.25 0 0 0-3.25 3.25c0 3.106 3.25 7.75 3.25 7.75s3.25-4.644 3.25-7.75A3.25 3.25 0 0 0 8 1.75Zm0 4.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Z"
+                    clip-rule="evenodd" />
                 </svg>
                 <span>Bogor, Jawa Barat</span>
               </div>
               <div class="card-rating">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
-                  <path fill-rule="evenodd" d="M8 1.75a.75.75 0 0 1 .692 1.012l-1.32 3.84a.75.75 0 0 0 .562.904l4.068.718a.75.75 0 0 1 .42 1.273l-3.08 2.69a.75.75 0 0 0-.246.69l.82 3.974a.75.75 0 0 1-1.11.822L8.26 14.99a.75.75 0 0 0-.52 0l-3.518 2.69a.75.75 0 0 1-1.11-.822l.82-3.974a.75.75 0 0 0-.246-.69l-3.08-2.69a.75.75 0 0 1 .42-1.273l4.068-.718a.75.75 0 0 0 .562-.904l-1.32-3.84A.75.75 0 0 1 8 1.75Z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd"
+                    d="M8 1.75a.75.75 0 0 1 .692 1.012l-1.32 3.84a.75.75 0 0 0 .562.904l4.068.718a.75.75 0 0 1 .42 1.273l-3.08 2.69a.75.75 0 0 0-.246.69l.82 3.974a.75.75 0 0 1-1.11.822L8.26 14.99a.75.75 0 0 0-.52 0l-3.518 2.69a.75.75 0 0 1-1.11-.822l.82-3.974a.75.75 0 0 0-.246-.69l-3.08-2.69a.75.75 0 0 1 .42-1.273l4.068-.718a.75.75 0 0 0 .562-.904l-1.32-3.84A.75.75 0 0 1 8 1.75Z"
+                    clip-rule="evenodd" />
                 </svg>
                 <span class="rating-score">4.8</span>
                 <span class="rating-count">(120 Ulasan)</span>
@@ -166,20 +186,24 @@ onMounted(() => {
               <button class="card-button">Lihat Detail</button>
             </div>
           </div>
-          
+
           <div class="card">
             <div class="card-content">
               <span class="card-price-overlay">Rp. 50.000/hari</span>
               <h3 class="card-title">Pantai Karang Indah</h3>
               <div class="card-location">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
-                  <path fill-rule="evenodd" d="M8 1.75a3.25 3.25 0 0 0-3.25 3.25c0 3.106 3.25 7.75 3.25 7.75s3.25-4.644 3.25-7.75A3.25 3.25 0 0 0 8 1.75Zm0 4.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd"
+                    d="M8 1.75a3.25 3.25 0 0 0-3.25 3.25c0 3.106 3.25 7.75 3.25 7.75s3.25-4.644 3.25-7.75A3.25 3.25 0 0 0 8 1.75Zm0 4.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Z"
+                    clip-rule="evenodd" />
                 </svg>
                 <span>Banten, Jawa Barat</span>
               </div>
               <div class="card-rating">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
-                  <path fill-rule="evenodd" d="M8 1.75a.75.75 0 0 1 .692 1.012l-1.32 3.84a.75.75 0 0 0 .562.904l4.068.718a.75.75 0 0 1 .42 1.273l-3.08 2.69a.75.75 0 0 0-.246.69l.82 3.974a.75.75 0 0 1-1.11.822L8.26 14.99a.75.75 0 0 0-.52 0l-3.518 2.69a.75.75 0 0 1-1.11-.822l.82-3.974a.75.75 0 0 0-.246-.69l-3.08-2.69a.75.75 0 0 1 .42-1.273l4.068-.718a.75.75 0 0 0 .562-.904l-1.32-3.84A.75.75 0 0 1 8 1.75Z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd"
+                    d="M8 1.75a.75.75 0 0 1 .692 1.012l-1.32 3.84a.75.75 0 0 0 .562.904l4.068.718a.75.75 0 0 1 .42 1.273l-3.08 2.69a.75.75 0 0 0-.246.69l.82 3.974a.75.75 0 0 1-1.11.822L8.26 14.99a.75.75 0 0 0-.52 0l-3.518 2.69a.75.75 0 0 1-1.11-.822l.82-3.974a.75.75 0 0 0-.246-.69l-3.08-2.69a.75.75 0 0 1 .42-1.273l4.068-.718a.75.75 0 0 0 .562-.904l-1.32-3.84A.75.75 0 0 1 8 1.75Z"
+                    clip-rule="evenodd" />
                 </svg>
                 <span class="rating-score">4.5</span>
                 <span class="rating-count">(98 Ulasan)</span>
@@ -203,13 +227,17 @@ onMounted(() => {
               <h3 class="card-title">Sungai Citarum Hulu</h3>
               <div class="card-location">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
-                  <path fill-rule="evenodd" d="M8 1.75a3.25 3.25 0 0 0-3.25 3.25c0 3.106 3.25 7.75 3.25 7.75s3.25-4.644 3.25-7.75A3.25 3.25 0 0 0 8 1.75Zm0 4.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd"
+                    d="M8 1.75a3.25 3.25 0 0 0-3.25 3.25c0 3.106 3.25 7.75 3.25 7.75s3.25-4.644 3.25-7.75A3.25 3.25 0 0 0 8 1.75Zm0 4.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Z"
+                    clip-rule="evenodd" />
                 </svg>
                 <span>Bandung, Jawa Barat</span>
               </div>
               <div class="card-rating">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
-                  <path fill-rule="evenodd" d="M8 1.75a.75.75 0 0 1 .692 1.012l-1.32 3.84a.75.75 0 0 0 .562.904l4.068.718a.75.75 0 0 1 .42 1.273l-3.08 2.69a.75.75 0 0 0-.246.69l.82 3.974a.75.75 0 0 1-1.11.822L8.26 14.99a.75.75 0 0 0-.52 0l-3.518 2.69a.75.75 0 0 1-1.11-.822l.82-3.974a.75.75 0 0 0-.246-.69l-3.08-2.69a.75.75 0 0 1 .42-1.273l4.068-.718a.75.75 0 0 0 .562-.904l-1.32-3.84A.75.75 0 0 1 8 1.75Z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd"
+                    d="M8 1.75a.75.75 0 0 1 .692 1.012l-1.32 3.84a.75.75 0 0 0 .562.904l4.068.718a.75.75 0 0 1 .42 1.273l-3.08 2.69a.75.75 0 0 0-.246.69l.82 3.974a.75.75 0 0 1-1.11.822L8.26 14.99a.75.75 0 0 0-.52 0l-3.518 2.69a.75.75 0 0 1-1.11-.822l.82-3.974a.75.75 0 0 0-.246-.69l-3.08-2.69a.75.75 0 0 1 .42-1.273l4.068-.718a.75.75 0 0 0 .562-.904l-1.32-3.84A.75.75 0 0 1 8 1.75Z"
+                    clip-rule="evenodd" />
                 </svg>
                 <span class="rating-score">4.2</span>
                 <span class="rating-count">(45 Ulasan)</span>
@@ -236,42 +264,53 @@ onMounted(() => {
 
         <div class="carousel-wrapper">
           <button class="carousel-nav-btn prev" @click="scrollCarousel(-1)">
-            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
           </button>
 
           <div class="carousel" ref="carouselContainer">
             <div class="carousel-card small">
               <h3>Umpan Terbaik</h3>
-              <p>Teknik mancing adalah panduan lengkap yang membahas berbagai metode memancing, mulai dari teknik dasar hingga strategi tingkat lanjut...</p>
+              <p>Teknik mancing adalah panduan lengkap yang membahas berbagai metode memancing, mulai dari teknik dasar
+                hingga strategi tingkat lanjut...</p>
               <a href="#" class="read-more">Baca Selengkapnya</a>
             </div>
             <div class="carousel-card medium">
               <h3>Teknik Mancing</h3>
-              <p>Teknik mancing adalah panduan lengkap yang membahas berbagai metode memancing, mulai dari teknik dasar hingga strategi tingkat lanjut...</p>
+              <p>Teknik mancing adalah panduan lengkap yang membahas berbagai metode memancing, mulai dari teknik dasar
+                hingga strategi tingkat lanjut...</p>
               <a href="#" class="read-more">Baca Selengkapnya</a>
             </div>
             <div class="carousel-card large">
               <h3>Umpan Terbaik</h3>
-              <p>Teknik mancing adalah panduan lengkap yang membahas berbagai metode memancing, mulai dari teknik dasar hingga strategi tingkat lanjut...</p>
+              <p>Teknik mancing adalah panduan lengkap yang membahas berbagai metode memancing, mulai dari teknik dasar
+                hingga strategi tingkat lanjut...</p>
               <a href="#" class="read-more">Baca Selengkapnya</a>
             </div>
             <div class="carousel-card medium">
               <h3>Pancingan Terbaik</h3>
-              <p>Teknik mancing adalah panduan lengkap yang membahas berbagai metode memancing, mulai dari teknik dasar hingga strategi tingkat lanjut...</p>
+              <p>Teknik mancing adalah panduan lengkap yang membahas berbagai metode memancing, mulai dari teknik dasar
+                hingga strategi tingkat lanjut...</p>
               <a href="#" class="read-more">Baca Selengkapnya</a>
             </div>
-             <div class="carousel-card small">
+            <div class="carousel-card small">
               <h3>Jenis Ikan</h3>
-              <p>Teknik mancing adalah panduan lengkap yang membahas berbagai metode memancing, mulai dari teknik dasar hingga strategi tingkat lanjut...</p>
+              <p>Teknik mancing adalah panduan lengkap yang membahas berbagai metode memancing, mulai dari teknik dasar
+                hingga strategi tingkat lanjut...</p>
               <a href="#" class="read-more">Baca Selengkapnya</a>
             </div>
           </div>
 
           <button class="carousel-nav-btn next" @click="scrollCarousel(1)">
-            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
           </button>
         </div>
-          
+
         <div class="carousel-dots-custom">
           <span class="dot-custom active"></span>
           <span class="dot-custom"></span>

@@ -1,82 +1,9 @@
-/* Define Color Variables (Akan diganti oleh CSS global jika ada, tapi penting untuk self-containment) */
-:root {
-    --white: #FFFFFF;
-    --black: #000000;
-    --licorice: #2C2C2C; /* Dark Gray for text */
-    --dove-gray: #6B6B6B; /* Medium Gray for secondary text */
-    --sonic-silver: #757575; /* Gray for placeholders */
-    --bon-jour: #E5E5E5; /* Light Gray for borders/backgrounds */
-    
-    /* Warna Biru UTAMA yang DIKEHENDAKI (Lebih Terang dari sebelumnya) */
-    --bay-of-many: #143A7C; 
-    --primary-button-color: var(--bay-of-many); /* Menggunakan warna yang sama untuk konsistensi */
-    --primary-button-hover: #0d2f64; /* Warna hover yang sedikit lebih gelap */
-
-    --perano: #A2B9E4; /* Lighter Blue for tags */
-    --travertine: #FFE08C; /* Yellow/Gold for rating box */
-    --bg-blue: #F0F4F8; /* Light background blue */
-    --btn-blue: #0A325E; /* Darker blue untuk focus input/garis */
-}
+/*
+ * SEARCH VIEW STYLES
+ */
 
 /* ==================================== */
-/* 0. NOTIFICATION/MODAL STYLES */
-/* ==================================== */
-.custom-notification-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.custom-notification {
-    background: var(--white);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    max-width: 400px;
-    width: 90%;
-}
-
-.custom-notification p {
-    font-size: 18px;
-    color: var(--licorice);
-    margin-bottom: 20px;
-}
-
-.close-notification-button {
-    background-color: var(--primary-button-color); /* Biru yang dikehendaki */
-    color: var(--white);
-    border: none;
-    border-radius: 5px;
-    padding: 10px 30px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.2s;
-}
-
-.close-notification-button:hover {
-    background-color: var(--primary-button-hover); 
-}
-
-/* Transition styles for notification */
-.slide-up-enter-active, .slide-up-leave-active {
-    transition: all 0.3s ease;
-}
-.slide-up-enter-from, .slide-up-leave-to {
-    opacity: 0;
-    transform: translateY(20px);
-}
-
-
-/* ==================================== */
-/* 1. WRAPPER & HEADING */
+/* 1. WRAPPER & HEADING (Tidak Berubah) */
 /* ==================================== */
 
 .search-page-wrapper {
@@ -93,32 +20,19 @@
     margin-top: 50px;
     padding: 0 20px;
 }
-.no-results-message {
-    text-align: center;
-    padding: 100px 20px;
-    color: var(--licorice);
-}
-.no-results-message h2 {
-    font-size: 32px;
-    margin-bottom: 10px;
-}
-.no-results-message p {
-    font-size: 20px;
-    color: var(--dove-gray);
-}
-
 
 /* ============================================== */
-/* 2. SEARCH BAR SECTION */
+/* 🌟 BAGIAN INI DIDUPLIKASI DARI HOMEVIEW.STYLE.CSS 🌟 */
 /* ============================================== */
 .search-section {
     position: relative;
     z-index: 10;
+    /* 🌟 PERUBAHAN: Disesuaikan untuk Halaman Search (bukan overlap) */
     padding-top: 100px; /* Jarak dari Navbar */
     padding-bottom: 60px; /* Jarak ke Judul Halaman */
     padding-left: 20px;
     padding-right: 20px;
-    margin-top: 0;
+    margin-top: 0; /* Hapus margin negatif */
 }
 
 .search-container-custom {
@@ -148,7 +62,7 @@
 }
 
 .search-field-custom:focus-within {
-    border-color: var(--btn-blue); /* Sesuai dengan permintaan sebelumnya */
+    border-color: var(--btn-blue);
 }
 
 .search-icon {
@@ -156,6 +70,7 @@
     flex-shrink: 0;
     width: 22px;
     height: 22px;
+    object-fit: contain; 
 }
 
 .search-input-custom {
@@ -192,7 +107,7 @@
 }
 
 .search-button-custom {
-    background-color: var(--primary-button-color); /* Biru yang dikehendaki */
+    background-color: var(--bay-of-many);
     border: none;
     border-radius: 8px;
     width: 50px;
@@ -207,7 +122,7 @@
 }
 
 .search-button-custom:hover {
-    background-color: var(--primary-button-hover); 
+    background-color: #0f3166;
     transform: scale(1.05);
 }
 
@@ -267,9 +182,13 @@
         max-width: 1920px;
     }
 }
+/* ============================================== */
+/* 🌟 AKHIR BAGIAN DUPLIKASI 🌟 */
+/* ============================================== */
+
 
 /* ==================================== */
-/* 3. RESULT CARDS SECTION */
+/* 3. RESULT CARDS SECTION (Tata letak tumpuk di mobile) */
 /* ==================================== */
 
 .results-container {
@@ -354,12 +273,9 @@
     width: fit-content;
 }
 
-.rating-box svg {
-    /* Star icon styling */
+.rating-box img {
     width: 18px;
     height: 18px;
-    fill: #FFC107;
-    stroke: #FFC107;
 }
 
 .rating-value {
@@ -381,11 +297,9 @@
     font-size: 20px;
     color: var(--dove-gray); 
 }
-.location-icon-card {
-    /* Location icon styling */
+.card-location img {
     width: 25px;
     height: 25px;
-    stroke: var(--dove-gray);
 }
 
 .card-description {
@@ -428,7 +342,7 @@
 }
 
 .button-booking {
-    background-color: var(--primary-button-color); /* Biru yang dikehendaki */
+    background-color: var(--bay-of-many);
     color: var(--white);
     font-size: 20px;
     font-weight: 600;
@@ -444,7 +358,7 @@
 }
 
 .button-booking:hover {
-    background-color: var(--primary-button-hover); /* Warna hover yang dikehendaki */
+    background-color: #0d2f64;
 }
 
 /* ==================================== */
@@ -458,8 +372,11 @@
     }
 }
 
-/* Tata letak card tumpuk */
+/* Tata letak mobile dikembalikan ke Tumpuk Vertikal */
 @media (max-width: 992px) {
+    /* (Style Search Bar Responsif sudah ada di atas) */
+
+    /* Tata letak card tumpuk */
     .result-card {
         flex-direction: column; 
         min-height: auto;

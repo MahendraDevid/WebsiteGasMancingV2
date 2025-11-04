@@ -21,7 +21,7 @@ const isMenuOpen = ref(false)
       <nav class="menu-desktop">
         <!-- 🌟 PERBAIKAN: Menghapus 'Pencarian' dan mengembalikan 'Pesanan Saya' -->
         <router-link to="/" class="menu-item">Beranda</router-link>
-        <a href="#" class="menu-item">Pesanan Saya</a>
+        <router-link to="/pesanan" class="menu-item">Pesanan Saya</router-link>
         <router-link to="/ensiklopedia" class="menu-item">Ensiklopedia</router-link>
       </nav>
       <div class="auth-buttons">

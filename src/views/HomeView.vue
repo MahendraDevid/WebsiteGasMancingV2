@@ -1,5 +1,12 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
+import Modal from '../components/Modal.vue' // adjust path if needed
+
+const showModal = ref(false)
+
+function openModal() {
+  showModal.value = true
+}
 
 const isMenuOpen = ref(false)
 const carouselContainer = ref(null)
@@ -55,11 +62,7 @@ onMounted(() => {
   <div class="homepage">
     <header class="navbar">
       <div class="navbar-container">
-        <a href="#" class="logo">
-          <div class="logo-icon">
-          </div>
-          <span class="logo-text">Gas Mancing</span>
-        </a>
+        
 
         <button class="menu-toggle" @click="isMenuOpen = !isMenuOpen">
           <span></span>
@@ -74,9 +77,15 @@ onMounted(() => {
         </nav>
 
         <div class="auth-buttons">
-          <button class="btn-masuk">Masuk</button>
-          <button class="btn-daftar">Daftar</button>
-        </div>
+    <!-- Masuk button triggers modal -->
+    <button class="btn-masuk" @click="openModal">Masuk</button>
+    <button class="btn-daftar">Daftar</button>
+  </div>
+
+  </div>
+
+  <Modal v-if="showModal" @close="showModal = false" />
+
       </div>
     </header>
 

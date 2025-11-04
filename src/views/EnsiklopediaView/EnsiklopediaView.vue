@@ -86,4 +86,4 @@ export default {
 }
 </script>
 
-<style scoped src="@/assets/styles/ensiklopedia.css"></style>
+<style scoped src="@/assets/styles/Ensiklopedia.style.css"></style>

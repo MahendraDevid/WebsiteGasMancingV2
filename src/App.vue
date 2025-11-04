@@ -2,7 +2,9 @@
   <div id="app-wrapper">
     <Navbar /> 
     
-    <RouterView /> 
+    <main class="main-content">
+      <RouterView /> 
+    </main>
     
     <Footer /> 
   </div>
@@ -10,12 +12,34 @@
 
 <script setup>
 import { RouterView } from 'vue-router'
-// Pastikan path impor ini benar sesuai lokasi file Anda
 import Navbar from './components/Navbar.vue' 
 import Footer from './components/Footer.vue' 
 </script>
 
 <style>
-/* Impor CSS global jika belum dilakukan */
-@import './assets/main.css'; 
+@import './assets/main.css';
+
+#app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 80px; /* Adjust based on your navbar height */
+  padding-bottom: 40px;
+}
+
+@media (max-width: 1024px) {
+  .main-content {
+    padding-top: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding-top: 60px;
+  }
+}
 </style>

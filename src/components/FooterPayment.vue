@@ -1,4 +1,6 @@
 <script setup>
+import { useRouter } from 'vue-router' // 🔹 Tambahkan ini
+
 // 1. Definisikan semua props yang mungkin kita butuhkan
 const props = defineProps({
   // 'variant' akan menentukan layout mana yang dipakai
@@ -32,14 +34,23 @@ const props = defineProps({
 })
 
 // 2. Definisikan event 'submit'
-// Ini agar komponen induk tahu saat tombolnya diklik
 const emit = defineEmits(['submit'])
 
+// 3. Buat router instance
+const router = useRouter()
+
+// 4. Modifikasi handler klik tombol
 function onButtonClick() {
-  // Hanya emit 'submit' jika ada yang "mendengarkan"
-  emit('submit')
+  if (props.variant === 'checkout') {
+    // Jika layout checkout, arahkan ke halaman Payment
+    router.push('/payment')
+  } else {
+    // Jika bukan checkout, jalankan event submit biasa
+    emit('submit')
+  }
 }
 </script>
+
 
 <template>
   <div class="footer-bar-container">
@@ -99,6 +110,8 @@ function onButtonClick() {
   border-radius: 999px; /* Bulat penuh */
   font-size: 16px;
   font-weight: 600;
+  padding: 10px 24px;
+  margin: 5px;
   cursor: pointer;
   transition: transform 0.2s ease;
 }

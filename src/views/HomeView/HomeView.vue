@@ -22,6 +22,13 @@ const goToSearch = () => {
     }) 
 }
 
+function goToDetail(id) {
+  router.push({
+    name: 'DetailTempatPemancing',
+    params: { id } // Pastikan route detail kamu pakai :id di router/index.js
+  })
+}
+
 // Data dan Logika Carousel (tetap)
 const carouselContainer = ref(null)
 const isAtStart = ref(true)
@@ -157,78 +164,77 @@ onMounted(() => {
                     <div class="card">
                         <img src="/img/kolam.png" alt="Spot Mancing 1" class="card-image" />
                         <div class="card-content">
-                            <span class="card-price-overlay">Rp. 50.000/hari</span>
-                            <h3 class="card-title">Danau Pemancingan Asri</h3>
+                            <span class="card-price-overlay">Rp. 30.000/hari</span>
+                            <h3 class="card-title">Kolam Pemancingan Cibiru</h3>
                             <div class="card-location">
-                                <span>Bogor, Jawa Barat</span>
-                            </div>
-                            <div class="card-rating">
-                                <img src="/img/star.png" alt="Rating" class="rating-star-icon">
-                                <span class="rating-score">4.8</span>
-                                <span class="rating-count">(120 Ulasan)</span>
-                            </div>
-                            <p class="card-description">
-                                Tempat pemancingan keluarga dengan suasana yang asri dan sejuk.
-                                Tersedia berbagai jenis ikan...
-                            </p>
-                            <div class="card-facilities">
-                                <span class="facility">Restoran</span>
-                                <span class="facility">Mushola</span>
-                                <span class="facility">Toilet</span>
-                                <span class="facility-more">+4</span>
-                            </div>
-                            <button class="card-button">Lihat Detail</button>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <img src="/img/produk1.png" alt="Spot Mancing 2" class="card-image" />
-                        <div class="card-content">
-                            <span class="card-price-overlay">Rp. 50.000/hari</span>
-                            <h3 class="card-title">Pantai Karang Indah</h3>
-                            <div class="card-location">
-                                <span>Banten, Jawa Barat</span>
+                                <span>Cibiru, Bandung</span>
                             </div>
                             <div class="card-rating">
                                 <img src="/img/star.png" alt="Rating" class="rating-star-icon">
                                 <span class="rating-score">4.5</span>
-                                <span class="rating-count">(98 Ulasan)</span>
+                                <span class="rating-count">(150 Ulasan)</span>
                             </div>
                             <p class="card-description">
-                                Spot mancing pinggir pantai dengan pemandangan karang yang indah.
-                                Cocok untuk teknik...
+                                Kolam pemancingan air tawar dengan fokus pada ikan mas dan nila. Tersedia sewa alat dan umpan.
                             </p>
                             <div class="card-facilities">
-                                <span class="facility">Warung</span>
-                                <span class="facility">Parkir Luas</span>
                                 <span class="facility">Toilet</span>
+                                <span class="facility">Kantin</span>
+                                <span class="facility">Parkir</span>
+                                <span class="facility-more">+4</span>
                             </div>
-                            <button class="card-button">Lihat Detail</button>
+                            <button class="card-button" @click="goToDetail(2)">Lihat Detail</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <img src="/img/balong.png" alt="Spot Mancing 2" class="card-image" />
+                        <div class="card-content">
+                            <span class="card-price-overlay">Rp. 35.000/hari</span>
+                            <h3 class="card-title">Balong Kuluwung</h3>
+                            <div class="card-location">
+                                <span>Jatinangor, Bandung Timur</span>
+                            </div>
+                            <div class="card-rating">
+                                <img src="/img/star.png" alt="Rating" class="rating-star-icon">
+                                <span class="rating-score">4.1</span>
+                                <span class="rating-count">(120 Ulasan)</span>
+                            </div>
+                            <p class="card-description">
+                                Kolam pemancingan keluarga dengan pemandangan sawah. Cocok untuk bersantai sambil memancing ikan mas dan gurame.
+                            </p>
+                            <div class="card-facilities">
+                                <span class="facility">Toilet</span>
+                                <span class="facility">Parkir Luas</span>
+                                <span class="facility">Warung</span>
+                            </div>
+                            <button class="card-button" @click="goToDetail(4)">Lihat Detail</button>
                         </div>
                     </div>
 
                     <div class="card">
-                        <img src="/img/balong.png" alt="Spot Mancing 3" class="card-image" />
+                        <img src="/img/ancol.png" alt="Spot Mancing 3" class="card-image" />
                         <div class="card-content">
                             <span class="card-price-overlay">Rp. 50.000/hari</span>
-                            <h3 class="card-title">Sungai Citarum Hulu</h3>
+                            <h3 class="card-title">Pantai Ancol</h3>
                             <div class="card-location">
-                                <span>Bandung, Jawa Barat</span>
+                                <span>Ancol, Jakarta Utara</span>
                             </div>
                             <div class="card-rating">
                                 <img src="/img/star.png" alt="Rating" class="rating-star-icon">
                                 <span class="rating-score">4.2</span>
-                                <span class="rating-count">(45 Ulasan)</span>
+                                <span class="rating-count">(300 Ulasan)</span>
                             </div>
                             <p class="card-description">
-                                Rasakan sensasi mancing di alam liar di hulu sungai Citarum.
-                                Ikan-ikan predator...
+                                Tempat pemancingan laut yang populer dengan fasilitas lengkap dan suasana nyaman. Cocok untuk memancing harian.
                             </p>
                             <div class="card-facilities">
-                                <span class="facility">Alam Liar</span>
-                                <span class="facility">Camping Area</span>
+                                <span class="facility">Toilet</span>
+                                <span class="facility">Kantin</span>
+                                <span class="facility">Parkir</span>
+                                <span class="facility">Musholla</span>
                             </div>
-                            <button class="card-button">Lihat Detail</button>
+                            <button class="card-button" @click="goToDetail(1)">Lihat Detail</button>
                         </div>
                     </div>
                 </div>

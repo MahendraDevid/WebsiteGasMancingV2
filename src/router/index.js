@@ -4,6 +4,8 @@ import Search from '../views/Search/Search.vue'
 import Payment from '@/views/Payment/Payment.vue'
 import PaymentConfirmation from '@/views/PaymentConfirmation/PaymentConfirmation.vue'
 import DetailTempatPemancinganView from '@/views/DetailTempatPemancinganView/DetailTempatPemancinganView.vue'
+import Booking from '@/views/Booking/Booking.vue'
+import Pesanan from '@/views/Pesanan/Pesanan.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,12 +34,14 @@ const router = createRouter({
     {
       path: '/payment',
       name: 'payment',
-      component: Payment
+      component: Payment,
+      meta: { hideFooter: true } 
     },
     {
       path: '/paymentconfirmation',
       name: 'paymentconfirmation',
-      component: PaymentConfirmation
+      component: PaymentConfirmation,
+      meta: { hideFooter: true } 
     },
     {
       path: '/detail/:id',
@@ -46,10 +50,16 @@ const router = createRouter({
       props: true // Enable props passing from route params
     },
     {
-      path: '/pesanan',
+      path: '/pesanan', // (Atau path apa pun yang Anda gunakan untuk booking)
       name: 'pesanan',
-      component: () => import('../views/Pesanan/Pesanan.vue'),
-    }
+      component: Pesanan,
+    },
+    {
+      path: '/booking', // (Atau path apa pun yang Anda gunakan untuk booking)
+      name: 'booking',
+      component: Booking,
+      meta: { hideFooter: true } 
+    },
   ],
 })
 

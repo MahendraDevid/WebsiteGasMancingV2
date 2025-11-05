@@ -11,7 +11,7 @@
       <RouterView /> 
     </main>
     
-    <Footer /> 
+    <Footer v-if="!route.meta.hideFooter" />
 
     <LoginRegisterModal
       :is-visible="isModalVisible && modalType === 'login'"
@@ -42,9 +42,13 @@
 <script setup>
 import { ref } from 'vue'
 import { RouterView } from 'vue-router'
-import Navbar from './components/NavBar.vue' // Pastikan nama file Anda benar
+import Navbar from './components/NavBar.vue' 
+// BARU: Impor komponen Modal
+import LoginRegisterModal from '@/components/LoginRegister.vue'
+import { useRoute } from 'vue-router'
+
+// BARU: Data/State untuk mengontrol Modal (Dipindahkan dari HomeView)
 import Footer from './components/Footer.vue' 
-import LoginRegisterModal from '@/components/LoginRegister.vue'; // Pastikan nama file Anda benar
 // BARU: Impor dropdown profil
 import UserProfileDropdown from '@/components/UserProfileDropdown.vue';
 
@@ -54,6 +58,7 @@ const isLoggedIn = ref(false);
 // --- STATE MODAL LOGIN/REGISTER ---
 const isModalVisible = ref(false);
 const modalType = ref('');
+const route = useRoute();
 
 // --- STATE MODAL PROFIL ---
 const isProfileVisible = ref(false); // State untuk dropdown profil

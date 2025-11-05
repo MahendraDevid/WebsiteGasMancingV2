@@ -30,7 +30,7 @@
           <h2>Deskripsi:</h2>
           <p class="description-text">{{ place.fullDescription }}</p>
         </div>
-        
+        <hr>
         <div class="section facilities-section">
           <h2>Fasilitas</h2>
           <div class="tag-list">
@@ -43,7 +43,7 @@
             </span>
           </div>
         </div>
-
+        <hr>
         <div class="section equipment-section">
           <h2>Peralatan Tambahan:</h2>
           <div class="equipment-grid">
@@ -81,17 +81,6 @@
               <p class="review-text">{{ review.comment }}</p>
             </div>
           </div>
-        </div>
-
-        <!-- Tombol Booking Footer -->
-        <div class="section booking-footer-section">
-          <div class="booking-footer-price-info">
-            Harga mulai dari:
-            <span class="booking-footer-price">{{ place.price }}</span>
-          </div>
-          <button class="booking-button" @click="goToBooking">
-            Lihat Ketersediaan & Booking
-          </button>
         </div>
 
       </div>

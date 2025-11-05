@@ -99,6 +99,8 @@ function onButtonClick() {
   border-radius: 999px; /* Bulat penuh */
   font-size: 16px;
   font-weight: 600;
+  padding: 10px 24px;
+  margin: 5px;
   cursor: pointer;
   transition: transform 0.2s ease;
 }

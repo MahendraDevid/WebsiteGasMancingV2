@@ -7,7 +7,7 @@
       <RouterView />
     </main>
     
-    <Footer />
+    <Footer v-if="!route.meta.hideFooter" />
 
     <!-- Komponen Modal diletakkan di App.vue agar bisa tampil di semua route -->
     <!-- Modal untuk Login -->
@@ -38,11 +38,13 @@ import { RouterView } from 'vue-router'
 import Navbar from './components/NavBar.vue' 
 // BARU: Impor komponen Modal
 import LoginRegisterModal from '@/components/LoginRegister.vue'
+import { useRoute } from 'vue-router'
 
 // BARU: Data/State untuk mengontrol Modal (Dipindahkan dari HomeView)
 import Footer from './components/Footer.vue' 
 const isModalVisible = ref(false);
 const modalType = ref('');
+const route = useRoute();
 
 // BARU: Metode untuk membuka modal (Dipindahkan dari HomeView)
 const openModal = (type) => {

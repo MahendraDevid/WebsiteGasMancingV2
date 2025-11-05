@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView/HomeView.vue'
 import Search from '../views/Search/Search.vue' 
-import Pesanan from '../views/Pesanan/Pesanan.vue'
+import Payment from '@/views/Payment/Payment.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,9 +28,9 @@ const router = createRouter({
       props: (route) => ({ location: route.query.location }),
     },
     {
-      path: '/pesanan',
-      name: 'pesanan',
-      component: Pesanan
+      path: '/payment',
+      name: 'payment',
+      component: Payment
     },
   ],
 })

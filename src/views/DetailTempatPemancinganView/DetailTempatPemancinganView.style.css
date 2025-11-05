@@ -38,6 +38,15 @@
 
 .main-info {
   margin-bottom: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Align items to the top */
+  flex-wrap: wrap; /* Allow wrapping on mobile */
+  gap: 20px; /* Add gap for spacing */
+}
+
+.info-text {
+  flex-grow: 1; /* Allow text to grow */
 }
 
 .place-name {
@@ -229,7 +238,112 @@ hr {
   margin: 30px 0;
 }
 
-/* Responsive adjustments */
+/* --- 6. BOOKING BUTTONS & SECTIONS --- */
+.booking-button {
+  padding: 12px 30px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  white-space: nowrap; /* Prevent button text from wrapping */
+}
+
+.booking-button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+/* Header Booking Box */
+.header-booking-box {
+  flex-shrink: 0; /* Prevent shrinking */
+  text-align: right;
+}
+
+.booking-price-header {
+  font-size: 24px;
+  font-weight: 700;
+  color: #27ae60;
+  margin: 0 0 8px 0;
+}
+
+/* Footer Booking Section */
+.booking-footer-section {
+  margin-top: 40px;
+  padding: 25px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.booking-footer-price-info {
+  font-size: 16px;
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.booking-footer-price {
+  display: block;
+  font-size: 24px;
+  font-weight: 700;
+  color: #27ae60;
+  margin-top: 4px;
+}
+
+/* --- 7. ERROR STATE (Moved from .vue) --- */
+.error-state {
+  text-align: center;
+  padding: 60px 20px;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-state h2 {
+  font-size: 28px;
+  color: #e74c3c;
+  margin-bottom: 15px;
+}
+
+.error-state p {
+  font-size: 16px;
+  color: #7f8c8d;
+  margin-bottom: 30px;
+}
+
+.back-button {
+  padding: 12px 30px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+
+/* --- 8. RESPONSIVE ADJUSTMENTS --- */
 @media (max-width: 768px) {
   .place-detail-page {
     max-width: 95%;
@@ -243,6 +357,37 @@ hr {
   .content-container {
     padding: 20px;
   }
+
+  .main-info {
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-start; /* Align to the left */
+  }
+
+  .header-booking-box {
+    text-align: left; /* Align text left on mobile */
+    width: 100%; /* Make it full width */
+    margin-top: 15px;
+  }
+
+  .booking-price-header {
+    font-size: 22px;
+  }
+  
+  .booking-button {
+    width: 100%; /* Make button full-width */
+    text-align: center; /* Center text in button */
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+
+  .booking-footer-section {
+    flex-direction: column; /* Stack items */
+    align-items: stretch; /* Stretch to full width */
+  }
+
+  .booking-footer-price-info {
+    text-align: center; /* Center text */
+  }
   
   .equipment-grid {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -252,4 +397,6 @@ hr {
   .reviews-grid {
     grid-template-columns: 1fr;
   }
+
+  
 }

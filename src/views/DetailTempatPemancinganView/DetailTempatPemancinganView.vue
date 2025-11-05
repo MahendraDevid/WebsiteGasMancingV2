@@ -11,15 +11,25 @@
 
       <div class="content-container">
         <div class="main-info">
-          <h1 class="place-name">{{ place.title }}</h1>
-          <p class="place-location">{{ place.location }}</p>
+          <!-- Info Kiri (Judul & Lokasi) -->
+          <div class="info-text">
+            <h1 class="place-name">{{ place.title }}</h1>
+            <p class="place-location">{{ place.location }}</p>
+          </div>
+          
+          <!-- Tombol Booking Header -->
+          <div class="header-booking-box">
+            <p class="booking-price-header">{{ place.price }}</p>
+            <button class="booking-button">
+              Booking Sekarang
+            </button>
+          </div>
         </div>
-
         <div class="section description-section">
           <h2>Deskripsi:</h2>
           <p class="description-text">{{ place.fullDescription }}</p>
         </div>
-        
+        <hr>
         <div class="section facilities-section">
           <h2>Fasilitas</h2>
           <div class="tag-list">
@@ -32,7 +42,7 @@
             </span>
           </div>
         </div>
-
+        <hr>
         <div class="section equipment-section">
           <h2>Peralatan Tambahan:</h2>
           <div class="equipment-grid">
@@ -72,6 +82,17 @@
           </div>
         </div>
 
+        <!-- Tombol Booking Footer -->
+        <div class="section booking-footer-section">
+          <div class="booking-footer-price-info">
+            Harga mulai dari:
+            <span class="booking-footer-price">{{ place.price }}</span>
+          </div>
+          <button class="booking-button">
+            Lihat Ketersediaan & Booking
+          </button>
+        </div>
+
       </div>
     </div>
 
@@ -90,7 +111,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute} from 'vue-router'
-import { placesData } from '@/data/placesData'
+// Pastikan placesData memiliki properti 'price', contoh: "Rp 50.000 / orang"
+import { placesData } from '@/data/placesData' 
 
 const route = useRoute()
 
@@ -118,47 +140,5 @@ onMounted(() => {
 })
 </script>
 
+<!-- Semua style sekarang ada di file .css -->
 <style scoped src="./DetailTempatPemancinganView.style.css"></style>
-
-<style scoped>
-/* Additional styles untuk error state */
-.error-state {
-  text-align: center;
-  padding: 60px 20px;
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.error-state h2 {
-  font-size: 28px;
-  color: #e74c3c;
-  margin-bottom: 15px;
-}
-
-.error-state p {
-  font-size: 16px;
-  color: #7f8c8d;
-  margin-bottom: 30px;
-}
-
-.back-button {
-  padding: 12px 30px;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.back-button:hover {
-  background-color: #2980b9;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
-}
-</style>

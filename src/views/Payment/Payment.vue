@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 
 // 1. Impor komponen
 import Navbar from '@/components/NavBar.vue'
+import PaymentBox from '@/components/PaymentBox.vue'
 import FooterPayment from '@/components/FooterPayment.vue'
 
 // 2. Impor CSS
@@ -64,19 +65,10 @@ function handlePayment() {
   
   <div class="payment-page">
     <main class="payment-content">
-      <header class="payment-header">
-        <h1 class="payment-title">Pembayaran</h1>
-      </header>
-      <section class="order-summary">
-        <div class="order-total">
-          <span>Total Harga</span>
-          <strong>Rp. 1.999.009,-</strong>
-        </div>
-        <div class="order-number">
-          <span>#Nomor Pesanan</span>
-        </div>
-      </section>
-
+      <PaymentBox
+      title="Pembayaran"
+      totalPrice="Rp. 1.999.009,-" 
+      />
       <section class="payment-methods">
         <h2 class="methods-title">Metode Pembayaran</h2>
 

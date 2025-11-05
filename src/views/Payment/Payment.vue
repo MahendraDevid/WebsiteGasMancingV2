@@ -5,6 +5,9 @@ import { ref, computed } from 'vue'
 import Navbar from '@/components/NavBar.vue'
 import PaymentBox from '@/components/PaymentBox.vue'
 import FooterPayment from '@/components/FooterPayment.vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+console.log(route.query.total)
 
 // 2. Impor CSS
 import './Payment.css'

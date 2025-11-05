@@ -1,0 +1,255 @@
+.place-detail-page {
+  max-width: 90%; 
+  margin: 40px auto; /* Added top margin */
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden; 
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); 
+}
+
+/* --- 1. HEADER GAMBAR --- */
+.image-header {
+  position: relative;
+  height: 450px; /* Enlarged from 300px */
+}
+
+.place-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rating-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #333;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* --- 2. INFORMASI UTAMA & DESKRIPSI --- */
+.content-container {
+  padding: 30px 40px;
+}
+
+.main-info {
+  margin-bottom: 25px;
+}
+
+.place-name {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: #1a202c;
+}
+
+.place-location {
+  font-size: 16px;
+  color: #718096;
+  display: flex;
+  align-items: center;
+}
+
+.section {
+  margin-bottom: 35px;
+  padding-top: 10px;
+}
+
+.section h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 18px;
+}
+
+.description-text {
+  line-height: 1.7;
+  color: #4a5568;
+  font-size: 15px;
+}
+
+/* --- 3. FASILITAS (Tags) --- */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.facility-tag {
+  background-color: #e9f5ff;
+  color: #3498db;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  border: 1px solid #cceeff;
+  transition: all 0.2s ease;
+}
+
+.facility-tag:hover {
+  background-color: #d4edff;
+  transform: translateY(-2px);
+}
+
+/* --- 4. PERALATAN TAMBAHAN (Grid Card) - TIDIED UP --- */
+.equipment-section {
+  background-color: #f8fafc;
+  padding: 25px;
+  border-radius: 8px;
+  margin-bottom: 35px;
+}
+
+.equipment-section h2 {
+  margin-bottom: 20px;
+  color: #1a202c;
+}
+
+.equipment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.equipment-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 20px 15px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.equipment-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  border-color: #3498db;
+}
+
+.item-icon {
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a0aec0;
+  font-size: 14px;
+  border: 2px dashed #e2e8f0;
+}
+
+.item-name {
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: #2d3748;
+}
+
+.item-price {
+  color: #27ae60;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* --- 5. ULASAN (Grid Card) --- */
+.reviews-section {
+  margin-top: 40px;
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.review-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 20px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.review-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.avatar-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e9f5ff 0%, #d4edff 100%);
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.reviewer-info {
+  text-align: left;
+}
+
+.reviewer-name {
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  color: #2d3748;
+}
+
+.review-rating {
+  font-size: 14px;
+  color: #f39c12;
+  font-weight: 500;
+}
+
+.review-text {
+  font-size: 14px;
+  color: #4a5568;
+  line-height: 1.6;
+  margin: 0;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 30px 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .place-detail-page {
+    max-width: 95%;
+    margin: 20px auto;
+  }
+  
+  .image-header {
+    height: 300px;
+  }
+  
+  .content-container {
+    padding: 20px;
+  }
+  
+  .equipment-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+  }
+  
+  .reviews-grid {
+    grid-template-columns: 1fr;
+  }
+}

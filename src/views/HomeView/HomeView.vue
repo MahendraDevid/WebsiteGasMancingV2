@@ -2,7 +2,6 @@
 import { ref, onMounted } from 'vue'
 // 1. Impor useRouter untuk navigasi
 import { useRouter } from 'vue-router'
-import Modal from '../../components/Modal.vue'
 
 // Inisialisasi Router
 const router = useRouter()
@@ -21,13 +20,6 @@ const goToSearch = () => {
             location: keyword || 'Semua Lokasi' 
         }
     }) 
-}
-
-// Data dan Logika Modal (tetap)
-const showModal = ref(false)
-
-function openModal() {
-    showModal.value = true
 }
 
 // Data dan Logika Carousel (tetap)

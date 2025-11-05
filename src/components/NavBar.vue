@@ -19,7 +19,6 @@ const isMenuOpen = ref(false)
         <span></span><span></span><span></span>
       </button>
       <nav class="menu-desktop">
-        <!-- 🌟 PERBAIKAN: Menghapus 'Pencarian' dan mengembalikan 'Pesanan Saya' -->
         <router-link to="/" class="menu-item">Beranda</router-link>
         <router-link to="/pesanan" class="menu-item">Pesanan Saya</router-link>
         <router-link to="/ensiklopedia" class="menu-item">Ensiklopedia</router-link>
@@ -33,12 +32,12 @@ const isMenuOpen = ref(false)
 
   <nav :class="['menu-mobile', { active: isMenuOpen }]">
     <button class="menu-close" @click="isMenuOpen = false">&times;</button>
-    
+
     <!-- 🌟 PERBAIKAN: Menghapus 'Pencarian' dan mengembalikan 'Pesanan Saya' -->
     <router-link to="/" class="menu-item" @click="isMenuOpen = false">Beranda</router-link>
     <a href="#" class="menu-item" @click="isMenuOpen = false">Pesanan Saya</a>
     <router-link to="/ensiklopedia" class="menu-item" @click="isMenuOpen = false">Ensiklopedia</router-link>
-    
+
     <div class="menu-auth">
       <button class="btn-masuk">Masuk</button>
       <button class="btn-daftar">Daftar</button>
@@ -122,10 +121,10 @@ const isMenuOpen = ref(false)
 
 .menu-desktop {
   display: flex;
-  align-items: center;
+  align-items: right;
   gap: 30px;
   flex: 1;
-  justify-content: center;
+  justify-content: right;
 }
 
 .menu-item {
@@ -141,12 +140,6 @@ const isMenuOpen = ref(false)
 
 .menu-item:hover {
   background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Style untuk link yang aktif (menggunakan class dari Vue Router) */
-.menu-item.router-link-exact-active {
-  font-weight: 600;
-  background-color: rgba(255, 255, 255, 0.15);
 }
 
 .auth-buttons {

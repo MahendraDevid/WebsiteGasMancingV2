@@ -20,16 +20,17 @@
           <!-- Tombol Booking Header -->
           <div class="header-booking-box">
             <p class="booking-price-header">{{ place.price }}</p>
-            <button class="booking-button">
-              <a href="/booking">Booking Sekarang</a>
+            <button class="booking-button" @click="goToBooking">
+              Booking Sekarang
             </button>
           </div>
         </div>
+
         <div class="section description-section">
           <h2>Deskripsi:</h2>
           <p class="description-text">{{ place.fullDescription }}</p>
         </div>
-        <hr>
+        
         <div class="section facilities-section">
           <h2>Fasilitas</h2>
           <div class="tag-list">
@@ -42,7 +43,7 @@
             </span>
           </div>
         </div>
-        <hr>
+
         <div class="section equipment-section">
           <h2>Peralatan Tambahan:</h2>
           <div class="equipment-grid">
@@ -82,6 +83,17 @@
           </div>
         </div>
 
+        <!-- Tombol Booking Footer -->
+        <div class="section booking-footer-section">
+          <div class="booking-footer-price-info">
+            Harga mulai dari:
+            <span class="booking-footer-price">{{ place.price }}</span>
+          </div>
+          <button class="booking-button" @click="goToBooking">
+            Lihat Ketersediaan & Booking
+          </button>
+        </div>
+
       </div>
     </div>
 
@@ -99,14 +111,20 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute} from 'vue-router'
-// Pastikan placesData memiliki properti 'price', contoh: "Rp 50.000 / orang"
+import { useRoute, useRouter } from 'vue-router' // <-- Import useRouter
 import { placesData } from '@/data/placesData' 
 
 const route = useRoute()
+const router = useRouter() // <-- Initialize useRouter
 
 // State untuk data tempat
 const place = ref(null)
+
+// Function for programmatic navigation
+const goToBooking = () => {
+  // Navigate to the '/booking' route
+  router.push('/booking')
+}
 
 // Fungsi untuk load data berdasarkan ID dari URL
 const loadPlaceData = () => {
@@ -129,5 +147,4 @@ onMounted(() => {
 })
 </script>
 
-<!-- Semua style sekarang ada di file .css -->
 <style scoped src="./DetailTempatPemancinganView.style.css"></style>

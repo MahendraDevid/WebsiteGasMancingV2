@@ -1,15 +1,16 @@
 <template>
   <div id="app-wrapper">
     <!-- Dengarkan event @openModal dari Navbar dan panggil fungsi openModal -->
-    <Navbar @open-modal="openModal" /> 
+    <Navbar @open-modal="openModal" />
     
     <main class="main-content">
-      <RouterView /> 
+      <RouterView />
     </main>
     
-    <Footer /> 
+    <Footer />
 
-    <!-- Komponen Modal untuk LOGIN -->
+    <!-- Komponen Modal diletakkan di App.vue agar bisa tampil di semua route -->
+    <!-- Modal untuk Login -->
     <LoginRegisterModal
       :is-visible="isModalVisible && modalType === 'login'"
       title="Masuk Akun"
@@ -25,7 +26,7 @@
       title="Daftar Akun Baru"
       modal-type="register"
       @close="closeModal"
-      @register="handleUserRegistration" 
+      @register="handleUserRegistration"
       @open-modal="openModal"
     />
   </div>
@@ -35,13 +36,13 @@
 import { ref } from 'vue'
 import { RouterView } from 'vue-router'
 import Navbar from './components/NavBar.vue' 
-import Footer from './components/Footer.vue' 
 // BARU: Impor komponen Modal
 import LoginRegisterModal from '@/components/LoginRegister.vue'
 
 // BARU: Data/State untuk mengontrol Modal (Dipindahkan dari HomeView)
-const isModalVisible = ref(false)
-const modalType = ref('')
+import Footer from './components/Footer.vue' 
+const isModalVisible = ref(false);
+const modalType = ref('');
 
 // BARU: Metode untuk membuka modal (Dipindahkan dari HomeView)
 const openModal = (type) => {
@@ -61,18 +62,20 @@ const closeModal = () => {
 
 // BARU: Handler untuk proses Login (Contoh)
 const handleUserLogin = (data) => {
-  console.log('Login diproses dengan data:', data)
-  alert(`Login berhasil! Email: ${data.email}`)
-  closeModal()
-}
+  console.log('Login diproses dengan data:', data);
+  // Mengganti alert dengan console.log atau UI pesan yang lebih baik di aplikasi nyata
+  console.log(`Login berhasil! Email: ${data.email}`); 
+  closeModal();
+};
 
 // BARU: Handler untuk proses Register (Contoh)
 const handleUserRegistration = (data) => {
-  console.log('Registrasi diproses dengan data:', data)
-  alert(`Form registrasi dikirim! Email: ${data.email}.`)
+  console.log('Registrasi diproses dengan data:', data);
+  // Mengganti alert dengan console.log atau UI pesan yang lebih baik di aplikasi nyata
+  console.log(`Form registrasi dikirim! Email: ${data.email}.`); 
   // Logika registrasi...
-  closeModal()
-}
+  closeModal();
+};
 </script>
 
 <style scoped>

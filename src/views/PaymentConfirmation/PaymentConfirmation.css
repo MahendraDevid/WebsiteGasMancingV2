@@ -1,0 +1,170 @@
+/* Styling Utama Halaman dan Main Content */
+
+.confirmation-page-wrapper {
+    min-height: 100vh;
+    padding: 24px 24px 120px 24px; 
+}
+
+.confirmation-content-box {
+    max-width: 900px; /* Batasi lebar konten */
+    margin: 0 auto;
+    padding: 0; 
+    background-color: transparent; 
+    box-shadow: none; 
+    
+}
+
+/* KOTAK DETAIL KONFIRMASI (Kotak Putih Bawah) */
+.confirmation-details-wrapper {
+    background-color: #ffffff; 
+    border-radius: 16px; 
+    padding: 15px 20px; 
+    margin-top: 20px; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+}
+
+.section-subtitle {
+    font-family: "SF Pro-Semibold", Helvetica;
+    font-size: 18px; 
+    color: #141414; 
+    margin-bottom: 10px; 
+    padding-top: 5px; 
+    font-weight: 600;
+}
+
+
+/* Bagian Kode Bayar (Tidak ada perubahan signifikan di sini) */
+.payment-code-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; 
+    padding: 5px 0; 
+    border-bottom: 1px solid #EDF2F7; 
+}
+
+.code-label {
+    font-family: "SF Pro Display-Medium", Helvetica;
+    font-size: 14px; 
+    color: #4A5568; 
+    margin-right: 8px; 
+    font-weight: 500;
+}
+
+.code-value {
+    font-family: "SF Pro-Semibold", Helvetica;
+    font-size: 18px; 
+    color: #2d3748; 
+    font-weight: 600;
+}
+
+.copy-icon {
+    width: 18px; 
+    height: 18px;
+    color: #4A5568; 
+}
+
+
+/* Bagian Info Sewa: Lokasi, Tanggal, Orang & Peralatan */
+.rental-info-container {
+    display: flex;
+    gap: 15px; 
+    margin-top: 15px;
+    flex-wrap: nowrap; 
+    justify-content: space-between;
+}
+
+.location-date-person {
+    background-color: #f0f0f0; 
+    border-radius: 10px;
+    padding: 10px; 
+    flex: 1 1 50%; 
+    display: flex;
+    /* Alignment disetel agar ikon, label, dan detail merata */
+    justify-content: space-around; 
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* WAJIB CENTER UNTUK TEKS */
+    text-align: center;
+    padding: 0 5px; 
+}
+
+/* KODE BARU UNTUK MERAPIKAN IKON DAN TULISAN */
+
+.icon-wrapper {
+    /* Menjamin ruang seragam untuk semua ikon */
+    height: 35px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px; /* Jarak antara ikon dan label */
+}
+
+.detail-img {
+    /* Untuk iconlokasi.png dan calendar.png */
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+.detail-img-large {
+    /* Untuk icon people.png (jika memang lebih besar) */
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.info-label {
+    font-family: "SF Pro-Semibold", Helvetica;
+    font-size: 11px; 
+    color: #4A5568; 
+    font-weight: 600;
+    margin-top: 0px; 
+    line-height: 1.2; 
+}
+
+.info-detail {
+    font-family: "SF Pro Display-Regular", Helvetica;
+    font-size: 13px; 
+    color: #2d3748; 
+    margin-top: 2px; 
+    font-weight: 400;
+    line-height: 1.2; 
+    max-width: 100px;
+    word-break: break-word; 
+}
+
+/* Bagian Peralatan yang Disewa (Tidak ada perubahan signifikan di sini) */
+.rented-items-box {
+    background-color: #ffffff; 
+    border-radius: 10px;
+    padding: 10px; 
+    flex: 1 1 35%; 
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); 
+    border: 1px solid #EDF2F7;
+}
+
+.items-title {
+    font-family: "SF Pro Display-Semibold", Helvetica;
+    font-size: 13px; 
+    color: #2d3748;
+    margin-bottom: 8px; 
+    font-weight: 600;
+}
+
+.item-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px; 
+}
+
+.item-tag {
+    padding: 2px 5px; 
+    border-radius: 3px;
+    font-size: 10px; 
+    box-shadow: none; 
+    background-color: #EBF4FF; 
+    color: #133e87;
+    border: none;
+}

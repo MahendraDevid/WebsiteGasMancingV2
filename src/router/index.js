@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView/HomeView.vue'
 import Search from '../views/Search/Search.vue' 
 import Payment from '@/views/Payment/Payment.vue'
+import PaymentConfirmation from '@/views/PaymentConfirmation/PaymentConfirmation.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,9 +34,15 @@ const router = createRouter({
       component: Payment
     },
     {
+<<<<<<< HEAD
       path: '/detail',
       name: 'detail',
       component: () => import('../views/DetailTempatPemancinganView/DetailTempatPemancinganView.vue'),
+=======
+      path: '/paymentconfirmation',
+      name: 'paymentconfirmation',
+      component: PaymentConfirmation
+>>>>>>> 00ac25507c8ea55072e26e87585ba1b086f0e39a
     },
   ],
 })

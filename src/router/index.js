@@ -3,7 +3,7 @@ import HomeView from '../views/HomeView/HomeView.vue'
 import Search from '../views/Search/Search.vue' 
 import Payment from '@/views/Payment/Payment.vue'
 import PaymentConfirmation from '@/views/PaymentConfirmation/PaymentConfirmation.vue'
-import DetailPemancingan from '@/views/DetailTempatPemancinganView/DetailTempatPemancinganView.vue'
+import DetailTempatPemancinganView from '@/views/DetailTempatPemancinganView/DetailTempatPemancinganView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,9 +40,10 @@ const router = createRouter({
       component: PaymentConfirmation
     },
     {
-      path: '/detail',
-      name: 'detail',
-      component: DetailPemancingan
+      path: '/detail/:id',
+      name: 'DetailTempatPemancing',
+      component: DetailTempatPemancinganView,
+      props: true // Enable props passing from route params
     },
   ],
 })

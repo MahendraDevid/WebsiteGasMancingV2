@@ -45,6 +45,11 @@ const router = createRouter({
       component: DetailTempatPemancinganView,
       props: true // Enable props passing from route params
     },
+    {
+      path: '/pesanan',
+      name: 'pesanan',
+      component: () => import('../views/Pesanan/Pesanan.vue'),
+    }
   ],
 })
 

@@ -1,33 +1,40 @@
 <template>
   <div id="app-wrapper">
-    <!-- Dengarkan event @openModal dari Navbar dan panggil fungsi openModal -->
-    <Navbar @open-modal="openModal" />
+    <Navbar 
+      @open-modal="openModal" 
+      :is-logged-in="isLoggedIn"
+      @logout="handleLogout"
+      @toggle-profile="handleToggleProfile" 
+    /> 
     
     <main class="main-content">
-      <RouterView />
+      <RouterView /> 
     </main>
     
-    <Footer />
+    <Footer /> 
 
-    <!-- Komponen Modal diletakkan di App.vue agar bisa tampil di semua route -->
-    <!-- Modal untuk Login -->
     <LoginRegisterModal
       :is-visible="isModalVisible && modalType === 'login'"
       title="Masuk Akun"
       modal-type="login"
       @close="closeModal"
       @login="handleUserLogin"
-      @open-modal="openModal"
+      @open-modal="openModal" 
     />
-
-    <!-- Komponen Modal untuk REGISTER -->
     <LoginRegisterModal
       :is-visible="isModalVisible && modalType === 'register'"
       title="Daftar Akun Baru"
       modal-type="register"
       @close="closeModal"
-      @register="handleUserRegistration"
-      @open-modal="openModal"
+      @register="handleUserRegistration" 
+      @open-modal="openModal" 
+    />
+
+    <UserProfileDropdown 
+      :is-visible="isProfileVisible"
+      @close="handleToggleProfile(false)"
+      @logout="handleLogout"
+      @edit-profile="handleOpenEditProfile"
     />
   </div>
 </template>
@@ -35,45 +42,74 @@
 <script setup>
 import { ref } from 'vue'
 import { RouterView } from 'vue-router'
-import Navbar from './components/NavBar.vue' 
-// BARU: Impor komponen Modal
-import LoginRegisterModal from '@/components/LoginRegister.vue'
-
-// BARU: Data/State untuk mengontrol Modal (Dipindahkan dari HomeView)
+import Navbar from './components/NavBar.vue' // Pastikan nama file Anda benar
 import Footer from './components/Footer.vue' 
+import LoginRegisterModal from '@/components/LoginRegister.vue'; // Pastikan nama file Anda benar
+// BARU: Impor dropdown profil
+import UserProfileDropdown from '@/components/UserProfileDropdown.vue';
+
+// --- STATE AUTENTIKASI ---
+const isLoggedIn = ref(false); 
+
+// --- STATE MODAL LOGIN/REGISTER ---
 const isModalVisible = ref(false);
 const modalType = ref('');
 
-// BARU: Metode untuk membuka modal (Dipindahkan dari HomeView)
+// --- STATE MODAL PROFIL ---
+const isProfileVisible = ref(false); // State untuk dropdown profil
+
+// --- FUNGSI MODAL (LOGIN/REG/EDIT) ---
 const openModal = (type) => {
-  console.log(`[App] Event diterima, tipe modal: ${type}`) // BARU
-  modalType.value = type
-  isModalVisible.value = true
-  document.body.style.overflow = 'hidden'
-}
+  console.log(`[App] Buka Modal: ${type}`);
+  modalType.value = type;
+  isModalVisible.value = true;
+  document.body.style.overflow = 'hidden';
+  isProfileVisible.value = false; // Tutup dropdown profil jika terbuka
+};
 
-// BARU: Metode untuk menutup modal (Dipindahkan dari HomeView)
 const closeModal = () => {
-  isModalVisible.value = false
-  modalType.value = ''
-  // Aktifkan kembali scroll body
-  document.body.style.overflow = ''
-}
+  isModalVisible.value = false;
+  modalType.value = '';
+  document.body.style.overflow = '';
+};
 
-// BARU: Handler untuk proses Login (Contoh)
+// --- FUNGSI DROPDOWN PROFIL ---
+const handleToggleProfile = (forceState) => {
+  // forceState digunakan oleh tombol close
+  if (typeof forceState === 'boolean') {
+    isProfileVisible.value = forceState;
+  } else {
+    isProfileVisible.value = !isProfileVisible.value;
+  }
+};
+
+const handleOpenEditProfile = () => {
+  isProfileVisible.value = false; // Tutup dropdown
+  openModal('edit-profile'); // Buka modal edit profile
+};
+
+// --- FUNGSI AUTENTIKASI ---
 const handleUserLogin = (data) => {
-  console.log('Login diproses dengan data:', data);
-  // Mengganti alert dengan console.log atau UI pesan yang lebih baik di aplikasi nyata
-  console.log(`Login berhasil! Email: ${data.email}`); 
+  console.log('LOGIN diproses:', data);
+  isLoggedIn.value = true; 
   closeModal();
 };
 
-// BARU: Handler untuk proses Register (Contoh)
 const handleUserRegistration = (data) => {
-  console.log('Registrasi diproses dengan data:', data);
-  // Mengganti alert dengan console.log atau UI pesan yang lebih baik di aplikasi nyata
-  console.log(`Form registrasi dikirim! Email: ${data.email}.`); 
-  // Logika registrasi...
+  console.log('REGISTER diproses:', data);
+  isLoggedIn.value = true; 
+  closeModal();
+};
+
+const handleLogout = () => {
+  console.log('User logout.');
+  isLoggedIn.value = false;
+  isProfileVisible.value = false; // Tutup dropdown jika sedang terbuka
+};
+
+const handleUpdateProfile = (data) => {
+  console.log('PROFIL DIPERBARUI:', data);
+  // Kirim data ke backend...
   closeModal();
 };
 </script>

@@ -1,19 +1,46 @@
 <script setup>
 import { ref } from 'vue'
-// 1. Impor RouterLink untuk penggunaan di template
 import { RouterLink } from 'vue-router'
 
 const isMenuOpen = ref(false)
 
-// Deklarasikan event yang bisa dikeluarkan oleh komponen ini
-const emit = defineEmits(['openModal']);
+// BARU: Menerima prop 'isLoggedIn' dari App.vue
+defineProps({
+  isLoggedIn: {
+    type: Boolean,
+    default: false
+  }
+})
 
-// Fungsi yang memicu event
+// BARU: Menambahkan 'toggleProfile' dan 'logout' ke emits
+const emit = defineEmits(['openModal', 'toggleProfile', 'logout']);
+
+// Fungsi ini HANYA akan dipanggil jika !isLoggedIn
 const handleAuthClick = (type) => {
-    console.log(`[Navbar] Tombol diklik, mengeluarkan event: ${type}`); // BARU
+    console.log(`[Navbar] Event: openModal(${type})`);
     isMenuOpen.value = false;
     emit('openModal', type); 
 };
+
+// BARU: Fungsi untuk menangani klik ikon profil (Desktop)
+const handleProfileClick = () => {
+    console.log("[Navbar] Event: toggleProfile");
+    isMenuOpen.value = false; 
+    emit('toggleProfile'); // Memberi tahu App.vue untuk toggle dropdown
+};
+
+// BARU: Fungsi untuk menangani logout (Mobile)
+const handleLogoutClick = () => {
+  isMenuOpen.value = false;
+  console.log("[Navbar] Event: logout");
+  emit('logout');
+}
+
+// BARU: Fungsi untuk menangani klik "Profil Saya" (Mobile)
+const handleProfileClickMobile = () => {
+  isMenuOpen.value = false;
+  emit('toggleProfile'); // Ini juga akan toggle dropdown
+}
 </script>
 
 <template>
@@ -25,32 +52,49 @@ const handleAuthClick = (type) => {
         </div>
         <span class="logo-text">Gas Mancing</span>
       </router-link>
+      
       <button class="menu-toggle" @click="isMenuOpen = !isMenuOpen">
         <span></span><span></span><span></span>
       </button>
+
       <nav class="menu-desktop">
         <router-link to="/" class="menu-item">Beranda</router-link>
         <router-link to="/pesanan" class="menu-item">Pesanan Saya</router-link>
         <router-link to="/ensiklopedia" class="menu-item">Ensiklopedia</router-link>
       </nav>
-        <div class="auth-buttons">
+      
+      <div class="auth-buttons">
+          <template v-if="!isLoggedIn">
             <button class="btn-masuk" @click="handleAuthClick('login')">Masuk</button>
             <button class="btn-daftar" @click="handleAuthClick('register')">Daftar</button>
-        </div>
+          </template>
+          
+          <template v-else>
+            <button class="user-profile-button" @click="handleProfileClick">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+            </button>
+          </template>
+      </div>
     </div>
   </header>
 
   <nav :class="['menu-mobile', { active: isMenuOpen }]">
     <button class="menu-close" @click="isMenuOpen = false">&times;</button>
-
-    <!-- 🌟 PERBAIKAN: Menghapus 'Pencarian' dan mengembalikan 'Pesanan Saya' -->
+    
     <router-link to="/" class="menu-item" @click="isMenuOpen = false">Beranda</router-link>
     <a href="#" class="menu-item" @click="isMenuOpen = false">Pesanan Saya</a>
     <router-link to="/ensiklopedia" class="menu-item" @click="isMenuOpen = false">Ensiklopedia</router-link>
-
-    <div class="menu-auth">
+    
+    <div v-if="!isLoggedIn" class="menu-auth">
         <button class="btn-masuk" @click="handleAuthClick('login')">Masuk</button>
         <button class="btn-daftar" @click="handleAuthClick('register')">Daftar</button>
+    </div>
+    
+    <div v-else class="menu-auth">
+      <a href="#" class="menu-item" @click="handleProfileClickMobile">Profil Saya</a>
+      <a href="#" class="menu-item logout" @click="handleLogoutClick">Keluar</a>
     </div>
   </nav>
 </template>
@@ -255,6 +299,38 @@ const handleAuthClick = (type) => {
   text-align: center;
 }
 
+
+/* BARU: Tambahkan style untuk tombol ikon profil */
+.user-profile-button {
+  background-color: var(--white);
+  color: var(--bay-of-many); /* Warna ikon */
+  border: none;
+  border-radius: 50%; /* Bulat */
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.user-profile-button:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.05);
+}
+.user-profile-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* BARU: Style untuk tombol logout di mobile */
+.menu-mobile .menu-item.logout {
+  color: #d9534f;
+}
+.menu-mobile .menu-item.logout:hover {
+  background-color: rgba(217, 83, 79, 0.1);
+}
+
 /* --- RESPONSIVE NAVBAR --- */
 @media (max-width: 1024px) {
   .navbar-container {
@@ -296,4 +372,3 @@ const handleAuthClick = (type) => {
   }
 }
 </style>
-

@@ -1,15 +1,7 @@
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background-color: #dce9f7;
-  padding-top: 100px;
-}
-
 .edit-profile-wrapper {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  background-color: #dce9f7;
   padding: 2rem;
 }
 
@@ -20,6 +12,7 @@ body {
   padding: 40px;
   width: 1100px;
   text-align: center;
+  margin-top: 2rem;
 }
 
 .profile-icon {

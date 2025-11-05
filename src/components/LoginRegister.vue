@@ -1,80 +1,62 @@
 <template>
-  <!-- Overlay: Hanya tampil jika isVisible=true. Menggunakan @click.self untuk menutup saat klik latar belakang -->
   <div v-if="isVisible" class="modal-overlay" @click.self="closeModal">
     <div class="login-container">
       
-      <!-- Header dan Tombol Tutup -->
       <div class="modal-header">
         <h2 class="masuk-akun">{{ title }}</h2>
         <button class="close-button" @click="closeModal">&times;</button>
       </div>
 
-      <!-- Form (Untuk Login/Register) -->
       <form @submit.prevent="handleAuth" class="form-content">
 
-        <!-- BARU: Hanya tampil saat registrasi -->
-        <div v-if="modalType === 'register'" class="input-group">
-          <label for="name" class="label-text">Nama Lengkap</label>
-          <input
-            id="name"
-            type="text"
-            class="input-card"
-            placeholder="Masukkan Nama Lengkap Anda"
-            v-model="namaLengkap"
-            required
-          />
-        </div>
+        <!-- ===== FORM REGISTER ===== -->
+        <template v-if="modalType === 'register'">
+          <div class="input-group">
+            <label for="name" class="label-text">Nama Lengkap</label>
+            <input id="name" type="text" class="input-card" v-model="namaLengkap" required />
+          </div>
+          <div class="input-group">
+            <label for="email" class="label-text">Email</label>
+            <input id="email" type="email" class="input-card" v-model="email" required />
+          </div>
+          <div class="input-group">
+            <label for="password" class="label-text">Password</label>
+            <input id="password" type="password" class="input-card" v-model="password" required />
+          </div>
+          <div class="input-group">
+            <label for="confirmPassword" class="label-text">Konfirmasi Password</label>
+            <input id="confirmPassword" type="password" class="input-card" v-model="konfirmasiPassword" required />
+          </div>
+        </template>
 
-        <!-- Input Email (Tampil di Login & Register) -->
-        <div class="input-group">
-          <label for="email" class="label-text">Email</label>
-          <input
-            id="email"
-            type="email"
-            class="input-card"
-            placeholder="Masukkan Email Anda"
-            v-model="email"
-            required
-          />
-        </div>
+        <!-- ===== FORM LOGIN ===== -->
+        <template v-if="modalType === 'login'">
+          <div class="input-group">
+            <label for="email-login" class="label-text">Email</label>
+            <input id="email-login" type="email" class="input-card" v-model="email" required />
+          </div>
+          <div class="input-group">
+            <label for="password-login" class="label-text">Password</label>
+            <input id="password-login" type="password" class="input-card" v-model="password" required />
+          </div>
+        </template>
+        
+        <!-- 
+          KITA HAPUS FORM EDIT PROFILE DARI SINI 
+        -->
 
-        <!-- Input Password (Tampil di Login & Register) -->
-        <div class="input-group">
-          <label for="password" class="label-text">Password</label>
-          <input
-            id="password"
-            type="password"
-            class="input-card"
-            placeholder="Masukkan Password"
-            v-model="password"
-            required
-          />
-        </div>
-
-        <!-- BARU: Hanya tampil saat registrasi -->
-        <div v-if="modalType === 'register'" class="input-group">
-          <label for="confirmPassword" class="label-text">Konfirmasi Password</label>
-          <input
-            id="confirmPassword"
-            type="password"
-            class="input-card"
-            placeholder="Konfirmasi Password Anda"
-            v-model="konfirmasiPassword"
-            required
-          />
-        </div>
-
+        <!-- Tombol Submit Dinamis -->
         <button type="submit" class="login-button">
-          {{ modalType === 'login' ? 'Masuk' : 'Daftar' }}
+          <span v-if="modalType === 'login'">Masuk</span>
+          <span v-else-if="modalType === 'register'">Daftar</span>
         </button>
       </form>
 
-      <!-- Tautan Daftar/Login -->
+      <!-- Tautan Bawah (Hanya untuk Login/Register) -->
       <div class="belum-ada-akun-daftar">
         <span class="span0">
           {{ modalType === 'login' ? 'Belum ada akun? ' : 'Sudah punya akun? ' }}
         </span>
-        <!-- Tautan ini sekarang memicu event 'openModal' di App.vue untuk berganti modal -->
         <a href="#" class="span1" @click.prevent="modalType === 'login' ? $emit('openModal', 'register') : $emit('openModal', 'login')">
           {{ modalType === 'login' ? 'Daftar' : 'Masuk' }}
         </a>
@@ -84,79 +66,58 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'LoginModal',
-  // Props tetap sama
-  props: {
-    isVisible: {
-      type: Boolean,
-      required: true,
-    },
-    title: {
-      type: String,
-      default: 'Masuk Akun',
-    },
-    modalType: {
-      type: String,
-      default: 'login',
-    },
-  },
-  // BARU: Tambahkan data untuk field register
-  data() {
-    return {
-      email: '',
-      password: '',
-      namaLengkap: '', // <-- BARU
-      konfirmasiPassword: '', // <-- BARU
-    };
-  },
-  methods: {
-    closeModal() {
-      this.$emit('close');
-    },
-    // BARU: Logika handleAuth diperbarui
-    handleAuth() {
-      const eventName = this.modalType; // 'login' or 'register'
-      let payload = {};
+<script setup>
+import { ref, watch } from 'vue'
 
-      if (eventName === 'login') {
-        payload = {
-          email: this.email,
-          password: this.password
-        };
-      } else if (eventName === 'register') {
-        // Validasi konfirmasi password
-        if (this.password !== this.konfirmasiPassword) {
-          alert('Password dan Konfirmasi Password tidak cocok!');
-          return; // Hentikan submit jika tidak cocok
-        }
-        
-        payload = {
-          namaLengkap: this.namaLengkap,
-          email: this.email,
-          password: this.password
-          // Anda tidak perlu mengirim konfirmasiPassword ke backend
-        };
-      }
-      
-      console.log(`Mengeluarkan event: ${eventName}`, payload);
-      this.$emit(eventName, payload);
-    }
-  },
-  // BARU: Watch diperbarui untuk reset semua field
-  watch: {
-    isVisible(newVal) {
-      if (newVal) {
-        // Reset semua form saat modal dibuka
-        this.email = '';
-        this.password = '';
-        this.namaLengkap = ''; // <-- BARU
-        this.konfirmasiPassword = ''; // <-- BARU
-      }
-    }
+const props = defineProps({
+  isVisible: { type: Boolean, required: true },
+  title: { type: String, default: 'Masuk Akun' },
+  modalType: { type: String, default: 'login' },
+})
+
+// BARU: Hapus 'updateProfile'
+const emit = defineEmits(['close', 'login', 'register', 'openModal'])
+
+const email = ref('')
+const password = ref('')
+const namaLengkap = ref('')
+const konfirmasiPassword = ref('')
+
+watch(() => props.isVisible, (newVal) => {
+  if (newVal) {
+    email.value = ''
+    password.value = ''
+    namaLengkap.value = ''
+    konfirmasiPassword.value = ''
+    //
+    // KITA HAPUS LOGIKA 'edit-profile' DARI SINI
+    //
   }
-};
+})
+
+const closeModal = () => {
+  emit('close')
+}
+
+const handleAuth = () => {
+  if (props.modalType === 'login') {
+    emit('login', { email: email.value, password: password.value })
+  } 
+  else if (props.modalType === 'register') {
+    if (password.value !== konfirmasiPassword.value) {
+      alert('Password dan Konfirmasi Password tidak cocok!');
+      return; 
+    }
+    emit('register', { 
+      namaLengkap: namaLengkap.value, 
+      email: email.value, 
+      password: password.value 
+    })
+  }
+  //
+  // KITA HAPUS LOGIKA 'edit-profile' DARI SINI
+  //
+}
 </script>
 
 <style scoped>

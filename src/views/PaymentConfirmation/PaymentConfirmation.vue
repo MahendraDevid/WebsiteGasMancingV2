@@ -118,11 +118,13 @@ function handleConfirmation() {
     </main>
   </div>
   
-  <FooterPayment
-    variant="button"
-    buttonText="Bayar Sekarang" 
-    @submit="handleConfirmation"
-  />
+  <!-- Footer pembayaran -->
+    <FooterPayment
+      variant="checkout"
+      :leftTitle="'Total'"
+      :leftSubtitle="'Rp 120.000'"
+      :buttonText="'Bayar Sekarang'"
+      nextRoute="/pesanan"/>
 </template>
 
 <style scoped>

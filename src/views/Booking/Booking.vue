@@ -62,26 +62,6 @@ const formatCurrency = (value) => {
 
 const totalPriceFormatted = computed(() => formatCurrency(totalPrice.value));
 
-// // --- Aksi Tombol ---
-// function handleBooking() {
-//   if (!bookingDate.value) {
-//     alert('Harap pilih tanggal booking.');
-//     return;
-//   }
-  
-//   const bookingDetails = {
-//     spot: spotInfo.value.title,
-//     date: bookingDate.value,
-//     duration: duration.value,
-//     people: numPeople.value,
-//     equipment: equipment.value,
-//     total: totalPriceFormatted.value
-//   };
-  
-//   console.log('Booking Dibuat:', bookingDetails);
-//   alert(`Booking untuk ${bookingDetails.spot} sejumlah ${totalPriceFormatted.value} berhasil!`);
-// }
-
 // Fungsi untuk memilih/membatalkan pilihan peralatan
 function toggleEquipment(equipmentId) {
   equipment.value[equipmentId] = !equipment.value[equipmentId];
@@ -148,13 +128,14 @@ function toggleEquipment(equipmentId) {
 
     <!-- 3. Footer Pembayaran -->
     <!-- Menggunakan variant "checkout" dari komponen baru Anda -->
-    <FooterPayment 
-      variant="checkout"
-      :leftSubtitle="'Total Pembayaran'"
-      :leftTitle="totalPriceFormatted" 
-      :buttonText="'Booking'"
-      @submit="handleBooking" 
+    <FooterPayment
+        variant="checkout"
+        :leftTitle="'Total'"
+        :leftSubtitle="'Rp 1.999.009,-'"
+        :buttonText="'Lanjut ke Pembayaran'"
+        nextRoute="/payment"
     />
+
   </main>
 </template>
 

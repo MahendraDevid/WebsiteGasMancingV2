@@ -4,7 +4,7 @@ export const placesData = [
         id: 1,
         image: '/img/ancol.png', 
         title: 'Pantai Ancol',
-        location: 'Ancol, Jakarta Barat',
+        location: 'Ancol, Jakarta Utara',
         description: 'Tempat pemancingan laut yang populer dengan fasilitas lengkap dan suasana nyaman. Cocok untuk memancing harian.',
         price: 'Rp. 50.000/hari',
         rating: '4.2',

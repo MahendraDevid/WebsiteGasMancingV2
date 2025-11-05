@@ -107,7 +107,7 @@ function handleBooking(itemId) {
         </section>
         
         <h2 class="search-results-title">
-            Tempat Pemancingan di Sekitar **{{ currentKeywordDisplay }}**
+            Tempat Pemancingan di Sekitar <b>{{ currentKeywordDisplay }}</b>
         </h2>
 
         <section class="results-container">
@@ -124,7 +124,7 @@ function handleBooking(itemId) {
                     </div>
 
                     <div class="card-content-section">
-                        <h3 class="card-title">{{ item.title }}</h3>
+                        <h3 class="card-title">{{ item.title }} </h3>
                         
                         <div class="card-rating">
                             <div class="rating-box">
@@ -134,21 +134,22 @@ function handleBooking(itemId) {
                             </div>
                         </div>
                         
-                        <div class="card-price">{{ item.price }}</div>
                         
                         <div class="card-location">
                             <svg class="location-icon-card" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                             <span>{{ item.location }}</span>
                         </div>
-
+                        
                         <p class="card-description">{{ item.description }}</p>
+                        
+                        <div class="card-price">{{ item.price }}</div>
                         
                         <div class="card-facilities">
                             <span v-for="(facility, index) in item.facilities" :key="index" class="facility-tag">
                                 {{ facility }}
                             </span>
                         </div>
-
+                        
                         <div class="card-button-wrapper">
                             <button class="button-booking" @click="handleBooking(item.id)">
                                 Booking

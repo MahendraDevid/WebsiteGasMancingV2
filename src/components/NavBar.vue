@@ -4,6 +4,16 @@ import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 
 const isMenuOpen = ref(false)
+
+// Deklarasikan event yang bisa dikeluarkan oleh komponen ini
+const emit = defineEmits(['openModal']);
+
+// Fungsi yang memicu event
+const handleAuthClick = (type) => {
+    console.log(`[Navbar] Tombol diklik, mengeluarkan event: ${type}`); // BARU
+    isMenuOpen.value = false;
+    emit('openModal', type); 
+};
 </script>
 
 <template>
@@ -23,10 +33,10 @@ const isMenuOpen = ref(false)
         <router-link to="/pesanan" class="menu-item">Pesanan Saya</router-link>
         <router-link to="/ensiklopedia" class="menu-item">Ensiklopedia</router-link>
       </nav>
-      <div class="auth-buttons">
-        <button class="btn-masuk">Masuk</button>
-        <button class="btn-daftar">Daftar</button>
-      </div>
+        <div class="auth-buttons">
+            <button class="btn-masuk" @click="handleAuthClick('login')">Masuk</button>
+            <button class="btn-daftar" @click="handleAuthClick('register')">Daftar</button>
+        </div>
     </div>
   </header>
 
@@ -39,8 +49,8 @@ const isMenuOpen = ref(false)
     <router-link to="/ensiklopedia" class="menu-item" @click="isMenuOpen = false">Ensiklopedia</router-link>
 
     <div class="menu-auth">
-      <button class="btn-masuk">Masuk</button>
-      <button class="btn-daftar">Daftar</button>
+        <button class="btn-masuk" @click="handleAuthClick('login')">Masuk</button>
+        <button class="btn-daftar" @click="handleAuthClick('register')">Daftar</button>
     </div>
   </nav>
 </template>

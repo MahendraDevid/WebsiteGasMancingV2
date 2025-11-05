@@ -1,0 +1,181 @@
+/* Latar belakang utama halaman */
+.payment-page {
+  min-height: 100vh;
+  padding: 24px 24px 120px 24px; 
+}
+
+/* Kontainer utama konten di tengah */
+.payment-content {
+  max-width: 900px; /* Batasi lebar konten */
+  margin: 0 auto;
+}
+
+.payment-header {
+  margin-bottom: 24px;
+}
+
+.payment-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a202c; /* Teks hitam pekat */
+}
+
+/* Box Putih: Total Harga & Nomor Pesanan */
+.order-summary {
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.order-total {
+  display: flex;
+  flex-direction: column;
+}
+
+.order-total span {
+  font-size: 16px;
+  color: #718096; /* Teks abu-abu */
+  margin-bottom: 4px;
+}
+
+.order-total strong {
+  font-size: 22px;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.order-number {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #4A5568;
+}
+
+.order-badge {
+  background-color: #E53E3E; /* Merah */
+  color: #FFFFFF;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Box Abu-abu: Metode Pembayaran */
+.payment-methods {
+  background-color: #FFFFFF; /* Abu-abu container */
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.methods-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 16px;
+}
+
+/* Setiap kategori (Transfer Bank, E-Wallet, dll) */
+.method-category {
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  overflow: hidden; 
+}
+
+.method-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.method-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.method-info h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.method-logos {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.method-logos img {
+  height: 20px; /* Atur tinggi logo seragam */
+  object-fit: contain;
+}
+
+.method-toggle {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  color: #718096;
+}
+
+.method-header .method-logos {
+  display: none;
+}
+
+.method-content {
+  padding: 0 20px 20px 20px;
+  border-top: 1px solid #EDF2F7;
+}
+
+.payment-option-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Jarak antar opsi */
+  padding-top: 15px; /* Jarak dari garis pemisah */
+}
+
+/* Style untuk setiap baris opsi (BRI, BNI, dll) */
+.payment-option {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.payment-option:hover {
+  border-color: #0D47A1; /* Warna biru saat di-hover */
+}
+
+/* Style untuk logo di dalam daftar */
+.payment-logo {
+  height: 24px; /* Ukuran logo (sesuaikan jika perlu) */
+  margin-right: 12px;
+  object-fit: contain;
+}
+
+.payment-option span {
+  font-weight: 500;
+  color: #333;
+}
+
+/* Pindahkan radio button ke paling kanan */
+.payment-option input[type="radio"] {
+  margin-left: auto; 
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}

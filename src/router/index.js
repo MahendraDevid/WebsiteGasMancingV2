@@ -34,15 +34,9 @@ const router = createRouter({
       component: Payment
     },
     {
-<<<<<<< HEAD
-      path: '/detail',
-      name: 'detail',
-      component: () => import('../views/DetailTempatPemancinganView/DetailTempatPemancinganView.vue'),
-=======
       path: '/paymentconfirmation',
       name: 'paymentconfirmation',
       component: PaymentConfirmation
->>>>>>> 00ac25507c8ea55072e26e87585ba1b086f0e39a
     },
   ],
 })

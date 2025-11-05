@@ -5,6 +5,7 @@
 .hero-title-text {
     font-size: 58px;
     font-weight: 800;
+    height: 100px;
     color: white;
     text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     margin-bottom: 10px;
@@ -20,6 +21,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: -30px;
 }
 
 .hero-image {
@@ -539,7 +541,7 @@
         padding: 40px 282px;
     }
     .hero-image {
-        height: 300px;
+        height: 450px;
     }
     .hero-content {
         top: 120px;
@@ -552,7 +554,7 @@
 
 @media (max-width: 768px) {
     .hero-image {
-        height: 250px;
+        height: 500px;
     }
     .hero-content {
         top: 100px;
@@ -624,7 +626,7 @@
 
 @media (max-width: 480px) {
     .hero-image {
-        height: 220px;
+        height: 450px;
     }
     .hero-content {
         top: 90px;

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Navbar />
     <div class="edit-profile-wrapper">
       <div class="edit-profile-card">
         <img src="/img/ikan.png" alt="Logo Ikan" class="profile-icon">
@@ -28,7 +27,6 @@
 
 <script setup>
 import { ref } from 'vue'
-import Navbar from '@/components/NavBar.vue'
 import './Profile.css'
 
 const email = ref('')

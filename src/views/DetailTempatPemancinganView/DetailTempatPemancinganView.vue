@@ -21,7 +21,7 @@
           <div class="header-booking-box">
             <p class="booking-price-header">{{ place.price }}</p>
             <button class="booking-button">
-              Booking Sekarang
+              <a href="/booking">Booking Sekarang</a>
             </button>
           </div>
         </div>
@@ -80,17 +80,6 @@
               <p class="review-text">{{ review.comment }}</p>
             </div>
           </div>
-        </div>
-
-        <!-- Tombol Booking Footer -->
-        <div class="section booking-footer-section">
-          <div class="booking-footer-price-info">
-            Harga mulai dari:
-            <span class="booking-footer-price">{{ place.price }}</span>
-          </div>
-          <button class="booking-button">
-            Lihat Ketersediaan & Booking
-          </button>
         </div>
 
       </div>

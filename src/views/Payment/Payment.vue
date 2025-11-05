@@ -22,8 +22,8 @@ const router = useRouter()
 console.log(route.query.total)
 
 // 5. Helper kategori
-const bankOptions = ['bri', 'bni', 'visa', 'mastercard']
-const walletOptions = ['gopay', 'ovo']
+const bankOptions = ['bri', 'bni', 'VISA', 'MASTERCARD']
+const walletOptions = ['Gopay', 'ovo']
 const qrOptions = ['qris']
 
 function isCategorySelected(category) {

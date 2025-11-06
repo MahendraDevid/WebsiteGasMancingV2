@@ -1,6 +1,6 @@
 .ensiklopedia-view {
   font-family: Arial, Helvetica, sans-serif;
-  padding: 120px 40px 80px; /* Increased padding: top for navbar, sides for spacing, bottom for footer */
+  padding: 120px 40px 80px;
   min-height: 100vh;
   background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
 }
@@ -27,95 +27,69 @@
   line-height: 1.6;
 }
 
-/* Grid Container - Larger cards with more spacing */
+/* BARU: Style untuk Search Bar 
+*/
+.search-container {
+  position: relative;
+  margin-top: 30px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.search-input {
+  width: 100%;
+  padding: 16px 20px 16px 50px; /* Jarak untuk ikon */
+  font-size: 16px;
+  border-radius: 50px; /* Sangat bulat */
+  border: 1px solid #d6d6d6;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+.search-input:focus {
+  outline: none;
+  border-color: var(--btn-blue);
+  box-shadow: 0 4px 12px rgba(96, 139, 193, 0.3);
+}
+
+.search-icon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: #999;
+}
+
+/* Grid Container */
 .grid-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 30px; /* Increased gap between cards */
+  gap: 30px;
   max-width: 1920px;
   margin: 0 auto;
 }
 
-/* Card Styles - Larger and more padded */
-.card {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border-radius: 12px;
-  background-color: #ffffff;
-  transition: all 0.3s ease;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  padding: 24px; /* Added padding inside card for larger appearance */
-}
+/* CSS .card, .card-image, .card-content, .btn-detail, dll. 
+  Sudah DIHAPUS dari sini dan dipindahkan ke FishCard.vue
+*/
 
-.card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-}
-
-/* Card Image */
-.card-image {
-  width: 100%;
-  height: 220px; /* Increased height */
-  overflow: hidden;
-  border-radius: 8px;
-  margin-bottom: 20px; /* Increased spacing */
-  background-color: #e9ecef;
-}
-
-.card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.card:hover .card-image img {
-  transform: scale(1.1);
-}
-
-/* Card Content - More padding */
-.card-content {
-  padding: 8px; /* Additional padding inside content area */
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.card-title {
-  font-size: 22px; /* Larger title */
-  font-weight: 600;
-  color: var(--bay-of-many);
-  margin-bottom: 14px; /* More spacing */
-}
-
-.card-description {
-  font-size: 15px; /* Slightly larger text */
+/* BARU: Style untuk "Hasil Tidak Ditemukan" */
+.no-results {
+  text-align: center;
+  margin-top: 50px;
   color: #6c757d;
-  line-height: 1.7; /* Better line height */
-  margin-bottom: 20px; /* More spacing */
-  flex: 1;
 }
-
-/* Button */
-.btn-detail {
-  width: 100%;
-  padding: 12px 24px; /* Larger button */
-  background-color: var(--btn-blue);
-  color: white;
-  border: none;
-  border-radius: 6px;
+.no-results h3 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.no-results p {
   font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.btn-detail:hover {
-  background-color: #4f7aa8;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
 
 /* Responsive Layout */
 @media screen and (max-width: 1400px) {
@@ -123,80 +97,45 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 25px;
   }
-  
   .ensiklopedia-view {
     padding: 100px 30px 60px;
   }
 }
-
 @media screen and (max-width: 1024px) {
   .grid-container {
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
   }
-  
   .ensiklopedia-view {
     padding: 90px 25px 50px;
   }
-  
   .page-title {
     font-size: 36px;
   }
-  
-  .card {
-    padding: 20px;
-  }
-  
-  .card-image {
-    height: 200px;
-  }
 }
-
 @media screen and (max-width: 768px) {
   .ensiklopedia-view {
     padding: 80px 20px 40px;
   }
-  
   .page-title {
     font-size: 32px;
   }
-  
   .page-subtitle {
     font-size: 16px;
   }
-  
-  .card-title {
-    font-size: 20px;
-  }
-  
-  .card-description {
-    font-size: 14px;
-  }
 }
-
 @media screen and (max-width: 600px) {
   .grid-container {
     grid-template-columns: 1fr;
     gap: 20px;
   }
-  
   .ensiklopedia-view {
     padding: 70px 15px 30px;
   }
-  
   .header-section {
     margin-bottom: 30px;
   }
-  
   .page-title {
     font-size: 28px;
-  }
-  
-  .card {
-    padding: 18px;
-  }
-  
-  .card-image {
-    height: 180px;
   }
 }

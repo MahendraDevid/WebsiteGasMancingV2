@@ -2,7 +2,6 @@
   font-family: Arial, Helvetica, sans-serif;
   padding: 120px 40px 80px;
   min-height: 100vh;
-  background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
 /* Header Section */
@@ -88,6 +87,42 @@
 }
 .no-results p {
   font-size: 16px;
+}
+
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 40px;
+}
+
+.page-btn {
+  background-color: white;
+  border: 1px solid #d6d6d6;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.page-btn:hover {
+  background-color: var(--btn-blue);
+  color: white;
+  border-color: var(--btn-blue);
+}
+
+.page-btn.active {
+  background-color: var(--btn-blue);
+  color: white;
+  border-color: var(--btn-blue);
+  font-weight: 600;
+}
+
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 

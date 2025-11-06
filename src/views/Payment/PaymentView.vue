@@ -8,7 +8,7 @@ import PaymentBox from '@/components/PaymentBox.vue'
 import FooterPayment from '@/components/FooterPayment.vue'
 
 // 2. Impor CSS
-import './Payment.css'
+import './PaymentView.style.css'
 
 // 3. STATE UTAMA: (radio button)
 const selectedOption = ref('bri')

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
-import './Booking.style.css';
+import './BookingView.style.css';
 // 1. Impor komponen FooterPayment
 import FooterPayment from '../../components/FooterPayment.vue';
 

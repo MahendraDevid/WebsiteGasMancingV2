@@ -3,7 +3,7 @@ defineOptions({ name: 'SearchPage' })
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { placesData } from '@/data/placesData'
-import './Search.style.css'
+import './SearchView.style.css'
 
 const route = useRoute()
 const router = useRouter()

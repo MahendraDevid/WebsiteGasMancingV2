@@ -27,7 +27,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import './Profile.css'
+import './ProfileView.style.css'
 
 const email = ref('')
 const username = ref('')

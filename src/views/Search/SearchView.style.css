@@ -13,24 +13,20 @@
     padding: 0 20px;
 }
 
-/* ============================================== */
-/* 🌟 BAGIAN INI DIDUPLIKASI DARI HOMEVIEW.STYLE.CSS 🌟 */
-/* ============================================== */
 .search-section {
     position: relative;
     z-index: 10;
-    /* 🌟 PERUBAHAN: Disesuaikan untuk Halaman Search (bukan overlap) */
-    padding-top: 100px; /* Jarak dari Navbar */
-    padding-bottom: 60px; /* Jarak ke Judul Halaman */
+    padding-top: 100px;
+    padding-bottom: 60px;
     padding-left: 20px;
     padding-right: 20px;
-    margin-top: 0; /* Hapus margin negatif */
+    margin-top: 0;
 }
 
 .search-container-custom {
     max-width: 1150px;
     margin: 0 auto;
-    background-color: var(--white);
+    background-color: #FFFFFF;
     border-radius: 10px;
     padding: 10px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
@@ -123,7 +119,6 @@
     height: 24px;
 }
 
-/* Responsive Media Queries untuk Search Bar */
 @media (max-width: 1024px) {
     .search-container-custom {
         flex-wrap: wrap;
@@ -140,7 +135,6 @@
 }
 
 @media (max-width: 768px) {
-    /* Penyesuaian padding untuk Halaman Search */
     .search-section {
         padding-top: 100px;
         padding-bottom: 40px;
@@ -271,25 +265,24 @@
     color: var(--licorice);
     text-align: justify;
     line-height: 1.6;
-    flex-grow: 1; /* Ini membuat description mengambil ruang yang tersisa */
+    flex-grow: 1;
 }
 
 .card-price {
     font-size: 28px;
     font-weight: 600;
-    color: var(--licorice);
+    color: #FFA500;
     margin-top: 10px;
     margin-bottom: 15px;
     align-items: right;
 }
 
-/* ✅ LAYOUT BARU: Facilities dan Button dalam satu baris */
 .card-button-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 15px;
-    margin-top: auto; /* Dorong ke bawah */
+    margin-top: auto;
 }
 
 .card-facilities {
@@ -314,7 +307,7 @@
 }
 
 .card-button-wrapper {
-    flex-shrink: 0; /* Mencegah button menyusut */
+    flex-shrink: 0;
 }
 
 .button-booking {
@@ -337,24 +330,18 @@
     background-color: #0d2f64;
 }
 
-/* ==================================== */
-/* 4. RESPONSIVENESS (Result Cards) */
-/* ==================================== */
-
 @media (max-width: 1200px) {
     .card-image-section {
         min-width: 250px;
         width: 40%;
     }
-    
+
     .card-content-section {
         padding: 25px 30px;
     }
 }
 
-/* Tata letak mobile dikembalikan ke Tumpuk Vertikal */
 @media (max-width: 992px) {
-    /* Tata letak card tumpuk */
     .result-card {
         flex-direction: column;
         min-height: auto;
@@ -369,8 +356,7 @@
     .card-content-section {
         padding: 20px;
     }
-    
-    /* Mobile: Stack facilities dan button secara vertikal */
+
     .card-button-container {
         flex-direction: column;
         align-items: stretch;
@@ -404,23 +390,22 @@
     .card-description {
         font-size: 16px;
     }
-    
+
     .facility-tag {
         font-size: 13px;
         padding: 4px 8px;
     }
-    
+
     .button-booking {
         font-size: 18px;
         padding: 10px 30px;
     }
 }
 
-/* Pesan "Tidak Ada Hasil" */
 .no-results-message {
     text-align: center;
     padding: 60px 20px;
-    background-color: var(--white);
+    background-color: #FFFFFF;
     border-radius: 15px;
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
 }

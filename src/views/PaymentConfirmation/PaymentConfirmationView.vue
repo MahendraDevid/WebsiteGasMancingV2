@@ -74,6 +74,7 @@ function handleConfirmation() {
         </div>
 
         <div class="rental-info-container">
+
             <!-- Lokasi, Tanggal, Orang -->
             <div class="location-date-person">
                 
@@ -107,6 +108,7 @@ function handleConfirmation() {
                 </div>
             </div>
 
+            
             <!-- Peralatan yang Disewa -->
             <div class="rented-items-box">
                 <h3 class="items-title">Peralatan yang Disewa :</h3>

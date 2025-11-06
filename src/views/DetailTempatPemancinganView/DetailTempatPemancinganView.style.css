@@ -241,7 +241,7 @@ hr {
 /* --- 6. BOOKING BUTTONS & SECTIONS --- */
 .booking-button {
   padding: 12px 30px;
-  background-color: #3498db;
+  background-color: #14347C;
   color: white;
   border: none;
   border-radius: 8px;
@@ -255,8 +255,7 @@ hr {
 }
 
 .booking-button:hover {
-  background-color: #2980b9;
-  transform: translateY(-2px);
+  background-color: #0d2558;
   box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
 }
 

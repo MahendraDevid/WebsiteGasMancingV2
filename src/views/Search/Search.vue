@@ -1,4 +1,5 @@
 <script setup>
+defineOptions({ name: 'SearchPage' })
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { placesData } from '@/data/placesData'
@@ -144,16 +145,18 @@ function handleBooking(itemId) {
                         
                         <div class="card-price">{{ item.price }}</div>
                         
-                        <div class="card-facilities">
+                        <div class="card-button-container">
+                          <div class="card-facilities">
                             <span v-for="(facility, index) in item.facilities" :key="index" class="facility-tag">
                                 {{ facility }}
                             </span>
-                        </div>
+                          </div>
                         
-                        <div class="card-button-wrapper">
+                          <div class="card-button-wrapper">
                             <button class="button-booking" @click="handleBooking(item.id)">
-                                Booking
+                                Detail
                             </button>
+                          </div>
                         </div>
                     </div>
                 </div>

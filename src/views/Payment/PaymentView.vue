@@ -20,6 +20,7 @@ const openCategory = ref('bank')
 const route = useRoute()
 const router = useRouter()
 console.log(route.query.total)
+const totalHarga = ref(route.query.total || 'Rp 0') // ambil total dari query
 
 // 5. Helper kategori
 const bankOptions = ['bri', 'bni', 'VISA', 'MASTERCARD']
@@ -48,10 +49,10 @@ const buttonText = computed(() => {
 
 // 8. 🔹 HANDLE PAYMENT — tambahkan navigasi ke PaymentConfirmation
 function handlePayment() {
-  console.log(`Memproses pembayaran dengan: ${selectedOption.value}`)
-
-  // Setelah user klik tombol Bayar → arahkan ke halaman konfirmasi
-  router.push('/paymentconfirmation')
+  router.push({
+    path: '/paymentconfirmation',
+    query: { total: totalHarga.value }
+  })
 }
 </script>
 
@@ -62,7 +63,7 @@ function handlePayment() {
     <main class="payment-content">
       <PaymentBox
         title="Pembayaran"
-        totalPrice="Rp. 1.999.009,-" 
+        :totalPrice="totalHarga" 
       />
 
       <section class="payment-methods">

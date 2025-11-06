@@ -1,5 +1,8 @@
 <script setup>
 import { ref } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 
 // 1. Impor komponen yang dibutuhkan
 import Navbar from '@/components/NavBar.vue'
@@ -11,7 +14,7 @@ import './PaymentConfirmationView.style.css'
 
 // Data Dummy (diasumsikan diambil dari API di aplikasi nyata)
 const kodeBayar = ref('8881081234567890');
-const totalHarga = ref('Rp. 1.999.009,-');
+const totalHarga = ref(route.query.total || 'Rp 0')
 const nomorPesanan = ref(42);
 const lokasi = ref('Ancol, Jakarta barat');
 const tanggal = ref('12 Desember 2025');
@@ -122,9 +125,10 @@ function handleConfirmation() {
     <FooterPayment
       variant="checkout"
       :leftTitle="'Total'"
-      :leftSubtitle="'Rp 120.000'"
+      :leftSubtitle="totalHarga"
       :buttonText="'Bayar Sekarang'"
-      nextRoute="/pesanan"/>
+      nextRoute="/pesanan"
+      />
 </template>
 
 <style scoped>

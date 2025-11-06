@@ -133,7 +133,7 @@ function toggleEquipment(equipmentId) {
         :leftTitle="'Total'"
         :leftSubtitle="totalPriceFormatted"
         :buttonText="'Lanjut ke Pembayaran'"
-        nextRoute="/payment"
+        :nextRoute="`/payment?total=${encodeURIComponent(totalPriceFormatted)}`"
     />
 
   </main>

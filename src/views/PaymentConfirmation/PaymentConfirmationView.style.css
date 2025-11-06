@@ -1,8 +1,10 @@
-/* Styling Utama Halaman dan Main Content */
+/* PaymentConfirmationView.css (VERSI BARU) */
 
+/* Styling Utama Halaman dan Main Content */
 .confirmation-page-wrapper {
     min-height: 100vh;
     padding: 24px 24px 120px 24px; 
+    background-color: #F0F4F8; /* -- DIUBAH -- Latar belakang halaman */
 }
 
 .confirmation-content-box {
@@ -11,15 +13,52 @@
     padding: 0; 
     background-color: transparent; 
     box-shadow: none; 
-    
 }
 
-/* KOTAK DETAIL KONFIRMASI (Kotak Putih Bawah) */
+/* -- BARU -- Style untuk header Total Harga (Pengganti PaymentBox) */
+.payment-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 10px;
+}
+.total-harga-section {
+  display: flex;
+  flex-direction: column;
+}
+.total-harga-label {
+  font-family: "SF Pro Display-Regular", Helvetica;
+  font-size: 14px;
+  color: #4A5568;
+}
+.total-harga-value {
+  font-family: "SF Pro-Semibold", Helvetica;
+  font-size: 20px;
+  color: #141414;
+  font-weight: 600;
+}
+.nomor-pesanan {
+  font-family: "SF Pro Display-Medium", Helvetica;
+  font-size: 14px;
+  color: #4A5568;
+  font-weight: 500;
+}
+
+/* -- BARU -- Style untuk garis pemisah */
+.divider {
+  border: 0;
+  height: 1px;
+  background-color: #CBD5E0; /* Warna garis abu-abu */
+  margin: 10px 0;
+}
+
+
+/* KOTAK DETAIL KONFIRMASI (Kotak Abu-abu Utama) */
 .confirmation-details-wrapper {
-    background-color: #ffffff; 
+    background-color: #E9EBED; /* -- DIUBAH -- Latar belakang kartu utama */
     border-radius: 16px; 
     padding: 15px 20px; 
-    margin-top: 20px; 
+    margin-top: 10px; /* -- DIUBAH -- Mengurangi jarak dari H1 */
     box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
 }
 
@@ -33,13 +72,14 @@
 }
 
 
-/* Bagian Kode Bayar (Tidak ada perubahan signifikan di sini) */
+/* Bagian Kode Bayar */
 .payment-code-section {
     display: flex;
     align-items: center;
     margin-bottom: 10px; 
     padding: 5px 0; 
-    border-bottom: 1px solid #EDF2F7; 
+    /* Garis bawah di sini bisa dihilangkan jika tidak ada di desain baru */
+    border-bottom: 1px solid #CBD5E0; /* -- DIUBAH -- Warna disesuaikan */
 }
 
 .code-label {
@@ -74,42 +114,40 @@
 }
 
 .location-date-person {
-    background-color: #f0f0f0; 
+    background-color: #ffffff; /* -- DIUBAH -- Menjadi Putih */
     border-radius: 10px;
     padding: 10px; 
     flex: 1 1 50%; 
     display: flex;
-    /* Alignment disetel agar ikon, label, dan detail merata */
     justify-content: space-around; 
+    /* -- BARU -- Samakan style dengan .rented-items-box */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); 
+    border: 1px solid #EDF2F7;
 }
 
 .info-item {
     display: flex;
     flex-direction: column;
-    align-items: center; /* WAJIB CENTER UNTUK TEKS */
+    align-items: center; 
     text-align: center;
     padding: 0 5px; 
 }
 
-/* KODE BARU UNTUK MERAPIKAN IKON DAN TULISAN */
-
+/* KODE UNTUK MERAPIKAN IKON DAN TULISAN */
 .icon-wrapper {
-    /* Menjamin ruang seragam untuk semua ikon */
     height: 35px; 
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 5px; /* Jarak antara ikon dan label */
+    margin-bottom: 5px; 
 }
 
 .detail-img {
-    /* Untuk iconlokasi.png dan calendar.png */
     width: 28px;
     height: 28px;
     object-fit: contain;
 }
 .detail-img-large {
-    /* Untuk icon people.png (jika memang lebih besar) */
     width: 32px;
     height: 32px;
     object-fit: contain;
@@ -135,7 +173,7 @@
     word-break: break-word; 
 }
 
-/* Bagian Peralatan yang Disewa (Tidak ada perubahan signifikan di sini) */
+/* Bagian Peralatan yang Disewa (Tidak ada perubahan) */
 .rented-items-box {
     background-color: #ffffff; 
     border-radius: 10px;

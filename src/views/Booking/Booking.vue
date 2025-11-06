@@ -131,7 +131,7 @@ function toggleEquipment(equipmentId) {
     <FooterPayment
         variant="checkout"
         :leftTitle="'Total'"
-        :leftSubtitle="'Rp 1.999.009,-'"
+        :leftSubtitle="totalPriceFormatted"
         :buttonText="'Lanjut ke Pembayaran'"
         nextRoute="/payment"
     />

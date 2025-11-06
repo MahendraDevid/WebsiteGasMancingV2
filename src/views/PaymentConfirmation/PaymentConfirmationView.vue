@@ -33,10 +33,6 @@ function handleCopy() {
     console.log('Kode bayar berhasil disalin!');
 }
 
-function handleConfirmation() {
-    console.log('Proses pembayaran dikonfirmasi!');
-}
-
 </script>
 
 <template>

@@ -122,7 +122,7 @@ function handleConfirmation() {
     <FooterPayment
       variant="checkout"
       :leftTitle="'Total'"
-      :leftSubtitle="totalPriceFormatted"
+      :leftSubtitle="'Rp 120.000'"
       :buttonText="'Bayar Sekarang'"
       nextRoute="/pesanan"/>
 </template>

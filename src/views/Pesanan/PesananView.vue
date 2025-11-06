@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import './Pesanan.style.css'; 
+import './PesananView.style.css'; 
 
 // Data dummy baru sesuai desain
 const allOrders = ref([

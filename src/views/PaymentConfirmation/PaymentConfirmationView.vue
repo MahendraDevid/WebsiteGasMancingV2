@@ -7,7 +7,7 @@ import PaymentBox from '@/components/PaymentBox.vue' // Menggunakan komponen kot
 import FooterPayment from '@/components/FooterPayment.vue'
 
 // 2. Impor CSS spesifik halaman ini
-import './PaymentConfirmation.css'
+import './PaymentConfirmationView.style.css'
 
 // Data Dummy (diasumsikan diambil dari API di aplikasi nyata)
 const kodeBayar = ref('8881081234567890');
@@ -129,7 +129,7 @@ function handleConfirmation() {
 
 <style scoped>
 /* Import CSS dari file terpisah */
-@import './PaymentConfirmation.css'; 
+@import './PaymentConfirmationView.style.css'; 
 
 /* STYLE KHUSUS UNTUK JUDUL H-1 DI HALAMAN INI */
 .page-title {

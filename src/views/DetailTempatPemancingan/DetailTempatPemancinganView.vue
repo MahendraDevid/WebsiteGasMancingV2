@@ -104,22 +104,17 @@ import { useRoute, useRouter } from 'vue-router' // <-- Import useRouter
 import { placesData } from '@/data/placesData' 
 
 const route = useRoute()
-const router = useRouter() // <-- Initialize useRouter
+const router = useRouter()
 
-// State untuk data tempat
 const place = ref(null)
 
-// Function for programmatic navigation
 const goToBooking = () => {
-  // Navigate to the '/booking' route
   router.push('/booking')
 }
 
-// Fungsi untuk load data berdasarkan ID dari URL
 const loadPlaceData = () => {
   const placeId = parseInt(route.params.id)
   
-  // Cari data tempat berdasarkan ID
   const foundPlace = placesData.find(p => p.id === placeId)
   
   if (foundPlace) {
@@ -130,7 +125,6 @@ const loadPlaceData = () => {
   }
 }
 
-// Load data saat component mounted
 onMounted(() => {
   loadPlaceData()
 })

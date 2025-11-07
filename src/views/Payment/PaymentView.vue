@@ -49,11 +49,20 @@ const buttonText = computed(() => {
 
 // 8. 🔹 HANDLE PAYMENT — tambahkan navigasi ke PaymentConfirmation
 function handlePayment() {
-  router.push({
-    path: '/paymentconfirmation',
-    query: { total: totalHarga.value }
-  })
+  console.log(`Memproses pembayaran dengan: ${selectedOption.value}`)
+
+  // Ambil total harga dari route.query
+  const total = route.query.total || 'Rp 0'
+
+  // Ambil peralatan dari route.query (yang sudah dikirim dari BookingView)
+  const equipment = route.query.equipment || '[]'
+
+  // Gabungkan semuanya jadi satu route push
+  router.push(
+    `/paymentconfirmation?total=${encodeURIComponent(total)}&equipment=${encodeURIComponent(equipment)}`
+  )
 }
+
 </script>
 
 <template>

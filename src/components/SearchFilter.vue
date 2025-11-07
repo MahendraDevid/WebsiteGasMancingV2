@@ -55,12 +55,11 @@ const triggerSearch = () => {
       </div>
       
       <div class="search-field-custom">
-        <img src="/img/people.png" alt="Jumlah Orang" class="search-icon">
+        <img src="/img/fasilitas.png" alt="Fasilitas" class="search-icon">
         <input 
-          type="number" 
+          type="text" 
           class="search-input-custom" 
-          placeholder="Jumlah Orang" 
-          min="1" 
+          placeholder="Fasilitas"  
           v-model="searchPeople"
         />
       </div>

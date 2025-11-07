@@ -144,8 +144,8 @@ onMounted(() => {
                         <input type="text" class="search-input-custom" placeholder="Tanggal Mancing" onfocus="(this.type='date')" onblur="(this.type='text')" />
                     </div>
                     <div class="search-field-custom">
-                        <img src="/img/people.png" alt="Jumlah Orang" class="search-icon">
-                        <input type="number" class="search-input-custom" placeholder="Jumlah Orang" min="1" />
+                        <img src="/img/fasilitas.png" alt="Fasilitas" class="search-icon">
+                        <input type="text" class="search-input-custom" placeholder="Fasilitas"/>
                     </div>
                     <button class="search-button-custom" @click="goToSearch">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="28" height="28">

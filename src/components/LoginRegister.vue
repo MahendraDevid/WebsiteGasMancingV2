@@ -9,7 +9,7 @@
 
       <form @submit.prevent="handleAuth" class="form-content">
 
-        <!-- ===== FORM REGISTER ===== -->
+        <!-- FORM REGISTER -->
         <template v-if="modalType === 'register'">
           <div class="input-group">
             <label for="name" class="label-text">Nama Lengkap</label>
@@ -29,7 +29,7 @@
           </div>
         </template>
 
-        <!-- ===== FORM LOGIN ===== -->
+        <!-- FORM LOGIN -->
         <template v-if="modalType === 'login'">
           <div class="input-group">
             <label for="email-login" class="label-text">Email</label>

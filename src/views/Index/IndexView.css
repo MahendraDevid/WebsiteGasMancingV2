@@ -1,6 +1,5 @@
-/* File: views/IndexView.css */
 ol, ul {
-  list-style: number; /* Ini dia pelakunya */
+  list-style: number;
   padding-left: 0;
   margin-left: 20px;
 }
@@ -36,7 +35,7 @@ h2 {
   list-style-type: none;
   padding-left: 0;
 }
-/* ... sisa style CSS lainnya sama ... */
+
 .halaman-nav li {
   margin-bottom: 1rem;
 }

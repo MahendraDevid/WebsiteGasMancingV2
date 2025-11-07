@@ -120,7 +120,7 @@
   margin-top: 15px;
 }
 
-/* --- RESPONSIVE FOOTER --- */
+/* RESPONSIVE FOOTER */
 @media (max-width: 768px) {
   .footer-links {
     gap: 10px;

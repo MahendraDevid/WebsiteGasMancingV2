@@ -1,7 +1,7 @@
 <template>
   <div class="payment-box-wrapper">
 
-    <!-- 2. Bagian Timer (Batas Waktu) -->
+    <!-- Bagian Timer (Batas Waktu) -->
     <section class="payment-timer-section">
       <div class="timer-header">
         <span>Selesaikan Pembayaran Dalam</span>
@@ -16,7 +16,7 @@
       </div>
     </section>
 
-    <!-- 3. Bagian Metode Pembayaran (VA) -->
+    <!-- Bagian Metode Pembayaran (VA) -->
     <section class="payment-method-section">
       <h3>Metode Pembayaran</h3>
       <div class="method-box">
@@ -33,7 +33,7 @@
       </div>
     </section>
 
-    <!-- 4. Bagian Rincian Pesanan (yang "lain2") -->
+    <!-- Bagian Rincian Pesanan (yang "lain2") -->
     <section class="order-details-section">
       <h3>Rincian Pesanan</h3>
       <div class="info-item">
@@ -71,7 +71,7 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 
-// 1. Terima SELURUH data 'order' sebagai prop
+// Terima SELURUH data 'order' sebagai prop
 const props = defineProps({
   order: {
     type: Object,
@@ -79,7 +79,7 @@ const props = defineProps({
   }
 });
 
-// --- LOGIKA TIMER ---
+// LOGIKA TIMER
 // Atur timer 24 jam (dalam detik)
 const timeLeft = ref(24 * 60 * 60); 
 const intervalId = ref(null);
@@ -117,7 +117,7 @@ onBeforeUnmount(() => {
   clearInterval(intervalId.value);
 });
 
-// --- LOGIKA KOPY ---
+// LOGIKA KOPY
 function handleCopy(textToCopy) {
   const tempInput = document.createElement('input');
   tempInput.value = textToCopy;
@@ -141,7 +141,7 @@ function handleCopy(textToCopy) {
   margin-bottom: 20px;
 }
 
-/* 2. Bagian Timer */
+/* Bagian Timer */
 .payment-timer-section {
   padding: 25px;
   border-bottom: 1px dashed #e0e0e0;
@@ -157,13 +157,13 @@ function handleCopy(textToCopy) {
 .timer-countdown {
   font-size: 24px;
   font-weight: 700;
-  color: #d9534f; /* Merah */
+  color: #d9534f;
   margin-top: 5px;
 }
 .timer-lunas {
   font-size: 20px;
   font-weight: 700;
-  color: #5cb85c; /* Hijau */
+  color: #5cb85c;
   margin-top: 5px;
 }
 .total-price {
@@ -180,7 +180,7 @@ function handleCopy(textToCopy) {
   color: var(--bay-of-many, #133e87);
 }
 
-/* 3. Bagian Metode Pembayaran */
+/* Bagian Metode Pembayaran */
 .payment-method-section {
   padding: 25px;
   border-bottom: 1px solid #e0e0e0;
@@ -237,7 +237,7 @@ function handleCopy(textToCopy) {
   color: #555;
 }
 
-/* 4. Bagian Rincian Pesanan */
+/* Bagian Rincian Pesanan */
 .order-details-section {
   padding: 25px;
 }

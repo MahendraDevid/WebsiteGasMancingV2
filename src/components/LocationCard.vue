@@ -173,7 +173,7 @@ defineProps({
     font-weight: 500;
     color: var(--dove-gray); 
 }
-/* --- Akhir Bagian Opsional --- */
+/* Akhir Bagian Opsional */
 
 
 .card-location {
@@ -232,10 +232,7 @@ defineProps({
     gap: 10px;
 }
 
-/* Style tombol di slot akan ditentukan oleh Halaman Induk (Pesanan.vue / Search.vue) */
-
-
-/* --- RESPONSIVENESS (Berlaku untuk kedua halaman) --- */
+/* RESPONSIVENESS */
 @media (max-width: 1200px) {
     .card-image-section {
         min-width: 250px;

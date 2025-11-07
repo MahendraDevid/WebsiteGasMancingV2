@@ -66,7 +66,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close'])
 
-// --- LOGIKA CAROUSEL ---
+// LOGIKA CAROUSEL
 const currentSlide = ref(0)
 const slideInterval = ref(null)
 
@@ -122,7 +122,7 @@ onBeforeUnmount(() => {
   stopAutoPlay()
 })
 
-// --- LOGIKA MODAL ---
+// LOGIKA MODAL
 const closeModal = () => {
   emit('close')
 }
@@ -135,7 +135,7 @@ const handleImageError = (event) => {
 </script>
 
 <style scoped>
-/* === Overlay & Container === */
+/* Overlay & Container */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -160,7 +160,7 @@ const handleImageError = (event) => {
   flex-direction: row;
 }
 
-/* === Close Button === */
+/* Close Button */
 .close-button {
   position: absolute;
   top: 15px;
@@ -177,12 +177,12 @@ const handleImageError = (event) => {
   color: #000;
 }
 
-/* === Kolom Kiri: Media Box (Carousel) === */
+/* Kolom Kiri: Media Box (Carousel) */
 .media-box {
   flex: 1.5;
   background: #1e1e1e;
-  position: relative; /* Diperlukan untuk tombol navigasi */
-  overflow: hidden; /* Sembunyikan slide yang tidak aktif */
+  position: relative;
+  overflow: hidden;
 }
 
 .slider-track {
@@ -257,7 +257,7 @@ const handleImageError = (event) => {
 }
 
 
-/* === Kolom Kanan: Content Box (Scrollable) === */
+/* Kolom Kanan: Content Box (Scrollable) */
 .content-box {
   flex: 1;
   padding: 40px;
@@ -281,7 +281,7 @@ const handleImageError = (event) => {
   line-height: 1.7;
 }
 
-/* === Responsive === */
+/* Responsive */
 @media (max-width: 768px) {
   .modal-container {
     flex-direction: column;

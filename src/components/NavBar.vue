@@ -111,7 +111,7 @@ const handleProfileClickMobile = () => {
   border-radius: 8px;
 }
 
-/* --- NAVBAR STYLES --- */
+/* NAVBAR STYLES */
 .navbar {
   position: fixed; /* Menggunakan 'fixed' agar selalu di atas */
   top: 0;
@@ -238,7 +238,7 @@ const handleProfileClickMobile = () => {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* --- MOBILE MENU STYLES --- */
+/* MOBILE MENU STYLES */
 .menu-mobile {
   display: none;
   position: fixed;
@@ -305,9 +305,9 @@ const handleProfileClickMobile = () => {
 /* BARU: Tambahkan style untuk tombol ikon profil */
 .user-profile-button {
   background-color: var(--white);
-  color: var(--bay-of-many); /* Warna ikon */
+  color: var(--bay-of-many);
   border: none;
-  border-radius: 50%; /* Bulat */
+  border-radius: 50%;
   width: 40px;
   height: 40px;
   display: flex;
@@ -333,7 +333,7 @@ const handleProfileClickMobile = () => {
   background-color: rgba(217, 83, 79, 0.1);
 }
 
-/* --- RESPONSIVE NAVBAR --- */
+/* RESPONSIVE NAVBAR */
 @media (max-width: 1024px) {
   .navbar-container {
     padding: 15px 20px;

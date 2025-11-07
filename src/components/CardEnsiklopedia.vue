@@ -12,8 +12,7 @@
 </template>
 
 <script setup>
-// 1. Kita simpan 'defineProps' ke dalam variabel 'props'
-//    agar bisa diakses oleh fungsi di bawah.
+//simpan 'defineProps' ke dalam variabel 'props' agar bisa diakses oleh fungsi di bawah
 const props = defineProps({
   data: {
     type: Object,
@@ -21,13 +20,13 @@ const props = defineProps({
   }
 })
 
-// 2. Fungsi fallback image sekarang DINAMIS
+//Fungsi fallback image sekarang DINAMIS
 const handleImageError = (event) => {
-  // Ambil title dari props, beri fallback 'Gambar' jika title kosong
+  //Ambil title dari props, beri fallback 'Gambar' jika title kosong
   const title = props.data.title || 'Gambar'
   
-  // Gunakan title tersebut di URL placeholder.
-  // encodeURIComponent() penting untuk menangani spasi (misal: "Ikan Nila")
+  //Gunakan title tersebut di URL placeholder
+  //encodeURIComponent() penting untuk menangani spasi (misal: "Ikan Nila")
   event.target.src = `https://placehold.co/300x200/608BC1/ffffff?text=${encodeURIComponent(title)}`
 }
 </script>

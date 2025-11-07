@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-// === Props ===
+// Props
 const props = defineProps({
   variant: {
     type: String,
@@ -30,14 +30,14 @@ const props = defineProps({
   }
 })
 
-// === Emits ===
+// Emits
 const emit = defineEmits(['submit'])
 const router = useRouter()
 
-// === Loading state ===
+// Loading state
 const isProcessing = ref(false)
 
-// === Handler tombol ===
+// Handler tombol
 async function onButtonClick() {
   if (isProcessing.value) return
   isProcessing.value = true

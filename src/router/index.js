@@ -8,6 +8,7 @@ import Booking from '@/views/Booking/BookingView.vue'
 import Pesanan from '@/views/Pesanan/PesananView.vue'
 import Ensiklopedia from '@/views/Ensiklopedia/EnsiklopediaView.vue'
 import Profile from '@/views/Profile/ProfileView.vue'
+import Index from '@/views/Index/IndexView.vue'
 
 
 const router = createRouter({
@@ -17,6 +18,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: Home,
+    },
+    {
+      path: '/index',
+      name: 'index',
+      component: Index,
     },
     {
       path: '/ensiklopedia',

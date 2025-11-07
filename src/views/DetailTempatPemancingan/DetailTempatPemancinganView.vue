@@ -3,11 +3,14 @@
     
     <div v-if="place" class="detail-content">
       <div class="image-header">
-        <img :src="place.image" :alt="place.title" class="place-image" />
-        <div class="rating-badge">
-          <span>⭐ {{ place.rating }} ({{ place.totalReviews }})</span>
-        </div>
-      </div>
+  <div class="image-frame">
+    <img :src="place.image" :alt="place.title" class="place-image" />
+  </div>
+  <div class="rating-badge">
+    <span>⭐ {{ place.rating }} ({{ place.totalReviews }})</span>
+  </div>
+</div>
+
 
       <div class="content-container">
         <div class="main-info">
@@ -53,7 +56,12 @@
               class="equipment-card"
             >
               <div class="item-icon">
-                🎣
+                <img 
+                  :src="item.image" 
+                  :alt="item.name"
+                  class="equipment-image"
+                  @error="handleImageError"
+                />
               </div>
               <p class="item-name">{{ item.name }}</p>
               <p class="item-price">{{ item.price }}</p>

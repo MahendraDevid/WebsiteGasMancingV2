@@ -61,6 +61,7 @@ const handleProfileClickMobile = () => {
         <router-link to="/" class="menu-item">Beranda</router-link>
         <router-link to="/pesanan" class="menu-item">Pesanan Saya</router-link>
         <router-link to="/ensiklopedia" class="menu-item">Ensiklopedia</router-link>
+        <router-link to="/index" class="menu-item">Indeks Halaman</router-link>
       </nav>
       
       <div class="auth-buttons">
@@ -86,6 +87,7 @@ const handleProfileClickMobile = () => {
     <router-link to="/" class="menu-item" @click="isMenuOpen = false">Beranda</router-link>
     <a href="#" class="menu-item" @click="isMenuOpen = false">Pesanan Saya</a>
     <router-link to="/ensiklopedia" class="menu-item" @click="isMenuOpen = false">Ensiklopedia</router-link>
+    <router-link to="/index" class="menu-item" @click="isMenuOpen = false">Indeks Halaman</router-link>
     
     <div v-if="!isLoggedIn" class="menu-auth">
         <button class="btn-masuk" @click="handleAuthClick('login')">Masuk</button>

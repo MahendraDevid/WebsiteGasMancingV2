@@ -33,7 +33,6 @@ const handleImageError = (event) => {
 </script>
 
 <style scoped>
-/* CSS Anda dari sebelumnya sudah sempurna, tidak perlu diubah */
 .card {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   border-radius: 12px;

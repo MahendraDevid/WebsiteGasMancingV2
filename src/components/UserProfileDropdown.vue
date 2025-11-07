@@ -7,11 +7,6 @@
       </div>
       <ul class="dropdown-list">
         
-        <!-- 
-          BARU: Ubah <li> menjadi <router-link> 
-          Asumsikan rute Anda adalah '/edit-profile'
-          Kita juga tambahkan @click="$emit('close')" agar dropdown tertutup saat link diklik
-        -->
         <router-link 
           to="/profile" 
           class="dropdown-item" 
@@ -29,7 +24,6 @@
 </template>
 
 <script setup>
-// BARU: Impor RouterLink (meskipun tidak wajib di <script setup> jika hanya di template)
 import { RouterLink } from 'vue-router'
 
 defineProps({

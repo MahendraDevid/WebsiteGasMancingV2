@@ -6,10 +6,10 @@ import { useRouter } from 'vue-router'
 // Inisialisasi Router
 const router = useRouter()
 
-// 🌟 BARU: State untuk input lokasi pencarian
+// State untuk input lokasi pencarian
 const searchKeyword = ref('') 
 
-// 🌟 MODIFIKASI: Fungsi navigasi yang membawa data pencarian
+// Fungsi navigasi yang membawa data pencarian
 const goToSearch = () => {
     const keyword = searchKeyword.value.trim()
     

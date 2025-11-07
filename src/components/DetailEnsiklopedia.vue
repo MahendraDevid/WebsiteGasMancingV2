@@ -3,9 +3,6 @@
     <div class="modal-container">
       <button class="close-button" @click="closeModal">&times;</button>
 
-      <!-- 
-        KOLOM KIRI: MEDIA BOX (SEKARANG MENJADI CAROUSEL)
-      -->
       <div class="media-box">
         
         <!-- Slider Track: Bagian yang bergerak -->
@@ -47,10 +44,6 @@
 
       </div>
 
-      <!-- 
-        KOLOM KANAN: KONTEN (SUDAH BISA SCROLL)
-        CSS 'overflow-y: auto' di bawah sudah menangani ini.
-      -->
       <div class="content-box">
         <h2 class="content-title">{{ item.title || 'Judul Ensiklopedia' }}</h2>
         <p class="content-description" v-html="item.details"></p>
@@ -304,8 +297,7 @@ const handleImageError = (event) => {
     padding: 25px;
   }
   .close-button {
-    /* Pindahkan tombol close ke atas media box 
-       agar kontras dengan latar belakang gelap */
+  
     color: white;
     top: 10px;
     right: 15px;

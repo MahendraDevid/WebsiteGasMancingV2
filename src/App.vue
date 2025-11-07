@@ -47,9 +47,9 @@ import Navbar from './components/NavBar.vue'
 import LoginRegisterModal from '@/components/LoginRegister.vue'
 import { useRoute } from 'vue-router'
 
-// BARU: Data/State untuk mengontrol Modal (Dipindahkan dari HomeView)
+//  Data/State untuk mengontrol Modal (Dipindahkan dari HomeView)
 import Footer from './components/Footer.vue' 
-// BARU: Impor dropdown profil
+// Impor dropdown profil
 import UserProfileDropdown from '@/components/UserProfileDropdown.vue';
 
 // --- STATE AUTENTIKASI ---
@@ -129,7 +129,6 @@ const handleUpdateProfile = (data) => {
 
 .main-content {
   flex-grow: 1;
-  /* Tambahkan padding top agar konten tidak tertutup navbar fixed */
-  padding-top: 75px; /* Sesuaikan dengan tinggi navbar Anda */
+  padding-top: 75px; 
 }
 </style>

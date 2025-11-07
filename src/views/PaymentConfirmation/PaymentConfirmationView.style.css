@@ -1,5 +1,3 @@
-/* PaymentConfirmationView.css (VERSI BARU) */
-
 /* Styling Utama Halaman dan Main Content */
 .confirmation-page-wrapper {
     min-height: 100vh;
@@ -15,7 +13,7 @@
     box-shadow: none; 
 }
 
-/* -- BARU -- Style untuk header Total Harga (Pengganti PaymentBox) */
+/*  Style untuk header Total Harga (Pengganti PaymentBox) */
 .payment-box-header {
   display: flex;
   justify-content: space-between;
@@ -44,7 +42,7 @@
   font-weight: 500;
 }
 
-/* -- BARU -- Style untuk garis pemisah */
+/* Style untuk garis pemisah */
 .divider {
   border: 0;
   height: 1px;
@@ -53,7 +51,7 @@
 }
 
 
-/* KOTAK DETAIL KONFIRMASI (Kotak Abu-abu Utama) */
+/* KOTAK DETAIL KONFIRMASI */
 .confirmation-details-wrapper {
     background-color: #E9EBED; /* -- DIUBAH -- Latar belakang kartu utama */
     border-radius: 16px; 
@@ -184,7 +182,6 @@
     word-break: break-word; 
 }
 
-/* Bagian Peralatan yang Disewa (Tidak ada perubahan) */
 .rented-items-box {
     background-color: #ffffff; 
     border-radius: 10px;

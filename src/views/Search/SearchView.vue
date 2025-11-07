@@ -49,12 +49,51 @@ const searchResults = computed(() => {
     )
 })
 
+// --- LOGIKA PAGINATION BARU ---
+const currentPage = ref(1)
+const itemsPerPage = ref(10) // Sesuai permintaan Anda "10 baris"
+
+const totalPages = computed(() => {
+  return Math.ceil(searchResults.value.length / itemsPerPage.value)
+})
+
+// Computed property BARU untuk menampilkan item HANYA di halaman saat ini
+const paginatedResults = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  const end = start + itemsPerPage.value
+  return searchResults.value.slice(start, end)
+})
+
+// Watch BARU: Jika hasil pencarian berubah, kembali ke halaman 1
+watch(searchResults, () => {
+  currentPage.value = 1
+})
+
 // ✅ Redirect ke halaman detail
 function handleBooking(itemId) {
     router.push({ 
         name: 'DetailTempatPemancing', 
         params: { id: itemId } 
     })
+}
+
+// Fungsi Pagination BARU
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page
+  }
+}
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
+  }
+}
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+  }
 }
 </script>
 
@@ -112,8 +151,8 @@ function handleBooking(itemId) {
         </h2>
 
         <section class="results-container">
-            <div v-if="searchResults.length > 0">
-                <div class="result-card" v-for="item in searchResults" :key="item.id">
+            <div v-if="paginatedResults.length > 0">
+                <div class="result-card" v-for="item in paginatedResults" :key="item.id">
                     
                     <div class="card-image-section">
                         <img 
@@ -168,5 +207,25 @@ function handleBooking(itemId) {
             </div>
         </section>
 
+        <!-- Pagination Section -->
+         <div v-if="totalPages > 1" class="pagination-container">
+          <button @click="prevPage" :disabled="currentPage === 1" class="page-nav">
+            &lt;
+          </button>
+          
+          <button 
+            v-for="page in totalPages" 
+            :key="page"
+            @click="goToPage(page)"
+            :class="['page-number', { active: page === currentPage }]"
+          >
+            {{ page }}
+          </button>
+          
+          <button @click="nextPage" :disabled="currentPage === totalPages" class="page-nav">
+            &gt;
+          </button>
+        </div>
+        
     </main>
 </template>

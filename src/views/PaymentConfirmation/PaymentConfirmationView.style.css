@@ -217,3 +217,49 @@
     color: #133e87;
     border: none;
 }
+
+
+.page-title {
+    font-family: "SF Pro-Semibold", Helvetica;
+    font-size: 24px; 
+    color: #141414;
+    font-weight: 600;
+    margin-bottom: 5px; 
+    margin-top: 0; 
+}
+
+.copy-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 5px; 
+    display: flex;
+    align-items: center;
+}
+.copy-icon {
+    width: 18px; 
+    height: 18px;
+    color: #4A5568; 
+}
+
+.detail-img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+.detail-img-large {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+.icon-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+    height: 35px;
+}
+.no-item {
+    color: #6b7280;
+    font-style: italic;
+}

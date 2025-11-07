@@ -278,7 +278,7 @@ onMounted(() => {
       <p>Ikan dengan nama "{{ searchQuery }}" tidak ditemukan.</p>
     </div>
 
-        <!-- Modal Detail -->
+    <!-- Modal Detail -->
     <DetailEnsiklopedia
       v-if="selectedItem"
       :isVisible="isModalVisible"

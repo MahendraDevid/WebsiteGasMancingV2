@@ -1,6 +1,10 @@
 <script setup>
 import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router'
 import './PesananView.style.css'; 
+
+const router = useRouter(); 
+const route = useRoute();
 
 // Data dummy baru sesuai desain
 const allOrders = ref([
@@ -45,9 +49,11 @@ const allOrders = ref([
   },
 ]);
 
-// Fungsi untuk tombol
-function viewDetail(orderId) {
-  console.log('Lihat detail untuk:', orderId);
+function goToDetailPesanan(orderId) {
+  router.push({
+    name: 'detailpesanan',
+    params: { orderId } // Pastikan route detail kamu pakai :id di router/index.js
+  })
 }
 
 function cancelOrder(orderId) {
@@ -127,7 +133,7 @@ function cancelOrder(orderId) {
             
             <!-- Tombol Aksi -->
             <div class="card-buttons">
-              <button class="button-detail" @click="viewDetail(order.id)">Lihat Detail</button>
+              <button class="button-detail" @click="goToDetailPesanan(order.id)">Lihat Detail</button>
               <button class="button-cancel" @click="cancelOrder(order.id)">Batalkan</button>
             </div>
 

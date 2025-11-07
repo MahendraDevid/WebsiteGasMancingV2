@@ -35,7 +35,8 @@
         <li><router-link to="/payment">6. Pembayaran (Payment)</router-link></li>
         <li><router-link to="/paymentconfirmation">6. Konfirmasi Pembayaran</router-link></li>
         <li><router-link to="/pesanan">7. List Pesanan Saya</router-link></li>
-        <li><router-link to="/profile">8. Edit Profile</router-link></li>
+        <li><router-link to="/detailpesanan">8. Detail Pesanan Saya</router-link></li>
+        <li><router-link to="/profile">9. Edit Profile</router-link></li>
         </ul>
     </nav>
   </div>

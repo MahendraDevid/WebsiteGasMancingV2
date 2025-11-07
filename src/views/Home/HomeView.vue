@@ -257,7 +257,7 @@ onMounted(() => {
                                 <h3>Umpan Terbaik</h3>
                             </div>
                             <p>Teknik mancing adalah panduan lengkap yang membahas berbagai metode memancing...</p>
-                            <a href="/ensiklopedia" class="read-more">Baca Selengkapnya &rarr;</a>
+                             <a href="/ensiklopedia?id=30" class="read-more">Baca Selengkapnya &rarr;</a>
                         </div>
                         <div class="carousel-card">
                             <div class="carousel-card-header">
@@ -265,7 +265,7 @@ onMounted(() => {
                                 <h3>Teknik Mancing</h3>
                             </div>
                             <p>Teknik mancing adalah panduan lengkap yang membahas berbagai metode memancing...</p>
-                            <a href="/ensiklopedia" class="read-more">Baca Selengkapnya &rarr;</a>
+                             <a href="/ensiklopedia?id=20" class="read-more">Baca Selengkapnya &rarr;</a>
                         </div>
                         <div class="carousel-card">
                             <div class="carousel-card-header">
@@ -273,7 +273,7 @@ onMounted(() => {
                                 <h3>Umpan Terbaik</h3>
                             </div>
                             <p>Teknik mancing adalah panduan lengkap yang membahas berbagai metode memancing...</p>
-                            <a href="/ensiklopedia" class="read-more">Baca Selengkapnya &rarr;</a>
+                             <a href="/ensiklopedia?id=30" class="read-more">Baca Selengkapnya &rarr;</a>
                         </div>
                         <div class="carousel-card">
                             <div class="carousel-card-header">
@@ -281,7 +281,7 @@ onMounted(() => {
                                 <h3>Pancingan Terbaik</h3>
                             </div>
                             <p>Teknik mancing adalah panduan lengkap yang membahas berbagai metode memancing...</p>
-                            <a href="/ensiklopedia" class="read-more">Baca Selengkapnya &rarr;</a>
+                             <a href="/ensiklopedia?id=40" class="read-more">Baca Selengkapnya &rarr;</a>
                         </div>
                             <div class="carousel-card">
                             <div class="carousel-card-header">
@@ -289,7 +289,7 @@ onMounted(() => {
                                 <h3>Jenis Ikan</h3>
                             </div>
                             <p>Teknik mancing adalah panduan lengkap yang membahas berbagai metode memancing...</p>
-                            <a href="/ensiklopedia" class="read-more">Baca Selengkapnya &rarr;</a>
+                             <a href="/ensiklopedia?id=50" class="read-more">Baca Selengkapnya &rarr;</a>
                         </div>
                     </div>
 

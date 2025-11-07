@@ -378,7 +378,6 @@
     box-shadow: 0 4px 12px rgba(19, 62, 135, 0.3);
 }
 
-/* --- Carousel Tips Section Styles (DIPERBARUI untuk flex/top align) --- */
 .carousel-wrapper {
     position: relative;
     max-width: 1200px;
@@ -470,7 +469,7 @@
     color: var(--gray);
     line-height: 1.6;
     margin-bottom: 15px; 
-    flex-grow: 1; /* PENTING: Mendorong 'Baca Selengkapnya' ke bawah */
+    flex-grow: 1;
     text-align: left; 
 }
 

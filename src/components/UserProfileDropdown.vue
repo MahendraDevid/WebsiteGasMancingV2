@@ -33,12 +33,10 @@ defineProps({
   }
 })
 
-// BARU: Hapus 'editProfile' dari emits
 defineEmits(['close', 'logout'])
 </script>
 
 <style scoped>
-/* ... (Semua CSS Anda sebelumnya SAMA) ... */
 .dropdown-overlay {
   position: fixed;
   top: 0;
@@ -62,7 +60,6 @@ defineEmits(['close', 'logout'])
 .dropdown-header {
   padding: 16px;
   font-weight: 700;
-  /* ... (style header) ... */
 }
 .dropdown-list {
   list-style: none;
@@ -70,9 +67,8 @@ defineEmits(['close', 'logout'])
   margin: 0;
 }
 
-/* BARU: Pastikan router-link di-style sebagai dropdown-item */
 .dropdown-item,
-.dropdown-item-link { /* Kita gunakan class yang sama */
+.dropdown-item-link { 
   padding: 14px 16px;
   cursor: pointer;
   display: flex;
@@ -81,7 +77,7 @@ defineEmits(['close', 'logout'])
   font-size: 15px;
   color: var(--black, #000000);
   transition: background-color 0.2s ease;
-  text-decoration: none; /* Hapus garis bawah link */
+  text-decoration: none;
 }
 .dropdown-item:hover,
 .dropdown-item-link:hover {

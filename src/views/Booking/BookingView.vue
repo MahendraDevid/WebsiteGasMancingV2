@@ -3,7 +3,6 @@ import { ref, computed } from 'vue';
 import './BookingView.style.css';
 import FooterPayment from '../../components/FooterPayment.vue';
 
-// --- Data Dummy (Ganti dengan data asli/props dari rute) ---
 const spotInfo = ref({
   title: 'Pantai Ancol',
   location: 'Ancol, Jakarta Barat',

@@ -136,7 +136,6 @@ onMounted(() => {
                 <div class="search-container-custom">
                     <div class="search-field-custom">
                         <img src="/img/loc.png" alt="Lokasi" class="search-icon">
-                        <!-- 🌟 PERUBAHAN UTAMA: Tambahkan v-model untuk mengikat input lokasi ke searchKeyword -->
                         <input type="text" v-model="searchKeyword" class="search-input-custom" placeholder="Mau mancing dimana?" />
                     </div>
                     <div class="search-field-custom">

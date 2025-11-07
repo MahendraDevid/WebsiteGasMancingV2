@@ -37,8 +37,6 @@
   </script>
 
   <style scoped>
-  /* Anda mungkin perlu menyesuaikan style di sini agar sesuai dengan CSS Payment.css Anda */
-  /* Saya akan buat style dasar agar terlihat seperti gambar */
 
   .payment-header {
     margin-bottom: 20px;
@@ -47,19 +45,19 @@
   .payment-title {
     font-size: 1.8rem;
     font-weight: 700;
-    color: #333; /* Sesuaikan warna */
+    color: #333;
   }
 
   .order-summary {
-    background-color: #f7f7f7; /* Warna abu-abu muda di gambar */
+    background-color: #f7f7f7;
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sedikit shadow */
-    position: relative; /* Untuk penempatan order-number-value */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); 
+    position: relative; 
   }
 
   .order-total span,

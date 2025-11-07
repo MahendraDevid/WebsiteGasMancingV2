@@ -5,18 +5,13 @@ import { useRoute } from 'vue-router'
 import PaymentBox from '@/components/PaymentBox.vue'
 import './DetailPesanan.style.css'
 
-// 1. Impor data dari file JS yang baru kita buat
 import { allOrders } from '@/data/ordersData.js'
 
 const route = useRoute()
 
-// 2. Buat satu ref untuk menampung data pesanan yang ditemukan
 const order = ref(null)
 
-// 3. Saat komponen dimuat, cari data berdasarkan ID dari URL
 onMounted(() => {
-  // Ambil 'orderId' dari parameter URL (sesuai 'PesananView.vue')
-  // 'route.params.orderId' akan berisi ID (misal: 1, 2, atau 3)
   const idFromUrl = parseInt(route.params.orderId)
 
   // Cari pesanan di dalam 'allOrders' yang ID-nya cocok
@@ -30,7 +25,6 @@ onMounted(() => {
   }
 })
 
-// 4. Fungsi 'handleCopy' sekarang mengambil data dari 'order'
 function handleCopy() {
   if (!order.value) return // Pastikan 'order' sudah ada
 
@@ -54,12 +48,7 @@ function handleConfirmation() {
 
 <template>
     <Navbar />
-   
-  <!-- 
-    5. Tambahkan v-if="order" 
-    Agar halaman hanya tampil jika data pesanan sudah ditemukan 
-  -->
-   
+
   <div v-if="order" class="confirmation-page-wrapper">
        
     <main class="confirmation-content-box">

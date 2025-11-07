@@ -230,10 +230,6 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- 
-      6. Gunakan komponen DataEnsiklopedia 
-      dan loop data yang sudah difilter 
-    -->
     <div class="grid-container">
       <DataEnsiklopedia 
         v-for="item in paginatedItems" 

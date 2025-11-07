@@ -2,18 +2,14 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-// 1. Impor komponen
 import Navbar from '@/components/NavBar.vue'
 import PaymentBox from '@/components/PaymentBox.vue'
 import FooterPayment from '@/components/FooterPayment.vue'
 
-// 2. Impor CSS
 import './PaymentView.style.css'
 
-// 3. STATE UTAMA: (radio button)
 const selectedOption = ref('bri')
 
-// 4. STATE PANEL TERBUKA
 const openCategory = ref('bank')
 
 // Router & Route
@@ -22,7 +18,6 @@ const router = useRouter()
 console.log(route.query.total)
 const totalHarga = ref(route.query.total || 'Rp 0') // ambil total dari query
 
-// 5. Helper kategori
 const bankOptions = ['bri', 'bni', 'VISA', 'MASTERCARD']
 const walletOptions = ['Gopay', 'ovo']
 const qrOptions = ['qris']
@@ -34,12 +29,10 @@ function isCategorySelected(category) {
   return false
 }
 
-// 6. Accordion toggle
 function toggleCategory(category) {
   openCategory.value = openCategory.value === category ? '' : category
 }
 
-// 7. Tombol bayar
 const buttonText = computed(() => {
   if (isCategorySelected('bank')) return 'Bayar Dengan Virtual Account'
   if (isCategorySelected('wallet')) return 'Bayar Dengan E-Wallet'
@@ -47,7 +40,6 @@ const buttonText = computed(() => {
   return 'Pilih Pembayaran'
 })
 
-// 8. 🔹 HANDLE PAYMENT — tambahkan navigasi ke PaymentConfirmation
 function handlePayment() {
   console.log(`Memproses pembayaran dengan: ${selectedOption.value}`)
 

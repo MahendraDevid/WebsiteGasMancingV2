@@ -18,7 +18,7 @@ const tanggal = ref('12 Desember 2025');
 const jumlahOrang = ref(1);
 const equipmentList = JSON.parse(decodeURIComponent(route.query.equipment || '[]'))
 
-// 🔹 Ambil daftar peralatan dari query
+//  Ambil daftar peralatan dari query
 let parsedEquipment = [];
 try {
   parsedEquipment = route.query.equipment ? JSON.parse(route.query.equipment) : [];

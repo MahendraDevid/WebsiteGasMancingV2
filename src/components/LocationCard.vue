@@ -73,8 +73,6 @@ defineProps({
 </template>
 
 <style scoped>
-/* SEMUA STYLE .result-card dari Search.style.css PINDAH KE SINI */
-/* Nama diubah dari .result-card menjadi .location-card */
 .location-card {
     background-color: var(--white);
     border-radius: 15px;

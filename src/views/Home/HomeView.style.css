@@ -55,7 +55,7 @@
   overflow: hidden; /* ✅ Penting untuk crop image */
 }
 
-/* ✅ Style untuk image agar ukurannya sama */
+/* Style untuk image agar ukurannya sama */
 .equipment-image {
   width: 60px;  /* Lebar tetap */
   height: 60px; /* Tinggi tetap */
@@ -71,7 +71,6 @@
 }
 
 .hero-content {
-    /* Diperbarui agar lebih responsif terhadap perubahan layout */
     position: absolute;
     top: 50%; /* Disesuaikan untuk menampung navbar */
     left: 50%;

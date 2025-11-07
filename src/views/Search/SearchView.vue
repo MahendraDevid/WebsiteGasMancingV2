@@ -49,7 +49,7 @@ const searchResults = computed(() => {
     )
 })
 
-// ✅ Redirect ke halaman detail
+// Redirect ke halaman detail
 function handleBooking(itemId) {
     router.push({ 
         name: 'DetailTempatPemancing', 

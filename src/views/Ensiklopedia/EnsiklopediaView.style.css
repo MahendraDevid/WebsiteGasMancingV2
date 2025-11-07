@@ -70,11 +70,8 @@
   margin: 0 auto;
 }
 
-/* CSS .card, .card-image, .card-content, .btn-detail, dll. 
-  Sudah DIHAPUS dari sini dan dipindahkan ke FishCard.vue
-*/
 
-/* BARU: Style untuk "Hasil Tidak Ditemukan" */
+/*  Style untuk "Hasil Tidak Ditemukan" */
 .no-results {
   text-align: center;
   margin-top: 50px;

@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
 import './BookingView.style.css';
-// 1. Impor komponen FooterPayment
 import FooterPayment from '../../components/FooterPayment.vue';
 
 // --- Data Dummy (Ganti dengan data asli/props dari rute) ---
@@ -14,7 +13,7 @@ const spotInfo = ref({
 
 // --- Form State ---
 const bookingDate = ref('');
-const duration = ref(1); // Durasi dalam jam
+const duration = ref(1);
 const numPeople = ref(1);
 
 // State untuk peralatan, true jika dipilih
@@ -66,6 +65,13 @@ const totalPriceFormatted = computed(() => formatCurrency(totalPrice.value));
 function toggleEquipment(equipmentId) {
   equipment.value[equipmentId] = !equipment.value[equipmentId];
 }
+
+// --- 🔹 Daftar peralatan yang dipilih (array nama) ---
+const selectedEquipment = computed(() => {
+  return equipmentList.value
+    .filter(item => equipment.value[item.id])
+    .map(item => item.name);
+});
 </script>
 
 <template>
@@ -126,16 +132,14 @@ function toggleEquipment(equipmentId) {
       </div>
     </section>
 
-    <!-- 3. Footer Pembayaran -->
-    <!-- Menggunakan variant "checkout" dari komponen baru Anda -->
+    <!-- Footer Pembayaran -->
     <FooterPayment
         variant="checkout"
         :leftTitle="'Total'"
         :leftSubtitle="totalPriceFormatted"
         :buttonText="'Lanjut ke Pembayaran'"
-        nextRoute="/payment"
+          :nextRoute="`/payment?total=${encodeURIComponent(totalPriceFormatted)}&equipment=${encodeURIComponent(
+          JSON.stringify(Object.keys(equipment).filter(key => equipment[key])))}`"
     />
-
   </main>
 </template>
-

@@ -20,6 +20,7 @@ const openCategory = ref('bank')
 const route = useRoute()
 const router = useRouter()
 console.log(route.query.total)
+const totalHarga = ref(route.query.total || 'Rp 0') // ambil total dari query
 
 // 5. Helper kategori
 const bankOptions = ['bri', 'bni', 'VISA', 'MASTERCARD']
@@ -50,9 +51,18 @@ const buttonText = computed(() => {
 function handlePayment() {
   console.log(`Memproses pembayaran dengan: ${selectedOption.value}`)
 
-  // Setelah user klik tombol Bayar → arahkan ke halaman konfirmasi
-  router.push('/paymentconfirmation')
+  // Ambil total harga dari route.query
+  const total = route.query.total || 'Rp 0'
+
+  // Ambil peralatan dari route.query (yang sudah dikirim dari BookingView)
+  const equipment = route.query.equipment || '[]'
+
+  // Gabungkan semuanya jadi satu route push
+  router.push(
+    `/paymentconfirmation?total=${encodeURIComponent(total)}&equipment=${encodeURIComponent(equipment)}`
+  )
 }
+
 </script>
 
 <template>
@@ -62,7 +72,7 @@ function handlePayment() {
     <main class="payment-content">
       <PaymentBox
         title="Pembayaran"
-        totalPrice="Rp. 1.999.009,-" 
+        :totalPrice="totalHarga" 
       />
 
       <section class="payment-methods">

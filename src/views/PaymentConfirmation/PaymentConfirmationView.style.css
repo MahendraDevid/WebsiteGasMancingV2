@@ -1,8 +1,10 @@
-/* Styling Utama Halaman dan Main Content */
+/* PaymentConfirmationView.css (VERSI BARU) */
 
+/* Styling Utama Halaman dan Main Content */
 .confirmation-page-wrapper {
     min-height: 100vh;
     padding: 24px 24px 120px 24px; 
+    background-color: #F0F4F8; /* -- DIUBAH -- Latar belakang halaman */
 }
 
 .confirmation-content-box {
@@ -11,15 +13,52 @@
     padding: 0; 
     background-color: transparent; 
     box-shadow: none; 
-    
 }
 
-/* KOTAK DETAIL KONFIRMASI (Kotak Putih Bawah) */
+/* -- BARU -- Style untuk header Total Harga (Pengganti PaymentBox) */
+.payment-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 10px;
+}
+.total-harga-section {
+  display: flex;
+  flex-direction: column;
+}
+.total-harga-label {
+  font-family: "SF Pro Display-Regular", Helvetica;
+  font-size: 14px;
+  color: #4A5568;
+}
+.total-harga-value {
+  font-family: "SF Pro-Semibold", Helvetica;
+  font-size: 20px;
+  color: #141414;
+  font-weight: 600;
+}
+.nomor-pesanan {
+  font-family: "SF Pro Display-Medium", Helvetica;
+  font-size: 14px;
+  color: #4A5568;
+  font-weight: 500;
+}
+
+/* -- BARU -- Style untuk garis pemisah */
+.divider {
+  border: 0;
+  height: 1px;
+  background-color: #CBD5E0; /* Warna garis abu-abu */
+  margin: 10px 0;
+}
+
+
+/* KOTAK DETAIL KONFIRMASI (Kotak Abu-abu Utama) */
 .confirmation-details-wrapper {
-    background-color: #ffffff; 
+    background-color: #E9EBED; /* -- DIUBAH -- Latar belakang kartu utama */
     border-radius: 16px; 
     padding: 15px 20px; 
-    margin-top: 20px; 
+    margin-top: 10px; /* -- DIUBAH -- Mengurangi jarak dari H1 */
     box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
 }
 
@@ -33,13 +72,14 @@
 }
 
 
-/* Bagian Kode Bayar (Tidak ada perubahan signifikan di sini) */
+/* Bagian Kode Bayar */
 .payment-code-section {
     display: flex;
     align-items: center;
     margin-bottom: 10px; 
     padding: 5px 0; 
-    border-bottom: 1px solid #EDF2F7; 
+    /* Garis bawah di sini bisa dihilangkan jika tidak ada di desain baru */
+    border-bottom: 1px solid #CBD5E0; /* -- DIUBAH -- Warna disesuaikan */
 }
 
 .code-label {
@@ -71,53 +111,59 @@
     margin-top: 15px;
     flex-wrap: nowrap; 
     justify-content: space-between;
+    flex-direction: column;
 }
 
 .location-date-person {
-    background-color: #f0f0f0; 
+    background-color: #ffffff; /* -- DIUBAH -- Menjadi Putih */
     border-radius: 10px;
-    padding: 10px; 
+    padding: 20px 10px; 
     flex: 1 1 50%; 
     display: flex;
-    /* Alignment disetel agar ikon, label, dan detail merata */
-    justify-content: space-around; 
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); 
+    border: 1px solid #EDF2F7;
 }
 
 .info-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* WAJIB CENTER UNTUK TEKS */
-    text-align: center;
-    padding: 0 5px; 
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas: "icon label" "icon detail";
+    align-items: center; 
+    gap: 0 12px;
+    padding: 0 5px;
+    padding-right: 20px;
 }
 
-/* KODE BARU UNTUK MERAPIKAN IKON DAN TULISAN */
-
+/* KODE UNTUK MERAPIKAN IKON DAN TULISAN */
 .icon-wrapper {
-    /* Menjamin ruang seragam untuk semua ikon */
-    height: 35px; 
+    grid-area: icon;
+    height: auto; 
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 5px; /* Jarak antara ikon dan label */
+    margin-bottom: 0; 
 }
 
 .detail-img {
-    /* Untuk iconlokasi.png dan calendar.png */
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
     object-fit: contain;
 }
 .detail-img-large {
-    /* Untuk icon people.png (jika memang lebih besar) */
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     object-fit: contain;
 }
 
 .info-label {
+    grid-area: label;
+    align-self: end;
+    text-align: left;
     font-family: "SF Pro-Semibold", Helvetica;
-    font-size: 11px; 
+    font-size: 14px; 
     color: #4A5568; 
     font-weight: 600;
     margin-top: 0px; 
@@ -125,17 +171,20 @@
 }
 
 .info-detail {
+    grid-area: detail;
+    align-self: start;
+    text-align: left;
     font-family: "SF Pro Display-Regular", Helvetica;
-    font-size: 13px; 
+    font-size: 16px; 
     color: #2d3748; 
     margin-top: 2px; 
     font-weight: 400;
     line-height: 1.2; 
-    max-width: 100px;
+    max-width: 150px;
     word-break: break-word; 
 }
 
-/* Bagian Peralatan yang Disewa (Tidak ada perubahan signifikan di sini) */
+/* Bagian Peralatan yang Disewa (Tidak ada perubahan) */
 .rented-items-box {
     background-color: #ffffff; 
     border-radius: 10px;
@@ -143,11 +192,14 @@
     flex: 1 1 35%; 
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); 
     border: 1px solid #EDF2F7;
+    padding-top: 37px;
+    padding-left: 30px;
+    padding-bottom: 37px;
 }
 
 .items-title {
     font-family: "SF Pro Display-Semibold", Helvetica;
-    font-size: 13px; 
+    font-size: 25px; 
     color: #2d3748;
     margin-bottom: 8px; 
     font-weight: 600;
@@ -160,9 +212,9 @@
 }
 
 .item-tag {
-    padding: 2px 5px; 
-    border-radius: 3px;
-    font-size: 10px; 
+    padding: 7px 10px; 
+    border-radius: 6px;
+    font-size: 15px; 
     box-shadow: none; 
     background-color: #EBF4FF; 
     color: #133e87;

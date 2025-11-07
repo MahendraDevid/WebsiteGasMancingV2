@@ -63,11 +63,3 @@ body {
   line-height: 1.5;
   overflow-x: hidden;
 }
-
-/* SEMUA STYLE .navbar, .navbar-container, .logo, .menu-item, .btn-masuk, .menu-mobile, .footer, .footer-content, dll.
-  DIHAPUS DARI SINI KARENA SUDAH PINDAH KE KOMPONEN MASING-MASING.
-  
-  Style global (seperti .homepage, .hero-section, .cards-grid) 
-  seharusnya berada di CSS per-halaman (seperti HomeView.style.css) 
-  atau dipindahkan ke sini jika benar-benar global.
-*/

@@ -37,8 +37,6 @@ defineProps({
 </script>
 
 <style scoped>
-/* Anda mungkin perlu menyesuaikan style di sini agar sesuai dengan CSS Payment.css Anda */
-/* Saya akan buat style dasar agar terlihat seperti gambar */
 
 .payment-header {
   margin-bottom: 20px;

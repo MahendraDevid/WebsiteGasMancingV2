@@ -66,7 +66,7 @@ function toggleEquipment(equipmentId) {
   equipment.value[equipmentId] = !equipment.value[equipmentId];
 }
 
-// --- 🔹 Daftar peralatan yang dipilih (array nama) ---
+// ---   Daftar peralatan yang dipilih (array nama) ---
 const selectedEquipment = computed(() => {
   return equipmentList.value
     .filter(item => equipment.value[item.id])

@@ -52,7 +52,6 @@
 </script>
 
 <style scoped>
-/* Pindahkan semua style Footer dari main.css ke sini */
 
 .footer {
   background: linear-gradient(180deg, rgba(19, 62, 135, 0.95) 0%, rgba(19, 62, 135, 0.85) 100%);

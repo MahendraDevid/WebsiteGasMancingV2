@@ -75,7 +75,6 @@ const triggerSearch = () => {
 </template>
 
 <style scoped>
-/* **CSS DARI HOMEVIEW.STYLE.CSS PINDAH KE SINI** */
 .search-section {
   position: relative;
   z-index: 10;
@@ -192,5 +191,4 @@ const triggerSearch = () => {
     height: 45px;
   }
 }
-/* ... (Sisa media queries) ... */
 </style>

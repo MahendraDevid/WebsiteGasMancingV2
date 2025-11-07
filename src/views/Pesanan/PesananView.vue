@@ -48,7 +48,6 @@ const allOrders = ref([
 // Fungsi untuk tombol
 function viewDetail(orderId) {
   console.log('Lihat detail untuk:', orderId);
-  // router.push(...)
 }
 
 function cancelOrder(orderId) {

@@ -40,11 +40,7 @@
             <input id="password-login" type="password" class="input-card" v-model="password" required />
           </div>
         </template>
-        
-        <!-- 
-          KITA HAPUS FORM EDIT PROFILE DARI SINI 
-        -->
-
+      
         <!-- Tombol Submit Dinamis -->
         <button type="submit" class="login-button">
           <span v-if="modalType === 'login'">Masuk</span>
@@ -89,9 +85,6 @@ watch(() => props.isVisible, (newVal) => {
     password.value = ''
     namaLengkap.value = ''
     konfirmasiPassword.value = ''
-    //
-    // KITA HAPUS LOGIKA 'edit-profile' DARI SINI
-    //
   }
 })
 
@@ -114,16 +107,10 @@ const handleAuth = () => {
       password: password.value 
     })
   }
-  //
-  // KITA HAPUS LOGIKA 'edit-profile' DARI SINI
-  //
 }
 </script>
 
 <style scoped>
-/* CSS Anda (yang sudah ada) tidak perlu diubah. 
-   Style .input-group dan .input-card akan otomatis diterapkan pada field baru.
-   Pastikan Anda juga memperbaiki .masuk-akun text-align: center dan flex-grow: 1 */
 
 :root {
   --white: #ffffff;
@@ -133,8 +120,6 @@ const handleAuth = () => {
   --cultured-pearl: #f5f5f5;
   --dove-gray: #6d6d6d;
 }
-
-/* ... (Semua CSS Anda yang lain) ... */
 
 .modal-header {
   display: flex;
@@ -150,7 +135,6 @@ const handleAuth = () => {
   text-align: center; /* <-- Perbaikan dari sebelumnya */
 }
 
-/* ... (Sisa CSS Anda) ... */
 .input-group {
   margin-bottom: 20px;
 }

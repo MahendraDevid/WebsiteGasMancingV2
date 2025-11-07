@@ -208,24 +208,6 @@ const nextPage = () => {
         </section>
 
         <!-- Pagination Section -->
-         <div v-if="totalPages > 1" class="pagination-container">
-          <button @click="prevPage" :disabled="currentPage === 1" class="page-nav">
-            &lt;
-          </button>
-          
-          <button 
-            v-for="page in totalPages" 
-            :key="page"
-            @click="goToPage(page)"
-            :class="['page-number', { active: page === currentPage }]"
-          >
-            {{ page }}
-          </button>
-          
-          <button @click="nextPage" :disabled="currentPage === totalPages" class="page-nav">
-            &gt;
-          </button>
-        </div>
-        
+                 
     </main>
 </template>

@@ -8,6 +8,7 @@ import Booking from '@/views/Booking/BookingView.vue'
 import Pesanan from '@/views/Pesanan/PesananView.vue'
 import Ensiklopedia from '@/views/Ensiklopedia/EnsiklopediaView.vue'
 import Profile from '@/views/Profile/ProfileView.vue'
+import DetailPesanan from '@/views/DetailPesanan/DetailPesanan.vue'
 
 
 const router = createRouter({
@@ -62,6 +63,11 @@ const router = createRouter({
       name: 'booking',
       component: Booking,
       meta: { hideFooter: true } 
+    },
+    {
+      path: '/detailpesanan/:orderId',
+      name: 'detailpesanan',
+      component: DetailPesanan,
     },
   ],
 })

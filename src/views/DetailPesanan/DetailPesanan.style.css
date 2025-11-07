@@ -1,0 +1,294 @@
+/* PaymentConfirmationView.css (VERSI BARU) */
+
+/* BLOK 'body' DIHAPUS DARI SINI
+  karena akan merusak semua halaman lain.
+*/
+
+/* Styling Utama Halaman dan Main Content */
+.confirmation-page-wrapper {
+  min-height: 100vh;
+  padding: 24px 24px 120px 24px; 
+  background-color: #F0F4F8; /* Latar belakang halaman */
+}
+
+.confirmation-content-box {
+  max-width: 900px; /* Batasi lebar konten */
+  margin: 0 auto;
+  padding: 0; 
+  background-color: transparent; 
+  box-shadow: none; 
+}
+
+/* Style untuk header Total Harga (Pengganti PaymentBox) */
+.payment-box-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: flex-start;
+ padding-bottom: 10px;
+}
+.total-harga-section {
+ display: flex;
+ flex-direction: column;
+}
+.total-harga-label {
+ font-family: "SF Pro Display-Regular", Helvetica;
+ font-size: 14px;
+ color: #4A5568;
+}
+.total-harga-value {
+ font-family: "SF Pro-Semibold", Helvetica;
+ font-size: 20px;
+ color: #141414;
+ font-weight: 600;
+}
+.nomor-pesanan {
+ font-family: "SF Pro Display-Medium", Helvetica;
+ font-size: 14px;
+ color: #4A5568;
+ font-weight: 500;
+}
+
+/* Style untuk garis pemisah */
+.divider {
+ border: 0;
+ height: 1px;
+ background-color: #CBD5E0; /* Warna garis abu-abu */
+ margin: 10px 0;
+}
+
+
+/* KOTAK DETAIL KONFIRMASI (Kotak Abu-abu Utama) */
+.confirmation-details-wrapper {
+  background-color: #E9EBED; /* Latar belakang kartu utama */
+  border-radius: 16px; 
+  padding: 15px 20px; 
+  margin-top: 10px; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+}
+
+.section-subtitle {
+  font-family: "SF Pro-Semibold", Helvetica;
+  font-size: 18px; 
+  color: #141414; 
+  margin-bottom: 10px; 
+  padding-top: 5px; 
+  font-weight: 600;
+}
+
+
+/* Bagian Kode Bayar */
+.payment-code-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; 
+  padding: 5px 0; 
+  border-bottom: 1px solid #CBD5E0; 
+}
+
+.payment-method-section {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid #CBD5E0;
+}
+
+.payment-method-section .code-label {
+  font-family: "SF Pro Display-Medium", Helvetica;
+  font-size: 14px;
+  color: #4A5568;
+  margin-right: 8px;
+  font-weight: 500;
+}
+
+.payment-method-section .code-value {
+  font-family: "SF Pro-Semibold", Helvetica;
+  font-size: 18px;
+  color: #2d3748;
+  font-weight: 600;
+}
+
+
+.code-label {
+  font-family: "SF Pro Display-Medium", Helvetica;
+  font-size: 14px; 
+  color: #4A5568; 
+  margin-right: 8px; 
+  font-weight: 500;
+}
+
+.code-value {
+  font-family: "SF Pro-Semibold", Helvetica;
+  font-size: 18px; 
+  color: #2d3748; 
+  font-weight: 600;
+}
+
+.copy-icon {
+  width: 18px; 
+  height: 18px;
+  color: #4A5568; 
+}
+
+
+/* Bagian Info Sewa: Lokasi, Tanggal, Orang & Peralatan */
+.rental-info-container {
+  display: flex;
+  gap: 15px; 
+  margin-top: 15px;
+  flex-wrap: nowrap; 
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.location-date-person {
+  background-color: #ffffff; /* Menjadi Putih */
+  border-radius: 10px;
+  padding: 20px 10px; 
+  flex: 1 1 50%; 
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); 
+  border: 1px solid #EDF2F7;
+}
+
+.info-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas: "icon label" "icon detail";
+  align-items: center; 
+  gap: 0 12px;
+  padding: 0 5px;
+  padding-right: 20px;
+}
+
+/* KODE UNTUK MERAPIKAN IKON DAN TULISAN */
+.icon-wrapper {
+  grid-area: icon;
+  height: auto; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0; 
+}
+
+.detail-img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+.detail-img-large {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.info-label {
+  grid-area: label;
+  align-self: end;
+  text-align: left;
+  font-family: "SF Pro-Semibold", Helvetica;
+  font-size: 14px; 
+  color: #4A5568; 
+  font-weight: 600;
+  margin-top: 0px; 
+  line-height: 1.2; 
+}
+
+.info-detail {
+  grid-area: detail;
+  align-self: start;
+  text-align: left;
+  font-family: "SF Pro Display-Regular", Helvetica;
+  font-size: 16px; 
+  color: #2d3748; 
+  margin-top: 2px; 
+  font-weight: 400;
+  line-height: 1.2; 
+  max-width: 150px;
+  word-break: break-word; 
+}
+
+/* Bagian Peralatan yang Disewa (Tidak ada perubahan) */
+.rented-items-box {
+  background-color: #ffffff; 
+  border-radius: 10px;
+  padding: 10px; 
+  flex: 1 1 35%; 
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); 
+  border: 1px solid #EDF2F7;
+  padding-top: 37px;
+  padding-left: 30px;
+  padding-bottom: 37px;
+}
+
+.items-title {
+  font-family: "SF Pro Display-Semibold", Helvetica;
+  font-size: 25px; 
+  color: #2d3748;
+  margin-bottom: 8px; 
+  font-weight: 600;
+}
+
+.item-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px; 
+}
+
+.item-tag {
+  padding: 7px 10px; 
+  border-radius: 6px;
+  font-size: 15px; 
+  box-shadow: none; 
+  background-color: #EBF4FF; 
+  color: #133e87;
+  border: none;
+}
+
+.page-title {
+  font-family: "SF Pro-Semibold", Helvetica;
+  font-size: 24px; 
+  color: #141414;
+  font-weight: 600;
+  margin-bottom: 5px; 
+  margin-top: 0; 
+}
+
+.copy-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 5px; 
+  display: flex;
+  align-items: center;
+}
+.copy-icon {
+ width: 18px; 
+  height: 18px;
+  color: #4A5568; 
+}
+
+.detail-img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+.detail-img-large {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+.icon-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5px;
+  height: 35px;
+}
+.no-item {
+  color: #6b7280;
+  font-style: italic;
+}

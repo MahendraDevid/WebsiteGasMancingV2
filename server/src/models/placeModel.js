@@ -1,61 +1,93 @@
 const db = require("../config/database");
 
 class PlaceModel {
-  // Get all places
+
+  // ======================================
+  // GET ALL TEMPAT PEMANCINGAN
+  // ======================================
   static async findAll() {
-    const [places] = await db.query("SELECT * FROM places");
+    const [places] = await db.query("SELECT * FROM tempat_pemancingan");
 
-    // Get related data for each place
     for (let place of places) {
+
+      // FASILITAS (many-to-many)
       const [facilities] = await db.query(
-        "SELECT name FROM facilities WHERE place_id = ?",
-        [place.id]
+        `SELECT f.nama_fasilitas 
+         FROM fasilitas f
+         JOIN tempat_fasilitas tf 
+           ON f.id_fasilitas = tf.id_fasilitas
+         WHERE tf.id_tempat = ?`,
+        [place.id_tempat]
       );
-      place.facilities = facilities.map((f) => f.name);
+      place.fasilitas = facilities.map(f => f.nama_fasilitas);
 
-      const [equipment] = await db.query(
-        "SELECT name, price, image FROM equipment WHERE place_id = ?",
-        [place.id]
+      // ITEM SEWA (peralatan & layanan)
+      const [items] = await db.query(
+        `SELECT id_item, nama_item, price, price_unit, image_url, tipe_item
+         FROM item_sewa
+         WHERE id_item IN (
+            SELECT id_item FROM detail_pemesanan_item WHERE id_pesanan IN (
+               SELECT id_pesanan FROM pemesanan WHERE id_tempat = ?
+            )
+         )`,
+        [place.id_tempat]
       );
-      place.equipment = equipment;
+      place.item_sewa = items;
 
+      // REVIEW
       const [reviews] = await db.query(
-        "SELECT name, score, comment FROM reviews WHERE place_id = ?",
-        [place.id]
+        `SELECT r.score, r.comment, r.review_date, u.nama_lengkap AS reviewer
+         FROM review r
+         LEFT JOIN pengguna u ON r.id_pengguna = u.id_pengguna
+         WHERE r.id_tempat = ?`,
+        [place.id_tempat]
       );
+
       place.reviews = reviews;
     }
 
     return places;
   }
 
-  // Get place by ID with all related data
+  // ======================================
+  // GET TEMPAT BY ID
+  // ======================================
   static async findById(id) {
-    const [places] = await db.query("SELECT * FROM places WHERE id = ?", [id]);
+    const [rows] = await db.query(
+      "SELECT * FROM tempat_pemancingan WHERE id_tempat = ?",
+      [id]
+    );
 
-    if (places.length === 0) {
-      return null;
-    }
+    if (rows.length === 0) return null;
 
-    const place = places[0];
+    const place = rows[0];
 
-    // Get facilities
+    // Fasilitas
     const [facilities] = await db.query(
-      "SELECT name FROM facilities WHERE place_id = ?",
+      `SELECT f.nama_fasilitas 
+       FROM fasilitas f
+       JOIN tempat_fasilitas tf 
+         ON f.id_fasilitas = tf.id_fasilitas
+       WHERE tf.id_tempat = ?`,
       [id]
     );
-    place.facilities = facilities.map((f) => f.name);
+    place.fasilitas = facilities.map(f => f.nama_fasilitas);
 
-    // Get equipment
-    const [equipment] = await db.query(
-      "SELECT name, price, image FROM equipment WHERE place_id = ?",
-      [id]
+    // Item sewa
+    const [items] = await db.query(
+      `SELECT id_item, nama_item, price, price_unit, image_url, tipe_item
+      FROM item_sewa
+      WHERE id_tempat = ?`,
+      [place.id_tempat]
     );
-    place.equipment = equipment;
+    place.item_sewa = items;
 
-    // Get reviews
+    // Review
     const [reviews] = await db.query(
-      "SELECT name, score, comment FROM reviews WHERE place_id = ?",
+      `SELECT r.score, r.comment, r.review_date, u.nama_lengkap AS reviewer
+       FROM review r
+       LEFT JOIN pengguna u ON r.id_pengguna = u.id_pengguna
+       WHERE r.id_tempat = ?`,
       [id]
     );
     place.reviews = reviews;
@@ -63,100 +95,36 @@ class PlaceModel {
     return place;
   }
 
-  // Create new place with related data
-  static async create(placeData) {
-    const {
-      image,
-      title,
-      location,
-      description,
-      fullDescription,
-      price,
-      rating,
-      reviewCount,
-      totalReviews,
-      facilities,
-      equipment,
-      reviews,
-    } = placeData;
-
-    // Insert place
-    const [result] = await db.query(
-      `INSERT INTO places (image, title, location, description, full_description, price, rating, review_count, total_reviews)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        image,
-        title,
-        location,
-        description,
-        fullDescription,
-        price,
-        rating || 0,
-        reviewCount || 0,
-        totalReviews || 0,
-      ]
-    );
-
-    const placeId = result.insertId;
-
-    // Insert facilities
-    if (facilities && facilities.length > 0) {
-      const facilityValues = facilities.map((f) => [placeId, f]);
-      await db.query("INSERT INTO facilities (place_id, name) VALUES ?", [
-        facilityValues,
-      ]);
-    }
-
-    // Insert equipment
-    if (equipment && equipment.length > 0) {
-      const equipmentValues = equipment.map((e) => [
-        placeId,
-        e.name,
-        e.price,
-        e.image,
-      ]);
-      await db.query(
-        "INSERT INTO equipment (place_id, name, price, image) VALUES ?",
-        [equipmentValues]
-      );
-    }
-
-    // Insert reviews
-    if (reviews && reviews.length > 0) {
-      const reviewValues = reviews.map((r) => [
-        placeId,
-        r.name,
-        r.score,
-        r.comment,
-      ]);
-      await db.query(
-        "INSERT INTO reviews (place_id, name, score, comment) VALUES ?",
-        [reviewValues]
-      );
-    }
-
-    return this.findById(placeId);
-  }
-
-  // Search places
+  // ======================================
+  // SEARCH TEMPAT
+  // ======================================
   static async search(keyword) {
-    const searchTerm = `%${keyword}%`;
+    const term = `%${keyword}%`;
+
     const [places] = await db.query(
-      "SELECT * FROM places WHERE title LIKE ? OR location LIKE ? OR description LIKE ?",
-      [searchTerm, searchTerm, searchTerm]
+      `SELECT * FROM tempat_pemancingan
+       WHERE title LIKE ? 
+          OR location LIKE ?
+          OR description LIKE ?`,
+      [term, term, term]
     );
 
-    // Get related data for each place
+    // Tambahkan fasilitas
     for (let place of places) {
       const [facilities] = await db.query(
-        "SELECT name FROM facilities WHERE place_id = ?",
-        [place.id]
+        `SELECT f.nama_fasilitas 
+         FROM fasilitas f
+         JOIN tempat_fasilitas tf 
+           ON f.id_fasilitas = tf.id_fasilitas
+         WHERE tf.id_tempat = ?`,
+        [place.id_tempat]
       );
-      place.facilities = facilities.map((f) => f.name);
+      place.fasilitas = facilities.map(f => f.nama_fasilitas);
     }
 
     return places;
   }
+
 }
 
 module.exports = PlaceModel;

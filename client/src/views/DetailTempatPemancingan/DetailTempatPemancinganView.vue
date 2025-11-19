@@ -10,10 +10,10 @@
     <div v-else-if="place" class="detail-content">
       <div class="image-header">
         <div class="image-frame">
-          <img :src="place.image" :alt="place.title" class="place-image" @error="handleImageError" />
+          <img :src="place.image_url" :alt="place.title" class="place-image" @error="handleImageError" />
         </div>
         <div class="rating-badge">
-          <span>⭐ {{ place.rating }} ({{ place.total_reviews }})</span>
+          <span>⭐ {{ place.average_rating }} ({{ place.total_reviews_count }})</span>
         </div>
       </div>
 
@@ -27,7 +27,7 @@
           
           <!-- Tombol Booking Header -->
           <div class="header-booking-box">
-            <p class="booking-price-header">{{ place.price }}</p>
+            <p class="booking-price-header">Rp. {{ place.base_price }} / {{ place.price_unit }}</p>
             <button class="booking-button" @click="goToBooking">
               Booking Sekarang
             </button>
@@ -44,7 +44,7 @@
           <h2>Fasilitas</h2>
           <div class="tag-list">
             <span 
-              v-for="(facility, index) in place.facilities" 
+              v-for="(facility, index) in place.fasilitas" 
               :key="index" 
               class="facility-tag"
             >
@@ -58,20 +58,20 @@
           <h2>Peralatan Tambahan:</h2>
           <div class="equipment-grid">
             <div 
-              v-for="(item, index) in place.equipment" 
+              v-for="(item, index) in place.item_sewa" 
               :key="index" 
               class="equipment-card"
             >
               <div class="item-icon">
                 <img 
-                  :src="item.image" 
-                  :alt="item.name"
+                  :src="item.image_url" 
+                  :alt="item.nama_item"
                   class="equipment-image"
                   @error="handleImageError"
                 />
               </div>
-              <p class="item-name">{{ item.name }}</p>
-              <p class="item-price">{{ item.price }}</p>
+              <p class="item-name">{{ item.nama_item }}</p>
+              <p class="item-price">Rp. {{ item.price }} / {{ item.price_unit }}</p>
             </div>
           </div>
         </div>
@@ -89,7 +89,7 @@
               <div class="review-header">
                 <div class="avatar-icon"></div>
                 <div class="reviewer-info">
-                  <p class="reviewer-name">{{ review.name }}</p>
+                  <p class="reviewer-name">{{ review.reviewer }}</p>
                   <span class="review-rating">⭐ {{ review.score }}/5</span>
                 </div>
               </div>

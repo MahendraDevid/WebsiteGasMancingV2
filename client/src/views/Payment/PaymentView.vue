@@ -9,22 +9,22 @@ import FooterPayment from '@/components/FooterPayment.vue'
 import './PaymentView.style.css'
 
 const selectedOption = ref('bri')
-
 const openCategory = ref('bank')
 
 // Router & Route
 const route = useRoute()
 const router = useRouter()
-console.log(route.query.total)
-const totalHarga = ref(route.query.total || 'Rp 0') // ambil total dari query
+
+// Ambil data dari halaman sebelumnya
+const totalHarga = ref(route.query.total || 'Rp 0')
+// Pastikan equipment diambil sebagai string (kalau undefined jadi string array kosong)
+const equipmentString = route.query.equipment || '[]'
 
 const bankOptions = ['bri', 'bni', 'VISA', 'MASTERCARD']
-const walletOptions = ['Gopay', 'ovo']
 const qrOptions = ['qris']
 
 function isCategorySelected(category) {
   if (category === 'bank') return bankOptions.includes(selectedOption.value)
-  if (category === 'wallet') return walletOptions.includes(selectedOption.value)
   if (category === 'qr') return qrOptions.includes(selectedOption.value)
   return false
 }
@@ -35,7 +35,6 @@ function toggleCategory(category) {
 
 const buttonText = computed(() => {
   if (isCategorySelected('bank')) return 'Bayar Dengan Virtual Account'
-  if (isCategorySelected('wallet')) return 'Bayar Dengan E-Wallet'
   if (isCategorySelected('qr')) return 'Bayar Dengan QRIS'
   return 'Pilih Pembayaran'
 })
@@ -43,18 +42,12 @@ const buttonText = computed(() => {
 function handlePayment() {
   console.log(`Memproses pembayaran dengan: ${selectedOption.value}`)
 
-  // Ambil total harga dari route.query
-  const total = route.query.total || 'Rp 0'
-
-  // Ambil peralatan dari route.query (yang sudah dikirim dari BookingView)
-  const equipment = route.query.equipment || '[]'
-
-  // Gabungkan semuanya jadi satu route push
+  // Kita oper lagi data yang kita terima ke halaman konfirmasi
+  // encodeURIComponent penting agar karakter spesial di JSON tidak merusak URL
   router.push(
-    `/paymentconfirmation?total=${encodeURIComponent(total)}&equipment=${encodeURIComponent(equipment)}`
+    `/paymentconfirmation?total=${encodeURIComponent(totalHarga.value)}&equipment=${encodeURIComponent(equipmentString)}`
   )
 }
-
 </script>
 
 <template>
@@ -70,11 +63,10 @@ function handlePayment() {
       <section class="payment-methods">
         <h2 class="methods-title">Metode Pembayaran</h2>
 
-        <!-- === KATEGORI BANK === -->
         <div class="method-category">
           <div class="method-header" @click="toggleCategory('bank')">
             <div class="method-info">
-              <h3>Transfer Bank</h3>
+              <h3>Virtual Account</h3>
             </div>
             <span class="method-toggle" v-html="openCategory === 'bank' ? '&#9650;' : '&#9660;'"></span>
           </div>
@@ -90,27 +82,6 @@ function handlePayment() {
           </div>
         </div>
 
-        <!-- === KATEGORI WALLET === -->
-        <div class="method-category">
-          <div class="method-header" @click="toggleCategory('wallet')">
-            <div class="method-info">
-              <h3>E-Wallet</h3>
-            </div>
-            <span class="method-toggle" v-html="openCategory === 'wallet' ? '&#9650;' : '&#9660;'"></span>
-          </div>
-
-          <div class="method-content" v-if="openCategory === 'wallet'">
-            <div class="payment-option-list">
-              <label class="payment-option" v-for="wallet in walletOptions" :key="wallet">
-                <img :src="`/img/${wallet}.png`" :alt="wallet" class="payment-logo">
-                <span>{{ wallet.toUpperCase() }}</span>
-                <input type="radio" name="paymentOption" :value="wallet" v-model="selectedOption">
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <!-- === KATEGORI QR === -->
         <div class="method-category">
           <div class="method-header" @click="toggleCategory('qr')">
             <div class="method-info">

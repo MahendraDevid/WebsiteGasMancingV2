@@ -2,12 +2,12 @@
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-const route = useRoute()
-
 import Navbar from '@/components/NavBar.vue'
 import PaymentBox from '@/components/PaymentBox.vue'
 import FooterPayment from '@/components/FooterPayment.vue'
 import './PaymentConfirmationView.style.css'
+
+const route = useRoute()
 
 // Data dari query
 const kodeBayar = ref('8881081234567890');
@@ -16,17 +16,19 @@ const nomorPesanan = ref(42);
 const lokasi = ref('Ancol, Jakarta barat');
 const tanggal = ref('12 Desember 2025');
 const jumlahOrang = ref(1);
-const equipmentList = JSON.parse(decodeURIComponent(route.query.equipment || '[]'))
 
-//  Ambil daftar peralatan dari query
-let parsedEquipment = [];
+// --- PERBAIKAN PARSING DATA PERALATAN ---
+const equipmentList = ref([]);
+
 try {
-  parsedEquipment = route.query.equipment ? JSON.parse(route.query.equipment) : [];
-} catch {
-  parsedEquipment = [];
+  // Ambil string dari URL, kalau kosong default ke "[]"
+  const rawData = route.query.equipment || '[]';
+  // Ubah string JSON menjadi Array Object
+  equipmentList.value = JSON.parse(rawData);
+} catch (error) {
+  console.error("Gagal membaca data peralatan:", error);
+  equipmentList.value = [];
 }
-
-const peralatanDisewa = ref(parsedEquipment.length > 0 ? parsedEquipment : []);
 
 function handleCopy() {
   const tempInput = document.createElement('input');
@@ -35,7 +37,8 @@ function handleCopy() {
   tempInput.select();
   document.execCommand('copy');
   document.body.removeChild(tempInput);
-  console.log('Kode bayar berhasil disalin!');
+  // Bisa diganti dengan alert atau toast notifikasi
+  alert('Kode bayar berhasil disalin!');
 }
 
 function handleConfirmation() {
@@ -96,16 +99,17 @@ function handleConfirmation() {
                 </div>
             </div>
 
-            <!-- Peralatan yang Disewa -->
             <div class="rented-items-box">
                 <h3 class="items-title">Peralatan yang Disewa :</h3>
+                
                 <div v-if="equipmentList.length > 0" class="item-list">
                     <span v-for="(item, index) in equipmentList" :key="index" class="item-tag">
-                    {{ item }}
+                      <b>{{ item.qty }}x</b> {{ item.name }}
                     </span>
                 </div>
-                    <p v-else class="no-equipment-text"><em>Tidak ada peralatan yang dipilih</em></p>
-                </div>
+                
+                <p v-else class="no-equipment-text"><em>Tidak ada peralatan yang dipilih</em></p>
+            </div>
         </div>
       </section>
     </main>

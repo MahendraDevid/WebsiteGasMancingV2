@@ -1,16 +1,21 @@
 <template>
   <div class="place-detail-page">
     
-    <div v-if="place" class="detail-content">
-      <div class="image-header">
-  <div class="image-frame">
-    <img :src="place.image" :alt="place.title" class="place-image" />
-  </div>
-  <div class="rating-badge">
-    <span>⭐ {{ place.rating }} ({{ place.totalReviews }})</span>
-  </div>
-</div>
+    <!-- Loading State -->
+    <div v-if="loading" class="loading-state">
+      <p>Loading...</p>
+    </div>
 
+    <!-- Place Data -->
+    <div v-else-if="place" class="detail-content">
+      <div class="image-header">
+        <div class="image-frame">
+          <img :src="place.image" :alt="place.title" class="place-image" @error="handleImageError" />
+        </div>
+        <div class="rating-badge">
+          <span>⭐ {{ place.rating }} ({{ place.total_reviews }})</span>
+        </div>
+      </div>
 
       <div class="content-container">
         <div class="main-info">
@@ -31,9 +36,10 @@
 
         <div class="section description-section">
           <h2>Deskripsi:</h2>
-          <p class="description-text">{{ place.fullDescription }}</p>
+          <p class="description-text">{{ place.full_description }}</p>
         </div>
         <hr>
+
         <div class="section facilities-section">
           <h2>Fasilitas</h2>
           <div class="tag-list">
@@ -47,6 +53,7 @@
           </div>
         </div>
         <hr>
+
         <div class="section equipment-section">
           <h2>Peralatan Tambahan:</h2>
           <div class="equipment-grid">
@@ -94,7 +101,7 @@
       </div>
     </div>
 
-    <!-- Loading atau Error State -->
+    <!-- Error State -->
     <div v-else class="error-state">
       <h2>Tempat tidak ditemukan</h2>
       <p>Maaf, data tempat pemancingan tidak tersedia.</p>
@@ -108,29 +115,48 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router' // <-- Import useRouter
-import { placesData } from '@/data/placesData' 
+import { useRoute, useRouter } from 'vue-router'
+import api from '@/services/api'
 
 const route = useRoute()
 const router = useRouter()
 
 const place = ref(null)
+const loading = ref(true)
 
 const goToBooking = () => {
-  router.push('/booking')
+  // Pass place data to booking page
+  router.push({
+    name: 'booking',
+    params: { placeId: place.value.id },
+    state: { place: place.value }
+  })
 }
 
-const loadPlaceData = () => {
-  const placeId = parseInt(route.params.id)
-  
-  const foundPlace = placesData.find(p => p.id === placeId)
-  
-  if (foundPlace) {
-    place.value = foundPlace
-  } else {
+const loadPlaceData = async () => {
+  try {
+    loading.value = true
+    const placeId = route.params.id
+    
+    // Call API to get place details
+    const response = await api.getPlaceById(placeId)
+    
+    if (response.data.success) {
+      place.value = response.data.data
+    } else {
+      place.value = null
+      console.error('Failed to load place data')
+    }
+  } catch (error) {
+    console.error('Error loading place:', error)
     place.value = null
-    console.error('Tempat tidak ditemukan dengan ID:', placeId)
+  } finally {
+    loading.value = false
   }
+}
+
+const handleImageError = (event) => {
+  event.target.src = '/img/placeholder.png' // Fallback image
 }
 
 onMounted(() => {

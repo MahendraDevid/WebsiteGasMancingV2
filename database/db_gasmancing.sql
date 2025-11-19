@@ -3,14 +3,12 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 19 Nov 2025 pada 14.26
+-- Waktu pembuatan: 19 Nov 2025 pada 17.22
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
-
 CREATE DATABASE IF NOT EXISTS db_gasmancing;
 USE db_gasmancing;
-
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -81,6 +79,15 @@ CREATE TABLE `fasilitas` (
   `nama_fasilitas` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data untuk tabel `fasilitas`
+--
+
+INSERT INTO `fasilitas` (`id_fasilitas`, `nama_fasilitas`) VALUES
+(2, 'Musholla'),
+(3, 'Parkiran'),
+(1, 'Toilet');
+
 -- --------------------------------------------------------
 
 --
@@ -93,8 +100,17 @@ CREATE TABLE `item_sewa` (
   `price` decimal(10,2) NOT NULL,
   `price_unit` varchar(50) NOT NULL,
   `image_url` varchar(255) DEFAULT NULL,
-  `tipe_item` enum('peralatan','layanan') DEFAULT NULL
+  `tipe_item` enum('peralatan','layanan') DEFAULT NULL,
+  `id_tempat` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `item_sewa`
+--
+
+INSERT INTO `item_sewa` (`id_item`, `nama_item`, `price`, `price_unit`, `image_url`, `tipe_item`, `id_tempat`) VALUES
+(1, 'Joran Pancing\r\n', 25000.00, 'Item', '/img/peralatan/joran.jpeg', 'peralatan', 1),
+(2, 'Reel Pancing\r\n', 20000.00, 'Item', '/img/peralatan/reel.jpeg', 'peralatan', 1);
 
 -- --------------------------------------------------------
 
@@ -159,6 +175,14 @@ CREATE TABLE `pengguna` (
   `tipe_user` enum('customer','admin') DEFAULT 'customer'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data untuk tabel `pengguna`
+--
+
+INSERT INTO `pengguna` (`id_pengguna`, `nama_lengkap`, `email`, `password_hash`, `no_telepon`, `tgl_daftar`, `tipe_user`) VALUES
+(1, 'Madeu', 'test@gmail.com', '123', '3213', '2025-11-19 22:40:29', 'customer'),
+(2, 'Ronggoi', 'ronggo@gmail.com', '321', '3213', '2025-11-19 22:51:48', 'customer');
+
 -- --------------------------------------------------------
 
 --
@@ -174,6 +198,14 @@ CREATE TABLE `review` (
   `review_date` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data untuk tabel `review`
+--
+
+INSERT INTO `review` (`id_review`, `id_tempat`, `id_pengguna`, `score`, `comment`, `review_date`) VALUES
+(1, 1, 1, 3, '3sasdasdasdasd', '2025-11-19 22:40:45'),
+(2, 1, 2, 5, 'asdsadsd', '2025-11-19 22:52:10');
+
 -- --------------------------------------------------------
 
 --
@@ -184,6 +216,15 @@ CREATE TABLE `tempat_fasilitas` (
   `id_tempat` int(11) NOT NULL,
   `id_fasilitas` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `tempat_fasilitas`
+--
+
+INSERT INTO `tempat_fasilitas` (`id_tempat`, `id_fasilitas`) VALUES
+(1, 1),
+(1, 2),
+(1, 3);
 
 -- --------------------------------------------------------
 
@@ -201,8 +242,17 @@ CREATE TABLE `tempat_pemancingan` (
   `description` text DEFAULT NULL,
   `full_description` longtext DEFAULT NULL,
   `total_reviews_count` int(11) DEFAULT 0,
-  `average_rating` decimal(2,1) DEFAULT 0.0
+  `average_rating` decimal(2,1) DEFAULT 0.0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `tempat_pemancingan`
+--
+
+INSERT INTO `tempat_pemancingan` (`id_tempat`, `title`, `location`, `base_price`, `price_unit`, `image_url`, `description`, `full_description`, `total_reviews_count`, `average_rating`, `created_at`, `updated_at`) VALUES
+(1, 'Pantai Ancol', 'Ancol, Jakarta Utara\r\n', 50000.00, 'Hari', '/img/ancol.png\r\n', 'Tempat pemancingan laut yang populer dengan fasilitas lengkap dan suasana nyaman. Cocok untuk memancing harian.', 'Bayangkan sebuah spot memancing di laut lepas dengan latar belakang silhouette megah Jakarta skyline yang berdiri gagah di kejauhan. Dari atas kapal atau dermaga, para pemancing dapat menyaksikan gedung-gedung pencakar langit yang berkilauan ditimpa cahaya matahari sore, menciptakan pemandangan kontras antara kehidupan perkotaan yang sibuk dengan ketenangan laut biru yang membentang luas.', 300, 4.2, '2025-11-19 14:49:45', '2025-11-19 15:09:50');
 
 --
 -- Indexes for dumped tables
@@ -241,7 +291,8 @@ ALTER TABLE `fasilitas`
 -- Indeks untuk tabel `item_sewa`
 --
 ALTER TABLE `item_sewa`
-  ADD PRIMARY KEY (`id_item`);
+  ADD PRIMARY KEY (`id_item`),
+  ADD KEY `id_tempat` (`id_tempat`);
 
 --
 -- Indeks untuk tabel `kategori_ensiklopedia`
@@ -320,13 +371,13 @@ ALTER TABLE `ensiklopedia_media`
 -- AUTO_INCREMENT untuk tabel `fasilitas`
 --
 ALTER TABLE `fasilitas`
-  MODIFY `id_fasilitas` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_fasilitas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `item_sewa`
 --
 ALTER TABLE `item_sewa`
-  MODIFY `id_item` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_item` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `kategori_ensiklopedia`
@@ -350,19 +401,19 @@ ALTER TABLE `pemesanan`
 -- AUTO_INCREMENT untuk tabel `pengguna`
 --
 ALTER TABLE `pengguna`
-  MODIFY `id_pengguna` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pengguna` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `review`
 --
 ALTER TABLE `review`
-  MODIFY `id_review` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_review` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `tempat_pemancingan`
 --
 ALTER TABLE `tempat_pemancingan`
-  MODIFY `id_tempat` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_tempat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
@@ -386,6 +437,12 @@ ALTER TABLE `ensiklopedia`
 --
 ALTER TABLE `ensiklopedia_media`
   ADD CONSTRAINT `ensiklopedia_media_ibfk_1` FOREIGN KEY (`id_artikel`) REFERENCES `ensiklopedia` (`id_artikel`);
+
+--
+-- Ketidakleluasaan untuk tabel `item_sewa`
+--
+ALTER TABLE `item_sewa`
+  ADD CONSTRAINT `item_sewa_ibfk_1` FOREIGN KEY (`id_tempat`) REFERENCES `tempat_pemancingan` (`id_tempat`);
 
 --
 -- Ketidakleluasaan untuk tabel `pembayaran`

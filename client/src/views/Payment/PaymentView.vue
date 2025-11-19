@@ -21,12 +21,10 @@ const totalHarga = ref(route.query.total || 'Rp 0')
 const equipmentString = route.query.equipment || '[]'
 
 const bankOptions = ['bri', 'bni', 'VISA', 'MASTERCARD']
-const walletOptions = ['Gopay', 'ovo']
 const qrOptions = ['qris']
 
 function isCategorySelected(category) {
   if (category === 'bank') return bankOptions.includes(selectedOption.value)
-  if (category === 'wallet') return walletOptions.includes(selectedOption.value)
   if (category === 'qr') return qrOptions.includes(selectedOption.value)
   return false
 }
@@ -37,7 +35,6 @@ function toggleCategory(category) {
 
 const buttonText = computed(() => {
   if (isCategorySelected('bank')) return 'Bayar Dengan Virtual Account'
-  if (isCategorySelected('wallet')) return 'Bayar Dengan E-Wallet'
   if (isCategorySelected('qr')) return 'Bayar Dengan QRIS'
   return 'Pilih Pembayaran'
 })
@@ -69,7 +66,7 @@ function handlePayment() {
         <div class="method-category">
           <div class="method-header" @click="toggleCategory('bank')">
             <div class="method-info">
-              <h3>Transfer Bank</h3>
+              <h3>Virtual Account</h3>
             </div>
             <span class="method-toggle" v-html="openCategory === 'bank' ? '&#9650;' : '&#9660;'"></span>
           </div>
@@ -80,25 +77,6 @@ function handlePayment() {
                 <img :src="`/img/${bank}.png`" :alt="bank" class="payment-logo">
                 <span>{{ bank.toUpperCase() }}</span>
                 <input type="radio" name="paymentOption" :value="bank" v-model="selectedOption">
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="method-category">
-          <div class="method-header" @click="toggleCategory('wallet')">
-            <div class="method-info">
-              <h3>E-Wallet</h3>
-            </div>
-            <span class="method-toggle" v-html="openCategory === 'wallet' ? '&#9650;' : '&#9660;'"></span>
-          </div>
-
-          <div class="method-content" v-if="openCategory === 'wallet'">
-            <div class="payment-option-list">
-              <label class="payment-option" v-for="wallet in walletOptions" :key="wallet">
-                <img :src="`/img/${wallet}.png`" :alt="wallet" class="payment-logo">
-                <span>{{ wallet.toUpperCase() }}</span>
-                <input type="radio" name="paymentOption" :value="wallet" v-model="selectedOption">
               </label>
             </div>
           </div>

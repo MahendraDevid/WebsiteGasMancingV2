@@ -17,7 +17,7 @@ const lokasi = ref('Ancol, Jakarta barat');
 const tanggal = ref('12 Desember 2025');
 const jumlahOrang = ref(1);
 
-// --- PERBAIKAN PARSING DATA PERALATAN ---
+// PERBAIKAN PARSING DATA PERALATAN
 const equipmentList = ref([]);
 
 try {

@@ -153,7 +153,7 @@ const handleBooking = (id) => {
 
                     <!-- Image -->
                     <div class="card-image-section">
-                        <img :src="item.image" :alt="item.title" loading="lazy"
+                        <img :src="item.image_url" :alt="item.title" loading="lazy"
                             @error="($event.target.src = 'https://placehold.co/600x400/CCCCCC/FFFFFF?text=Error')" />
                     </div>
 
@@ -169,8 +169,8 @@ const handleBooking = (id) => {
                                     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 
                     12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                                 </svg>
-                                <span class="rating-value">{{ item.rating }}</span>
-                                <span class="review-count">({{ item.review_count }})</span>
+                                <span class="rating-value">{{ item.average_rating }}</span>
+                                <span class="review-count">({{ item.total_reviews_count }})</span>
                             </div>
                         </div>
 
@@ -190,7 +190,7 @@ const handleBooking = (id) => {
                         <div class="card-button-container">
 
                             <div class="card-facilities">
-                                <span v-for="(facility, idx) in item.facilities" :key="idx" class="facility-tag">
+                                <span v-for="(facility, idx) in item.fasilitas" :key="idx" class="facility-tag">
                                     {{ facility }}
                                 </span>
                             </div>

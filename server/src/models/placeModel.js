@@ -3,62 +3,99 @@
 const db = require("../config/database");
 
 class PlaceModel {
-  // 1. Get all places
+
+  // ======================================
+  // GET ALL TEMPAT PEMANCINGAN
+  // ======================================
   static async findAll() {
-    const [places] = await db.query("SELECT * FROM places"); // Get related data for each place
+    const [places] = await db.query("SELECT * FROM tempat_pemancingan");
 
     for (let place of places) {
+
+      // FASILITAS (many-to-many)
       const [facilities] = await db.query(
-        "SELECT name FROM facilities WHERE place_id = ?",
-        [place.id]
+        `SELECT f.nama_fasilitas 
+         FROM fasilitas f
+         JOIN tempat_fasilitas tf 
+           ON f.id_fasilitas = tf.id_fasilitas
+         WHERE tf.id_tempat = ?`,
+        [place.id_tempat]
       );
-      place.facilities = facilities.map((f) => f.name);
+      place.fasilitas = facilities.map(f => f.nama_fasilitas);
 
-      const [equipment] = await db.query(
-        "SELECT name, price, image FROM equipment WHERE place_id = ?",
-        [place.id]
+      // ITEM SEWA (peralatan & layanan)
+      const [items] = await db.query(
+        `SELECT id_item, nama_item, price, price_unit, image_url, tipe_item
+         FROM item_sewa
+         WHERE id_item IN (
+            SELECT id_item FROM detail_pemesanan_item WHERE id_pesanan IN (
+               SELECT id_pesanan FROM pemesanan WHERE id_tempat = ?
+            )
+         )`,
+        [place.id_tempat]
       );
-      place.equipment = equipment;
+      place.item_sewa = items;
 
+      // REVIEW
       const [reviews] = await db.query(
-        "SELECT name, score, comment FROM reviews WHERE place_id = ?",
-        [place.id]
+        `SELECT r.score, r.comment, r.review_date, u.nama_lengkap AS reviewer
+         FROM review r
+         LEFT JOIN pengguna u ON r.id_pengguna = u.id_pengguna
+         WHERE r.id_tempat = ?`,
+        [place.id_tempat]
       );
+
       place.reviews = reviews;
     }
 
     return places;
   } // 2. Get place by ID with all related data
 
+  // ======================================
+  // GET TEMPAT BY ID
+  // ======================================
   static async findById(id) {
-    const [places] = await db.query("SELECT * FROM places WHERE id = ?", [id]);
+    const [rows] = await db.query(
+      "SELECT * FROM tempat_pemancingan WHERE id_tempat = ?",
+      [id]
+    );
 
-    if (places.length === 0) {
-      return null;
-    }
+    if (rows.length === 0) return null;
 
-    const place = places[0]; // Get facilities
+    const place = rows[0];
 
+    // Fasilitas
     const [facilities] = await db.query(
-      "SELECT name FROM facilities WHERE place_id = ?",
+      `SELECT f.nama_fasilitas 
+       FROM fasilitas f
+       JOIN tempat_fasilitas tf 
+         ON f.id_fasilitas = tf.id_fasilitas
+       WHERE tf.id_tempat = ?`,
       [id]
     );
-    place.facilities = facilities.map((f) => f.name); // Get equipment
+    place.fasilitas = facilities.map(f => f.nama_fasilitas);
 
-    const [equipment] = await db.query(
-      "SELECT name, price, image FROM equipment WHERE place_id = ?",
-      [id]
+    // Item sewa
+    const [items] = await db.query(
+      `SELECT id_item, nama_item, price, price_unit, image_url, tipe_item
+      FROM item_sewa
+      WHERE id_tempat = ?`,
+      [place.id_tempat]
     );
-    place.equipment = equipment; // Get reviews
+    place.item_sewa = items;
 
+    // Review
     const [reviews] = await db.query(
-      "SELECT name, score, comment FROM reviews WHERE place_id = ?",
+      `SELECT r.score, r.comment, r.review_date, u.nama_lengkap AS reviewer
+       FROM review r
+       LEFT JOIN pengguna u ON r.id_pengguna = u.id_pengguna
+       WHERE r.id_tempat = ?`,
       [id]
     );
     place.reviews = reviews;
 
     return place;
-  } // 3. Create new place with related data (Logika tidak diubah)
+  } 
 
   static async create(placeData) {
     const {
@@ -78,7 +115,7 @@ class PlaceModel {
 
     const [result] = await db.query(
       `INSERT INTO places (image, title, location, description, full_description, price, rating, review_count, total_reviews)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         image,
         title,
@@ -132,73 +169,93 @@ class PlaceModel {
 
   static async search(location, date, facilities) {
     let query = `
-        SELECT p.*
-        FROM places p
-    `;
+      SELECT DISTINCT p.*
+      FROM tempat_pemancingan p
+    `;
+    
     let conditions = [];
     let params = [];
 
-    // --- Kondisi Pencarian Lokasi/Kata Kunci (mencari di title, location, description) ---
+    // -----------------------------------------
+    // 1. Filter lokasi / keyword
+    // -----------------------------------------
     if (location && location !== "Semua Lokasi") {
       const searchTerm = `%${location}%`;
-      conditions.push(
-        `(p.title LIKE ? OR p.location LIKE ? OR p.description LIKE ? OR p.full_description LIKE ?)`
-      );
+      conditions.push(`
+        (p.title LIKE ? 
+        OR p.location LIKE ? 
+        OR p.description LIKE ? 
+        OR p.full_description LIKE ?)`);
       params.push(searchTerm, searchTerm, searchTerm, searchTerm);
     }
 
-    // --- Kondisi Pencarian Fasilitas (Menggunakan JOIN) ---
+    // -----------------------------------------
+    // 2. Filter fasilitas (many-to-many)
+    // -----------------------------------------
     if (facilities) {
-      // Lakukan JOIN ke tabel facilities
-      query += ` JOIN facilities f ON p.id = f.place_id`;
-      // Tambahkan kondisi pencarian fasilitas
-      conditions.push(`f.name LIKE ?`);
+      query += `
+        JOIN tempat_fasilitas tf ON p.id_tempat = tf.id_tempat
+        JOIN fasilitas f ON tf.id_fasilitas = f.id_fasilitas
+      `;
+      conditions.push(`f.nama_fasilitas LIKE ?`);
       params.push(`%${facilities}%`);
-
-      query += ` GROUP BY p.id`; // GROUP BY diperlukan untuk menghindari duplikasi hasil dari JOIN
     }
 
-    // --- Kondisi Pencarian Tanggal (Saat ini hanya placeholder karena tidak ada tabel bookings) ---
+    // -----------------------------------------
+    // 3. Filter tanggal (belum ada)
+    // -----------------------------------------
     if (date) {
-      // Logika untuk filter berdasarkan ketersediaan tanggal akan ditambahkan di sini
-      // Misalnya: conditions.push(`p.id NOT IN (SELECT place_id FROM bookings WHERE booking_date = ?)`);
-      // Misalnya: params.push(date);
-    } // Bangun klausa WHERE secara dinamis
-
-    if (conditions.length > 0) {
-      query = query.trim() + ` WHERE ` + conditions.join(" AND ");
+      // Nanti bisa ditambah filter tanggal
     }
 
-    // Tambahkan urutan
-    query += ` ORDER BY p.rating DESC`; // Eksekusi query utama
+    // Build WHERE
+    if (conditions.length > 0) {
+      query += " WHERE " + conditions.join(" AND ");
+    }
 
+    // Sort by rating
+    query += " ORDER BY p.average_rating DESC";
+
+    // Eksekusi query
     const [places] = await db.query(query, params);
+    if (places.length === 0) return [];
 
-    if (places.length === 0) return []; // Fetch related data for each place (Fasilitas, Equipment, Reviews)
-
+    // -----------------------------------------
+    // 4. Fetch data terkait
+    // -----------------------------------------
     for (let place of places) {
-      // Facilities
-      const [facilitiesData] = await db.query(
-        "SELECT name FROM facilities WHERE place_id = ?",
-        [place.id]
-      );
-      place.facilities = facilitiesData.map((f) => f.name); // Equipment
 
-      const [equipment] = await db.query(
-        "SELECT name, price, image FROM equipment WHERE place_id = ?",
-        [place.id]
-      );
-      place.equipment = equipment; // Reviews
+      // Ambil fasilitas
+      const [facilitiesData] = await db.query(`
+        SELECT f.nama_fasilitas
+        FROM fasilitas f
+        JOIN tempat_fasilitas tf ON f.id_fasilitas = tf.id_fasilitas
+        WHERE tf.id_tempat = ?
+      `, [place.id_tempat]);
+      place.fasilitas = facilitiesData.map(f => f.nama_fasilitas);
 
-      const [reviews] = await db.query(
-        "SELECT name, score, comment FROM reviews WHERE place_id = ?",
-        [place.id]
-      );
+      // Ambil item_sewa (karena sudah ada id_tempat)
+      const [equipment] = await db.query(`
+        SELECT nama_item, price, price_unit, image_url, tipe_item
+        FROM item_sewa
+        WHERE id_tempat = ?
+      `, [place.id_tempat]);
+      place.item_sewa = equipment;
+
+      // Ambil review
+      const [reviews] = await db.query(`
+        SELECT r.score, r.comment, r.review_date, u.nama_lengkap AS reviewer
+        FROM review r
+        LEFT JOIN pengguna u ON r.id_pengguna = u.id_pengguna
+        WHERE r.id_tempat = ?
+      `, [place.id_tempat]);
       place.reviews = reviews;
     }
 
     return places;
   }
+
+
 }
 
 module.exports = PlaceModel;

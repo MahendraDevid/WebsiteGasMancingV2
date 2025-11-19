@@ -55,8 +55,9 @@ export default {
   },
 
   // Search places by keyword
-  searchPlaces(query) {
-    return apiClient.get('/places/search', { params: { q: query } })
+  searchPlaces(params) {
+    // ✅ Terima objek params
+    return apiClient.get('/places/search', { params: params })
   },
 
   // Create new place (admin only)

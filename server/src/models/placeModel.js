@@ -1,59 +1,79 @@
-// models/placeModel.js
+// models/placeModel.js (FINAL & OPTIMIZED)
 
 const db = require("../config/database");
 
 class PlaceModel {
-
   // ======================================
-  // GET ALL TEMPAT PEMANCINGAN
+  // 1. GET ALL TEMPAT PEMANCINGAN (OPTIMIZED N+1)
   // ======================================
   static async findAll() {
+    // Q1: Ambil semua tempat utama
     const [places] = await db.query("SELECT * FROM tempat_pemancingan");
 
-    for (let place of places) {
+    if (places.length === 0) return [];
 
-      // FASILITAS (many-to-many)
-      const [facilities] = await db.query(
-        `SELECT f.nama_fasilitas 
-         FROM fasilitas f
-         JOIN tempat_fasilitas tf 
-           ON f.id_fasilitas = tf.id_fasilitas
-         WHERE tf.id_tempat = ?`,
-        [place.id_tempat]
-      );
-      place.fasilitas = facilities.map(f => f.nama_fasilitas);
+    const placeIds = places.map((p) => p.id_tempat);
 
-      // ITEM SEWA (peralatan & layanan)
-      const [items] = await db.query(
-        `SELECT id_item, nama_item, price, price_unit, image_url, tipe_item
-         FROM item_sewa
-         WHERE id_item IN (
-            SELECT id_item FROM detail_pemesanan_item WHERE id_pesanan IN (
-               SELECT id_pesanan FROM pemesanan WHERE id_tempat = ?
-            )
-         )`,
-        [place.id_tempat]
-      );
-      place.item_sewa = items;
+    // Q2: Ambil SEMUA fasilitas untuk SEMUA tempat
+    const [allFacilities] = await db.query(
+      `SELECT 
+                tf.id_tempat, 
+                f.nama_fasilitas 
+            FROM tempat_fasilitas tf
+            JOIN fasilitas f ON tf.id_fasilitas = f.id_fasilitas
+            WHERE tf.id_tempat IN (?)`,
+      [placeIds]
+    );
 
-      // REVIEW
-      const [reviews] = await db.query(
-        `SELECT r.score, r.comment, r.review_date, u.nama_lengkap AS reviewer
-         FROM review r
-         LEFT JOIN pengguna u ON r.id_pengguna = u.id_pengguna
-         WHERE r.id_tempat = ?`,
-        [place.id_tempat]
-      );
+    // Q3: Ambil SEMUA item sewa untuk SEMUA tempat
+    const [allItems] = await db.query(
+      `SELECT id_tempat, id_item, nama_item, price, price_unit, image_url, tipe_item
+             FROM item_sewa
+             WHERE id_tempat IN (?)`,
+      [placeIds]
+    );
 
-      place.reviews = reviews;
-    }
+    // Q4: Ambil SEMUA review untuk SEMUA tempat
+    const [allReviews] = await db.query(
+      `SELECT 
+                r.id_tempat, r.score, r.comment, r.review_date, u.nama_lengkap AS reviewer
+             FROM review r
+             LEFT JOIN pengguna u ON r.id_pengguna = u.id_pengguna
+             WHERE r.id_tempat IN (?)`,
+      [placeIds]
+    );
 
-    return places;
-  } // 2. Get place by ID with all related data
+    // MAPPING (Mengelompokkan data terkait di Node.js)
+    const mappedFacilities = {};
+    allFacilities.forEach((f) => {
+      if (!mappedFacilities[f.id_tempat]) mappedFacilities[f.id_tempat] = [];
+      mappedFacilities[f.id_tempat].push(f.nama_fasilitas);
+    });
 
-  // ======================================
-  // GET TEMPAT BY ID
-  // ======================================
+    const mappedItems = {};
+    allItems.forEach((i) => {
+      if (!mappedItems[i.id_tempat]) mappedItems[i.id_tempat] = [];
+      mappedItems[i.id_tempat].push(i);
+    });
+
+    const mappedReviews = {};
+    allReviews.forEach((r) => {
+      if (!mappedReviews[r.id_tempat]) mappedReviews[r.id_tempat] = [];
+      mappedReviews[r.id_tempat].push(r);
+    });
+
+    // Final Assembly: Menggabungkan tempat utama dengan data terkait
+    return places.map((place) => ({
+      ...place,
+      fasilitas: mappedFacilities[place.id_tempat] || [],
+      item_sewa: mappedItems[place.id_tempat] || [],
+      reviews: mappedReviews[place.id_tempat] || [],
+    }));
+  } // End findAll()
+
+  // -------------------------------------------------------------
+  // 2. GET TEMPAT BY ID (Efisien untuk ID tunggal)
+  // -------------------------------------------------------------
   static async findById(id) {
     const [rows] = await db.query(
       "SELECT * FROM tempat_pemancingan WHERE id_tempat = ?",
@@ -67,19 +87,19 @@ class PlaceModel {
     // Fasilitas
     const [facilities] = await db.query(
       `SELECT f.nama_fasilitas 
-       FROM fasilitas f
-       JOIN tempat_fasilitas tf 
-         ON f.id_fasilitas = tf.id_fasilitas
-       WHERE tf.id_tempat = ?`,
+            FROM fasilitas f
+            JOIN tempat_fasilitas tf 
+              ON f.id_fasilitas = tf.id_fasilitas
+            WHERE tf.id_tempat = ?`,
       [id]
     );
-    place.fasilitas = facilities.map(f => f.nama_fasilitas);
+    place.fasilitas = facilities.map((f) => f.nama_fasilitas);
 
     // Item sewa
     const [items] = await db.query(
       `SELECT id_item, nama_item, price, price_unit, image_url, tipe_item
-      FROM item_sewa
-      WHERE id_tempat = ?`,
+            FROM item_sewa
+            WHERE id_tempat = ?`,
       [place.id_tempat]
     );
     place.item_sewa = items;
@@ -87,126 +107,127 @@ class PlaceModel {
     // Review
     const [reviews] = await db.query(
       `SELECT r.score, r.comment, r.review_date, u.nama_lengkap AS reviewer
-       FROM review r
-       LEFT JOIN pengguna u ON r.id_pengguna = u.id_pengguna
-       WHERE r.id_tempat = ?`,
+            FROM review r
+            LEFT JOIN pengguna u ON r.id_pengguna = u.id_pengguna
+            WHERE r.id_tempat = ?`,
       [id]
     );
     place.reviews = reviews;
 
     return place;
-  } 
+  }
 
+  // -------------------------------------------------------------
+  // 3. CREATE TEMPAT PEMANCINGAN (Disesuaikan dengan skema DB)
+  // -------------------------------------------------------------
   static async create(placeData) {
     const {
-      image,
       title,
       location,
+      base_price, // Menggunakan base_price dari skema DB
+      price_unit,
+      image_url,
       description,
-      fullDescription,
-      price,
-      rating,
-      reviewCount,
-      totalReviews,
-      facilities,
-      equipment,
-      reviews,
-    } = placeData; // Insert place
+      full_description,
+      // reviewCount dan rating diurus oleh DB/Review logic
+      fasilitas = [], // Gunakan nama fasilitas
+      item_sewa = [], // Item sewa baru
+    } = placeData;
 
+    // 1. Insert Tempat Pemancingan
     const [result] = await db.query(
-      `INSERT INTO places (image, title, location, description, full_description, price, rating, review_count, total_reviews)
-   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO tempat_pemancingan (title, location, base_price, price_unit, image_url, description, full_description)
+             VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [
-        image,
         title,
         location,
+        base_price,
+        price_unit,
+        image_url,
         description,
-        fullDescription,
-        price,
-        rating || 0,
-        reviewCount || 0,
-        totalReviews || 0,
+        full_description,
       ]
     );
 
-    const placeId = result.insertId; // Insert facilities
+    const placeId = result.insertId;
 
-    if (facilities && facilities.length > 0) {
-      const facilityValues = facilities.map((f) => [placeId, f]);
-      await db.query("INSERT INTO facilities (place_id, name) VALUES ?", [
-        facilityValues,
-      ]);
-    } // Insert equipment
-
-    if (equipment && equipment.length > 0) {
-      const equipmentValues = equipment.map((e) => [
-        placeId,
-        e.name,
-        e.price,
-        e.image,
-      ]);
-      await db.query(
-        "INSERT INTO equipment (place_id, name, price, image) VALUES ?",
-        [equipmentValues]
+    // 2. Insert Fasilitas (membutuhkan id_fasilitas)
+    if (fasilitas.length > 0) {
+      // Asumsi: Fasilitas yang dikirim adalah nama, kita perlu ID-nya
+      const [existingFacilities] = await db.query(
+        `SELECT id_fasilitas FROM fasilitas WHERE nama_fasilitas IN (?)`,
+        [fasilitas]
       );
-    } // Insert reviews
 
-    if (reviews && reviews.length > 0) {
-      const reviewValues = reviews.map((r) => [
+      if (existingFacilities.length > 0) {
+        const facilityValues = existingFacilities.map((f) => [
+          placeId,
+          f.id_fasilitas,
+        ]);
+        await db.query(
+          "INSERT INTO tempat_fasilitas (id_tempat, id_fasilitas) VALUES ?",
+          [facilityValues]
+        );
+      }
+    }
+
+    // 3. Insert Item Sewa
+    if (item_sewa.length > 0) {
+      const equipmentValues = item_sewa.map((e) => [
+        e.nama_item,
+        e.price,
+        e.price_unit,
+        e.image_url || null,
+        e.tipe_item || "peralatan",
         placeId,
-        r.name,
-        r.score,
-        r.comment,
       ]);
+
       await db.query(
-        "INSERT INTO reviews (place_id, name, score, comment) VALUES ?",
-        [reviewValues]
+        `INSERT INTO item_sewa (nama_item, price, price_unit, image_url, tipe_item, id_tempat) VALUES ?`,
+        [equipmentValues]
       );
     }
 
-    return this.findById(placeId);
-  } // 4. SEARCH places with full related data (Menggunakan multi-kriteria: location, date, facilities)
+    // Tidak perlu memasukkan reviews saat create, reviews dibuat terpisah
 
+    return this.findById(placeId);
+  }
+
+  // -------------------------------------------------------------
+  // 4. SEARCH places (OPTIMIZED N+1)
+  // -------------------------------------------------------------
   static async search(location, date, facilities) {
     let query = `
-      SELECT DISTINCT p.*
-      FROM tempat_pemancingan p
-    `;
-    
+            SELECT DISTINCT p.*
+            FROM tempat_pemancingan p
+        `;
+
     let conditions = [];
     let params = [];
 
-    // -----------------------------------------
     // 1. Filter lokasi / keyword
-    // -----------------------------------------
     if (location && location !== "Semua Lokasi") {
       const searchTerm = `%${location}%`;
       conditions.push(`
-        (p.title LIKE ? 
-        OR p.location LIKE ? 
-        OR p.description LIKE ? 
-        OR p.full_description LIKE ?)`);
+                (p.title LIKE ? 
+                OR p.location LIKE ? 
+                OR p.description LIKE ? 
+                OR p.full_description LIKE ?)`);
       params.push(searchTerm, searchTerm, searchTerm, searchTerm);
     }
 
-    // -----------------------------------------
     // 2. Filter fasilitas (many-to-many)
-    // -----------------------------------------
     if (facilities) {
       query += `
-        JOIN tempat_fasilitas tf ON p.id_tempat = tf.id_tempat
-        JOIN fasilitas f ON tf.id_fasilitas = f.id_fasilitas
-      `;
+                JOIN tempat_fasilitas tf ON p.id_tempat = tf.id_tempat
+                JOIN fasilitas f ON tf.id_fasilitas = f.id_fasilitas
+            `;
+      // Asumsi: facilities adalah string tunggal yang dicari
       conditions.push(`f.nama_fasilitas LIKE ?`);
       params.push(`%${facilities}%`);
     }
 
-    // -----------------------------------------
-    // 3. Filter tanggal (belum ada)
-    // -----------------------------------------
-    if (date) {
-      // Nanti bisa ditambah filter tanggal
-    }
+    // 3. Filter tanggal (Diabaikan sementara, belum ada logic DB)
 
     // Build WHERE
     if (conditions.length > 0) {
@@ -220,42 +241,55 @@ class PlaceModel {
     const [places] = await db.query(query, params);
     if (places.length === 0) return [];
 
-    // -----------------------------------------
-    // 4. Fetch data terkait
-    // -----------------------------------------
-    for (let place of places) {
+    // 4. Batch Fetching data terkait (Sama seperti findAll)
+    const placeIds = places.map((p) => p.id_tempat);
 
-      // Ambil fasilitas
-      const [facilitiesData] = await db.query(`
-        SELECT f.nama_fasilitas
-        FROM fasilitas f
-        JOIN tempat_fasilitas tf ON f.id_fasilitas = tf.id_fasilitas
-        WHERE tf.id_tempat = ?
-      `, [place.id_tempat]);
-      place.fasilitas = facilitiesData.map(f => f.nama_fasilitas);
+    // Q-Batch: Ambil SEMUA data terkait
+    const [allFacilities] = await db.query(
+      `SELECT tf.id_tempat, f.nama_fasilitas 
+             FROM tempat_fasilitas tf JOIN fasilitas f ON tf.id_fasilitas = f.id_fasilitas
+             WHERE tf.id_tempat IN (?)`,
+      [placeIds]
+    );
+    const [allItems] = await db.query(
+      `SELECT id_tempat, nama_item, price, price_unit, image_url, tipe_item
+             FROM item_sewa WHERE id_tempat IN (?)`,
+      [placeIds]
+    );
+    const [allReviews] = await db.query(
+      `SELECT r.id_tempat, r.score, r.comment, r.review_date, u.nama_lengkap AS reviewer
+             FROM review r LEFT JOIN pengguna u ON r.id_pengguna = u.id_pengguna
+             WHERE r.id_tempat IN (?)`,
+      [placeIds]
+    );
 
-      // Ambil item_sewa (karena sudah ada id_tempat)
-      const [equipment] = await db.query(`
-        SELECT nama_item, price, price_unit, image_url, tipe_item
-        FROM item_sewa
-        WHERE id_tempat = ?
-      `, [place.id_tempat]);
-      place.item_sewa = equipment;
+    // MAPPING (Sama seperti findAll)
+    const mappedFacilities = {};
+    allFacilities.forEach((f) => {
+      if (!mappedFacilities[f.id_tempat]) mappedFacilities[f.id_tempat] = [];
+      mappedFacilities[f.id_tempat].push(f.nama_fasilitas);
+    });
 
-      // Ambil review
-      const [reviews] = await db.query(`
-        SELECT r.score, r.comment, r.review_date, u.nama_lengkap AS reviewer
-        FROM review r
-        LEFT JOIN pengguna u ON r.id_pengguna = u.id_pengguna
-        WHERE r.id_tempat = ?
-      `, [place.id_tempat]);
-      place.reviews = reviews;
-    }
+    const mappedItems = {};
+    allItems.forEach((i) => {
+      if (!mappedItems[i.id_tempat]) mappedItems[i.id_tempat] = [];
+      mappedItems[i.id_tempat].push(i);
+    });
 
-    return places;
+    const mappedReviews = {};
+    allReviews.forEach((r) => {
+      if (!mappedReviews[r.id_tempat]) mappedReviews[r.id_tempat] = [];
+      mappedReviews[r.id_tempat].push(r);
+    });
+
+    // Final Assembly
+    return places.map((place) => ({
+      ...place,
+      fasilitas: mappedFacilities[place.id_tempat] || [],
+      item_sewa: mappedItems[place.id_tempat] || [],
+      reviews: mappedReviews[place.id_tempat] || [],
+    }));
   }
-
-
 }
 
 module.exports = PlaceModel;

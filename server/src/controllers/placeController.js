@@ -35,16 +35,21 @@ exports.createPlace = async (req, res) => {
 
 // Search places
 exports.searchPlaces = async (req, res) => {
-  try {
-    const { q } = req.query;
-    if (!q) {
-      return res
-        .status(400)
-        .json({ success: false, error: "Search query required" });
-    }
-    const places = await placeModel.search(q);
-    res.json({ success: true, data: places });
-  } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
-  }
+  try {
+    // Ambil ketiga parameter dari query
+    const { location, date, facilities } = req.query; 
+
+    // Pastikan setidaknya satu kriteria ada, jika tidak, kita bisa anggap itu 'getAll'
+    if (!location && !date && !facilities) {
+      return res
+        .status(400)
+        .json({ success: false, error: "At least one search query required" });
+    }
+    
+    // Panggil model search dengan ketiga parameter
+    const places = await placeModel.search(location, date, facilities); 
+    res.json({ success: true, data: places });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
 };

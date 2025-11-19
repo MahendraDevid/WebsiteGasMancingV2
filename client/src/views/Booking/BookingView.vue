@@ -10,20 +10,21 @@ const spotInfo = ref({
   basePrice: 50000,
 });
 
-// --- Form State ---
+// Form State
 const bookingDate = ref('');
 const duration = ref(1);
 const numPeople = ref(1);
 
-// State untuk peralatan, true jika dipilih
+// State Peralatan (Quantity)
+// Diubah dari boolean (true/false) menjadi number (0)
 const equipment = ref({
-  joran: false,
-  umpan: false,
-  saung: false,
-  perahu: false,
+  joran: 0,
+  umpan: 0,
+  saung: 0,
+  perahu: 0,
 });
 
-// Daftar peralatan (untuk v-for)
+// Daftar peralatan
 const equipmentList = ref([
   { id: 'joran', name: 'Joran', icon: '/img/icon-joran.png', price: 15000 },
   { id: 'umpan', name: 'Umpan', icon: '/img/icon-umpan.png', price: 10000 },
@@ -31,13 +32,12 @@ const equipmentList = ref([
   { id: 'perahu', name: 'Perahu', icon: '/img/icon-perahu.png', price: 50000 },
 ]);
 
-// --- Logika Perhitungan Harga ---
+// Logika Perhitungan Harga
 const equipmentPrice = computed(() => {
   let total = 0;
   for (const item of equipmentList.value) {
-    if (equipment.value[item.id]) {
-      total += item.price;
-    }
+    const qty = equipment.value[item.id] || 0;
+    total += item.price * qty; // Harga * Jumlah
   }
   return total;
 });
@@ -60,16 +60,29 @@ const formatCurrency = (value) => {
 
 const totalPriceFormatted = computed(() => formatCurrency(totalPrice.value));
 
-// Fungsi untuk memilih/membatalkan pilihan peralatan
-function toggleEquipment(equipmentId) {
-  equipment.value[equipmentId] = !equipment.value[equipmentId];
+// Fungsi Mengubah Quantity
+function increaseQty(id) {
+  equipment.value[id]++;
 }
 
-// ---   Daftar peralatan yang dipilih (array nama) ---
-const selectedEquipment = computed(() => {
-  return equipmentList.value
-    .filter(item => equipment.value[item.id])
-    .map(item => item.name);
+function decreaseQty(id) {
+  if (equipment.value[id] > 0) {
+    equipment.value[id]--;
+  }
+}
+
+// Menyiapkan Data untuk dikirim ke Payment
+// Kita kirim array object berisi { name, quantity }
+const selectedEquipmentParams = computed(() => {
+  const selected = equipmentList.value
+    .filter(item => equipment.value[item.id] > 0)
+    .map(item => ({
+      name: item.name,
+      qty: equipment.value[item.id],
+      price: item.price
+    }));
+  
+  return JSON.stringify(selected);
 });
 </script>
 
@@ -116,29 +129,33 @@ const selectedEquipment = computed(() => {
           <div 
             v-for="item in equipmentList" 
             :key="item.id"
-            :class="['equipment-box', { active: equipment[item.id] }]"
-            @click="toggleEquipment(item.id)"
+            :class="['equipment-box', { active: equipment[item.id] > 0 }]"
           >
             <img 
               :src="item.icon" 
               :alt="item.name" 
               onerror="this.onerror=null; this.src='https://placehold.co/60x60/A2B9E4/FFFFFF?text=Icon'"
             >
-            <span>{{ item.name }}</span>
+            <span class="equipment-name">{{ item.name }}</span>
             <span class="equipment-price">{{ formatCurrency(item.price) }}</span>
+            
+            <div class="qty-control">
+              <button @click="decreaseQty(item.id)" :disabled="equipment[item.id] === 0" class="qty-btn">-</button>
+              <span class="qty-display">{{ equipment[item.id] }}</span>
+              <button @click="increaseQty(item.id)" class="qty-btn">+</button>
+            </div>
+
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Footer Pembayaran -->
     <FooterPayment
         variant="checkout"
         :leftTitle="'Total'"
         :leftSubtitle="totalPriceFormatted"
         :buttonText="'Lanjut ke Pembayaran'"
-          :nextRoute="`/payment?total=${encodeURIComponent(totalPriceFormatted)}&equipment=${encodeURIComponent(
-          JSON.stringify(Object.keys(equipment).filter(key => equipment[key])))}`"
+          :nextRoute="`/payment?total=${encodeURIComponent(totalPriceFormatted)}&equipment=${encodeURIComponent(selectedEquipmentParams)}`"
     />
   </main>
 </template>

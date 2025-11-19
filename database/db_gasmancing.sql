@@ -58,7 +58,7 @@ CREATE TABLE `ensiklopedia` (
 -- Dumping data untuk tabel `ensiklopedia`
 --
 
-INSERT INTO `ensiklopedia` (`id_artikel`, `id_kategori`, `judul`, `descriptin`, `image`, `url`, `tgl_terbit`) VALUES
+INSERT INTO `ensiklopedia` (`id_artikel`, `id_kategori`, `judul`, `description`, `image`, `url`, `tgl_terbit`) VALUES
 (1, 1, 'Ikan Gabus', 'Tips Memancing Ikan Gabus:\r\n    1. Gunakan umpan hidup seperti katak atau ikan kecil.\r\n    2. Pilih waktu pagi atau sore hari.\r\n\r\n    Cara Memancing Ikan Gabus:\r\n    1. Gunakan joran medium-heavy.\r\n    2. Gunakan reel kuat.\r\n    3. Tarik perlahan agar ikan terpancing keluar dari sarangnya.', '/img/fish.png', NULL, '2025-11-19 15:45:43'),
 (2, 1, 'Ikan Mas', 'Ikan air tawar yang populer untuk memancing kolam. Sering menggunakan umpan pelet.', '/img/fishs.png', NULL, '2025-11-19 15:45:43'),
 (3, 1, 'Ikan Lele', 'Ikan air tawar yang aktif di malam hari. Cocok menggunakan umpan cacing atau usus ayam.', '/img/fishss.png', NULL, '2025-11-19 15:45:43'),

@@ -54,6 +54,25 @@ CREATE TABLE `ensiklopedia` (
   `tgl_terbit` date DEFAULT curdate()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data untuk tabel `ensiklopedia`
+--
+
+INSERT INTO `ensiklopedia` (`id_artikel`, `id_kategori`, `judul`, `descriptin`, `image`, `url`, `tgl_terbit`) VALUES
+(1, 1, 'Ikan Gabus', 'Tips Memancing Ikan Gabus:\r\n    1. Gunakan umpan hidup seperti katak atau ikan kecil.\r\n    2. Pilih waktu pagi atau sore hari.\r\n\r\n    Cara Memancing Ikan Gabus:\r\n    1. Gunakan joran medium-heavy.\r\n    2. Gunakan reel kuat.\r\n    3. Tarik perlahan agar ikan terpancing keluar dari sarangnya.', '/img/fish.png', NULL, '2025-11-19 15:45:43'),
+(2, 1, 'Ikan Mas', 'Ikan air tawar yang populer untuk memancing kolam. Sering menggunakan umpan pelet.', '/img/fishs.png', NULL, '2025-11-19 15:45:43'),
+(3, 1, 'Ikan Lele', 'Ikan air tawar yang aktif di malam hari. Cocok menggunakan umpan cacing atau usus ayam.', '/img/fishss.png', NULL, '2025-11-19 15:45:43'),
+(4, 1, 'Ikan Patin', 'Ikan tawar omnivora, pertarungan yang kuat. Umpan terbaik: pelet campuran.', '/img/fishsss.png', NULL, '2025-11-19 15:45:43'),
+(5, 1, 'Ikan Bawal', 'Ikan dengan gigitan kuat. Hati-hati saat melepaskan kail. Umpan terbaik: daging atau pelet amis.', '/img/fishssss.png', NULL, '2025-11-19 15:45:43'),
+(20, 2, 'Teknik Memancing', '🎣 Teknik Memancing Lengkap Untuk Semua Kondisi\r\n\r\n    1. Teknik Casting\r\n        - Gunakan umpan buatan (lure) seperti minnow atau spoon.\r\n        - Lempar ke area yang dicurigai ada ikan, lalu gulung perlahan agar gerakannya alami.\r\n        - Efektif untuk ikan predator seperti gabus, toman, dan barramundi.\r\n\r\n    2. Teknik Dasaran\r\n        - Gunakan pemberat timah di ujung tali agar umpan jatuh ke dasar air.\r\n        - Cocok untuk ikan dasar seperti lele, patin, dan baung.\r\n\r\n    3. Teknik Fly Fishing\r\n        - Menggunakan umpan tiruan menyerupai serangga.\r\n        - Cocok di sungai dangkal atau air jernih dengan arus ringan.\r\n\r\n    4. Teknik Trolling\r\n        - Tarik umpan di belakang perahu yang bergerak pelan.\r\n        - Digunakan untuk ikan laut besar seperti tenggiri, marlin, atau tuna.\r\n\r\n    5. Teknik Pancing Pelampung\r\n        - Gunakan pelampung untuk mengatur kedalaman umpan.\r\n        - Mudah untuk pemula dan cocok di kolam atau sungai tenang.\r\n\r\n    💡 *Tips Tambahan:*\r\n    - Gunakan teknik berbeda sesuai kondisi air dan jenis ikan.\r\n    - Perhatikan cuaca dan waktu (pagi/sore biasanya lebih produktif).\r\n    - Selalu rawat peralatan setelah digunakan agar awet.', '/img/produk1.png', NULL, '2025-11-19 15:45:43'),
+(30, 3, 'Umpan Terbaik', '🎣 Umpan Terbaik Untuk Berbagai Ikan\r\n\r\n    1. Ikan Lele — Gunakan umpan cacing tanah, usus ayam, atau ikan kecil.\r\n    2. Ikan Gabus — Katak hidup atau tiruan berbentuk serangga.\r\n    3. Ikan Mas — Adonan roti, pelet, dan essen vanili.\r\n    4. Ikan Patin — Pelet dicampur keju atau telur bebek.\r\n    5. Ikan Bawal — Umpan daging atau pelet amis.\r\n\r\n    💡 *Tips:* Gunakan umpan sesuai habitat ikan dan waktu memancing (pagi/sore hari).', '/img/umpan.jpg', NULL, '2025-11-19 15:45:43'),
+(40, 4, 'Pancingan Terbaik', '🏆 Pancingan Terbaik untuk Berbagai Kondisi\r\n\r\n    1. Joran Spinning — fleksibel dan cocok untuk pemula.\r\n    2. Reel Baitcasting — presisi tinggi untuk teknik casting.\r\n    3. Senar PE — kuat, tahan gesekan, cocok untuk ikan besar.\r\n    4. Kail karbon — ringan tapi tajam, ideal untuk berbagai umpan.\r\n    5. Aksesori — gunakan swivel dan stopper untuk efisiensi.\r\n\r\n    💡 *Tips:* Sesuaikan pancingan dengan lokasi dan target ikanmu.', '/img/pancingan.jpg', NULL, '2025-11-19 15:45:43'),
+(50, 1, 'Jenis Ikan', '🐠 Jenis-Jenis Ikan Populer di Indonesia\r\n\r\n    1. Ikan Air Tawar\r\n        - Lele, Gabus, Patin, Mas, Gurame.\r\n    2. Ikan Air Payau\r\n        - Bandeng, Kakap Merah.\r\n    3. Ikan Laut\r\n        - Tuna, Cakalang, Tenggiri, Kerapu.\r\n\r\n    💡 *Fakta Menarik:* Setiap jenis ikan memiliki kebiasaan makan dan habitat berbeda — pahami sebelum memancing!', '/img/jenisikan.jpg', NULL, '2025-11-19 15:45:43'),
+(60, NULL, 'Perawatan Reel', 'Panduan lengkap cara membersihkan dan melumasi reel pancing Anda agar selalu prima. Perawatan rutin meningkatkan umur reel.', '/img/pancingan.jpg', NULL, '2025-11-19 16:04:46'),
+(70, NULL, 'Spot Muara', 'Tips menemukan spot memancing terbaik di area muara sungai, tempat pertemuan air tawar dan laut. Ikan yang sering didapat: Kakap, Barramundi, dan Kerapu.', '/img/jenisikan.jpg', NULL, '2025-11-19 16:04:46'),
+(80, NULL, 'Joran Carbon', 'Keunggulan dan kekurangan menggunakan joran berbahan karbon fiber. Joran karbon ringan, sensitif, namun rentan patah jika salah perlakuan.', '/img/produk1.png', NULL, '2025-11-19 16:04:46'),
+(90, NULL, 'Tali Senar PE', 'Jenis-jenis senar PE (Polyethylene) dan cara memilih ukuran yang tepat sesuai target ikan. Senar PE memiliki kekuatan tarikan yang sangat tinggi.', '/img/umpan.jpg', NULL, '2025-11-19 16:04:46');
+
 -- --------------------------------------------------------
 
 --
@@ -67,6 +86,36 @@ CREATE TABLE `ensiklopedia_media` (
   `media_url` varchar(255) NOT NULL,
   `keterangan` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `ensiklopedia_media`
+--
+
+INSERT INTO `ensiklopedia_media` (`id_media`, `id_artikel`, `media_type`, `media_url`, `keterangan`) VALUES
+(1, 1, 'image', '/img/fishs.png', 'Gabus siap menyambar'),
+(2, 1, 'video', 'https://www.youtube.com/embed/KA2-caMdYlM?si=nUxTHNJbOO3qrBzt', 'Video cara casting gabus'),
+(3, 1, 'image', '/img/fishs.png', 'Gabus besar'),
+(4, 1, 'image', '/img/gabus3.jpg', 'Spot mancing gabus'),
+(5, 1, 'image', '/img/gabus4.jpg', 'Gabus di rawa-rawa'),
+(6, 20, 'image', '/img/produk1.png', 'Ilustrasi teknik casting'),
+(7, 20, 'video', 'https://www.youtube.com/embed/Uvg0R0kPGYM', 'Video tutorial teknik dasaran'),
+(8, 20, 'image', '/img/produk1.png', 'Ilustrasi teknik dasaran'),
+(9, 30, 'image', '/img/umpan1.jpg', 'Umpan cacing tanah'),
+(10, 30, 'video', 'https://www.youtube.com/embed/H6hErwPTKGo', 'Video membuat umpan pelet'),
+(11, 30, 'image', '/img/umpan2.jpg', 'Adonan pelet'),
+(12, 30, 'image', '/img/umpan3.jpg', 'Umpan buatan (lure)'),
+(13, 40, 'image', '/img/pancing1.jpg', 'Joran spinning'),
+(14, 40, 'video', 'https://www.youtube.com/embed/o5jIGxZzJ9Q', 'Video review reel baitcasting'),
+(15, 40, 'image', '/img/pancing2.jpg', 'Reel baitcasting'),
+(16, 50, 'image', '/img/ikanair.jpg', 'Ikan air tawar'),
+(17, 50, 'image', '/img/ikanlaut.jpg', 'Ikan laut'),
+(18, 50, 'video', 'https://www.youtube.com/embed/hvR1hGQkKq8', 'Video jenis-jenis ikan di Indonesia'),
+(19, 60, 'image', '/img/pancing1.jpg', 'Alat-alat penting untuk membersihkan reel'),
+(20, 60, 'video', 'https://www.youtube.com/embed/P-qK7s8-E4E', 'Video tutorial pelumasan reel pancing'),
+(21, 70, 'image', '/img/ikanlaut.jpg', 'Pemandangan spot mancing di muara'),
+(22, 70, 'video', 'https://www.youtube.com/embed/5k5eJkQo-a8', 'Mancing Kakap Merah di muara'),
+(23, 80, 'image', '/img/pancing2.jpg', 'Joran karbon dengan desain minimalis'),
+(24, 90, 'image', '/img/umpan1.jpg', 'Aneka ukuran senar PE untuk berbagai teknik');
 
 -- --------------------------------------------------------
 

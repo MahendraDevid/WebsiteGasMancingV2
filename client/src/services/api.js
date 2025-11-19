@@ -13,7 +13,7 @@ apiClient.interceptors.request.use(
     // You can add auth token here later
     // const token = localStorage.getItem('token');
     // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
+    //   config.headers.Authorization = `Bearer ${token}`;
     // }
     return config
   },
@@ -47,79 +47,81 @@ export default {
   // Get all places
   getAllPlaces() {
     return apiClient.get('/places')
-  },
+  }, // Get place by ID
 
-  // Get place by ID
   getPlaceById(id) {
     return apiClient.get(`/places/${id}`)
-  },
+  }, // Search places by keyword
 
-  // Search places by keyword
   searchPlaces(params) {
     // ✅ Terima objek params
     return apiClient.get('/places/search', { params: params })
-  },
+  }, // Create new place (admin only)
 
-  // Create new place (admin only)
   createPlace(data) {
     return apiClient.post('/places', data)
   },
 
-  // ============ Booking API ============
+  // ============ Ensiklopedia API ============
 
+  /**
+   * Mengambil semua artikel Ensiklopedia.
+   * Endpoint: GET /api/ensiklopedia
+   */
+  getAllEnsiklopedia() {
+    return apiClient.get('/ensiklopedia')
+  },
+
+  /**
+   * Mengambil detail satu artikel Ensiklopedia.
+   * Endpoint: GET /api/ensiklopedia/:id
+   */
+  getEnsiklopediaById(id) {
+    return apiClient.get(`/ensiklopedia/${id}`)
+  }, // ============ Booking API ============
   // Create new booking
+
   createBooking(data) {
     return apiClient.post('/bookings', data)
-  },
+  }, // Get booking by ID
 
-  // Get booking by ID
   getBookingById(id) {
     return apiClient.get(`/bookings/${id}`)
-  },
+  }, // Get all bookings
 
-  // Get all bookings
   getAllBookings() {
     return apiClient.get('/bookings')
-  },
+  }, // Get bookings by user ID
 
-  // Get bookings by user ID
   getUserBookings(userId) {
     return apiClient.get(`/bookings/user/${userId}`)
-  },
+  }, // Update booking status
 
-  // Update booking status
   updateBookingStatus(id, status) {
     return apiClient.put(`/bookings/${id}/status`, { status })
-  },
+  }, // Delete booking
 
-  // Delete booking
   deleteBooking(id) {
     return apiClient.delete(`/bookings/${id}`)
-  },
-
-  // ============ Users API ============
-
+  }, // ============ Users API ============
   // Get all users
+
   getAllUsers() {
     return apiClient.get('/users')
-  },
+  }, // Get user by ID
 
-  // Get user by ID
   getUserById(id) {
     return apiClient.get(`/users/${id}`)
-  },
+  }, // Create new user
 
-  // Create new user
   createUser(data) {
     return apiClient.post('/users', data)
-  },
+  }, // Update user
 
-  // Update user
   updateUser(id, data) {
     return apiClient.put(`/users/${id}`, data)
-  },
+  }, // Delete user
 
-  // Delete user
   deleteUser(id) {
     return apiClient.delete(`/users/${id}`)
   },

@@ -10,12 +10,12 @@ const spotInfo = ref({
   basePrice: 50000,
 });
 
-// --- Form State ---
+// Form State
 const bookingDate = ref('');
 const duration = ref(1);
 const numPeople = ref(1);
 
-// --- State Peralatan (Quantity) ---
+// State Peralatan (Quantity)
 // Diubah dari boolean (true/false) menjadi number (0)
 const equipment = ref({
   joran: 0,
@@ -32,7 +32,7 @@ const equipmentList = ref([
   { id: 'perahu', name: 'Perahu', icon: '/img/icon-perahu.png', price: 50000 },
 ]);
 
-// --- Logika Perhitungan Harga ---
+// Logika Perhitungan Harga
 const equipmentPrice = computed(() => {
   let total = 0;
   for (const item of equipmentList.value) {
@@ -60,7 +60,7 @@ const formatCurrency = (value) => {
 
 const totalPriceFormatted = computed(() => formatCurrency(totalPrice.value));
 
-// --- Fungsi Mengubah Quantity ---
+// Fungsi Mengubah Quantity
 function increaseQty(id) {
   equipment.value[id]++;
 }
@@ -71,7 +71,7 @@ function decreaseQty(id) {
   }
 }
 
-// --- Menyiapkan Data untuk dikirim ke Payment ---
+// Menyiapkan Data untuk dikirim ke Payment
 // Kita kirim array object berisi { name, quantity }
 const selectedEquipmentParams = computed(() => {
   const selected = equipmentList.value

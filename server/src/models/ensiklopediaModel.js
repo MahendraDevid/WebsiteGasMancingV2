@@ -8,16 +8,15 @@ class EnsiklopediaModel {
   // =======================================================
   static async getAll() {
     let query = `
-      SELECT 
-        id_artikel AS id,
-        judul AS title,
-        descriptin AS description,
-        image,
-        url,
-        tgl_terbit
-      FROM ensiklopedia
-      ORDER BY tgl_terbit DESC
-    `.trim();
+        SELECT 
+          id_artikel AS id,
+          judul AS title,
+          description AS description,
+          image_url AS image,
+          tgl_terbit
+        FROM ensiklopedia
+        ORDER BY tgl_terbit DESC
+     `.trim();
 
     const [articles] = await db.query(query);
 
@@ -50,16 +49,15 @@ class EnsiklopediaModel {
   // =======================================================
   static async findById(id) {
     const query = `
-      SELECT 
-        id_artikel AS id,
-        judul AS title,
-        descriptin AS description,
-        image,
-        url,
-        tgl_terbit
-      FROM ensiklopedia
-      WHERE id_artikel = ?
-    `.trim();
+        SELECT 
+          id_artikel AS id,
+          judul AS title,
+          description AS description,
+          image_url AS image,  // <--- BARIS INI DIPERBAIKI
+          tgl_terbit
+        FROM ensiklopedia
+        WHERE id_artikel = ?
+     `.trim();
 
     const [articles] = await db.query(query, [id]);
 

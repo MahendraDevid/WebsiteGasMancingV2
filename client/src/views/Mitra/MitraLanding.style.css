@@ -1,0 +1,76 @@
+/* Wrapper Utama */
+.mitra-landing-wrapper {
+  background-color: var(--bg-blue);
+  min-height: 100vh;
+  padding: 120px 20px 80px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* --- PERBAIKAN DISINI: Ganti nama class jadi unik (pakai awalan mitra-) --- */
+
+.mitra-hero-section {
+  max-width: 1000px;
+  width: 100%;
+  /* Pastikan tidak mengganggu layout parent jika di-import */
+  margin: 0 auto;
+}
+
+.mitra-hero-title {
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--bay-of-many);
+  margin-bottom: 20px;
+}
+
+.mitra-hero-subtitle {
+  font-size: 20px;
+  color: var(--dove-gray);
+  margin-bottom: 50px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mitra-benefit-cards {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 50px;
+  flex-wrap: wrap;
+}
+
+.mitra-benefit-item {
+  background: var(--white);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  flex: 1;
+  min-width: 250px;
+}
+
+.mitra-benefit-item h3 {
+  color: var(--bay-of-many);
+  margin-bottom: 10px;
+  font-size: 22px;
+}
+
+.mitra-cta-button {
+  background-color: var(--bay-of-many);
+  color: var(--white);
+  font-size: 20px;
+  font-weight: 700;
+  padding: 18px 40px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+  box-shadow: 0 10px 20px rgba(13, 47, 100, 0.3);
+}
+
+.mitra-cta-button:hover {
+  background-color: #0d2f64;
+  transform: translateY(-3px);
+}

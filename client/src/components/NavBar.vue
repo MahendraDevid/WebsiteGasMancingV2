@@ -337,6 +337,7 @@ const handleProfileClickMobile = () => {
 @media (max-width: 1024px) {
   .navbar-container {
     padding: 15px 20px;
+    height: 76px;
   }
   .menu-desktop {
     display: none;
@@ -357,7 +358,8 @@ const handleProfileClickMobile = () => {
 
 @media (max-width: 480px) {
   .navbar-container {
-    padding: 12px 15px;
+    /* padding: 12px 15px; */
+    height: 76px;
   }
   .logo {
     font-size: 16px;

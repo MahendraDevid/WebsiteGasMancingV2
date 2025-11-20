@@ -78,32 +78,36 @@ export default {
    */
   getEnsiklopediaById(id) {
     return apiClient.get(`/ensiklopedia/${id}`)
+  },
+
+   // ============ Booking API ============
+   getAllBookings() {
+    return apiClient.get('/booking')
+  },
+  getBookingById(id) {
+    return apiClient.get(`/booking/${id}`)
   }, // ============ Booking API ============
   // Create new booking
 
   createBooking(data) {
-    return apiClient.post('/bookings', data)
-  }, // Get booking by ID
-
-  getBookingById(id) {
-    return apiClient.get(`/bookings/${id}`)
-  }, // Get all bookings
-
-  getAllBookings() {
-    return apiClient.get('/bookings')
-  }, // Get bookings by user ID
-
+    return apiClient.post('/booking', data)
+  }, 
+  
+  // Get booking by ID
   getUserBookings(userId) {
-    return apiClient.get(`/bookings/user/${userId}`)
-  }, // Update booking status
+    return apiClient.get(`/booking/user/${userId}`)
+  }, 
 
+  // Update booking status
   updateBookingStatus(id, status) {
-    return apiClient.put(`/bookings/${id}/status`, { status })
+    return apiClient.put(`/booking/${id}/status`, { status })
   }, // Delete booking
 
   deleteBooking(id) {
-    return apiClient.delete(`/bookings/${id}`)
-  }, // ============ Users API ============
+    return apiClient.delete(`/booking/${id}`)
+  }, 
+  
+  // ============ Users API ============
   // Get all users
 
   getAllUsers() {

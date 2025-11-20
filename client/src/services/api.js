@@ -91,12 +91,12 @@ export default {
 
   createBooking(data) {
     return apiClient.post('/booking', data)
-  }, 
-  
+  },
+
   // Get booking by ID
   getUserBookings(userId) {
     return apiClient.get(`/booking/user/${userId}`)
-  }, 
+  },
 
   // Update booking status
   updateBookingStatus(id, status) {
@@ -105,18 +105,18 @@ export default {
 
   deleteBooking(id) {
     return apiClient.delete(`/booking/${id}`)
-  }, 
-  
+  },
+
   // ============ Users API ============
   // Get all users
 
-  getAllUsers() {
-    return apiClient.get('/users')
-  }, // Get user by ID
+    getAllUsers() {
+      return apiClient.get('/users')
+    }, // Get user by ID
 
-  getUserById(id) {
-    return apiClient.get(`/users/${id}`)
-  }, // Create new user
+    getUserById(id) {
+      return apiClient.get(`/users/${id}`)
+    }, // Create new user
 
   createUser(data) {
     return apiClient.post('/users', data)

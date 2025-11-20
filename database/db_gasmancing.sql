@@ -150,7 +150,7 @@ CREATE TABLE `ensiklopedia_media` (
 CREATE TABLE mitra (
   `id_mitra` INT(11) NOT NULL,
   `nama_lengkap` VARCHAR(255) NOT NULL,
-  `email` VARCHAR(255) NOT NULL UNIQUE,
+  `email` VARCHAR(255) NOT NULL,
   `password_hash` VARCHAR(255) NOT NULL,
   `no_telepon` VARCHAR(20),
   `alamat` TEXT,

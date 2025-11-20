@@ -103,7 +103,6 @@ const handleBooking = (id) => {
 
 <template>
     <main class="search-page-wrapper">
-
         <!-- Search Bar -->
         <section class="search-section">
             <div class="search-container-custom">

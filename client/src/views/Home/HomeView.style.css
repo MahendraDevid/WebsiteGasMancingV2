@@ -3,6 +3,7 @@
     font-weight: 800;
     height: 100px;
     color: white;
+    margin-top: -200px;
     text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     margin-bottom: 10px;
     line-height: 1.2;
@@ -12,12 +13,14 @@
 .hero-section {
     position: relative;
     width: 100%;
-    height: 500px;
+    height: 100vh; 
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: -30px;
+    top: 50%; 
+    /* ... lainnya ... */
 }
 
 .hero-image {
@@ -70,11 +73,15 @@
   object-fit: cover; /* Fill container, mungkin crop */
 }
 
+/* HomeView.style.css */
+
 .hero-content {
     position: absolute;
-    top: 50%; /* Disesuaikan untuk menampung navbar */
+    /* Posisikan di sekitar 35% dari atas viewport */
+    top: 50%; 
     left: 50%;
-    transform: translate(-50%, -60%);
+    /* Centering akurat dari titik top */
+    transform: translate(-50%, -50%); 
     width: 90%;
     max-width: 900px;
     text-align: center;
@@ -89,11 +96,16 @@
 
 .shadow-gradient {
     position: absolute;
-    top: 300px;
+    /* HAPUS top: 300px; */
+    bottom: 0; /* KRITIS: Menempel di kaki hero section/viewport */
     left: 0;
     right: 0;
-    height: 250px;
-    background: linear-gradient(180deg, rgba(203, 220, 235, 0) 0%, rgba(203, 220, 235, 1) 85%);
+    height: 250px; /* Jarak transisi yang cukup panjang */
+        /* KRITIS: Gradient dari Transparan (0%) ke Putih Penuh (100%) */
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+    /* Jika Hero Image Anda gelap, mungkin perlu transisi yang lebih lebar */
+    /* background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(255, 255, 255, 1) 100%); */
+    
     pointer-events: none;
     z-index: 1;
 }
@@ -109,6 +121,22 @@
     overflow: hidden;
 }
 
+/* Anda dapat menerapkan latar belakang putih di sini atau di container global (body/html) */
+.homepage {
+    /* ... lainnya ... */
+    background-color: white; 
+}
+
+/* Pastikan section-section ini juga memiliki background putih jika home page tidak memiliki background */
+.popular-section,
+.tips-section {
+    background-color: white; 
+    padding: 60px 20px;
+    position: relative;
+    z-index: 5; /* Pastikan konten di atas gradient */
+}
+
+
 .section-title {
     text-align: center;
     margin-bottom: 50px;
@@ -123,24 +151,33 @@
 }
 
 /* --- Search Section Styles --- */
+/* HomeView.style.css */
+
 .search-section {
-    position: relative;
+    /* Hapus properti lama (relative, margin-top: -400px) */
+
+    position: absolute; 
+    
+    /* KRITIS: Menaikkan posisi, 75% berarti 75% dari atas viewport (100vh) */
+    top: 70%; 
+    
+    left: 50%;
+    /* Centering akurat pada sumbu X dan Y dari titik 'top: 75%' */
+    transform: translate(-50%, -50%); 
+
+    width: 95%; /* Agar responsif */
+    max-width: 1150px; 
+    
     z-index: 10;
-    margin-top: -80px;
-    padding: 0 20px 60px;
+    /* Minimalisir padding karena sudah di-absolute */
+    padding: 0 20px; 
 }
 
+/* Pastikan elemen di dalamnya (search-container-custom) di tengah */
 .search-container-custom {
     max-width: 1150px;
-    margin: 0 auto;
-    background-color: var(--white);
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: nowrap;
+    margin: 0 auto; /* Ini akan menempatkannya di tengah search-section */
+    /* ... lainnya ... */
 }
 
 .search-field-custom {
@@ -579,27 +616,61 @@
         height: 500px;
     }
     .hero-content {
-        top: 100px;
+        /* Hapus posisi absolute dinamis, ganti dengan penempatan statis */
+        position: relative; /* Kritis: Ganti ke relative/statik */
+        top: unset; /* Kritis: Hapus properti top */
+        transform: unset; /* Kritis: Hapus transform */
+        
+        /* Ganti top: 100px dengan padding untuk jarak dari navbar */
+        padding-top: 80px; 
+        
         width: 85%;
-        transform: translate(-50%, -50%);
+        margin: 0 auto; /* Tengah secara horizontal */
+        text-align: center;
+    }
+    .hero-section {
+        height: 500px; /* Tinggi statis (bukan 100vh) */
+        align-items: flex-start; /* Hapus centering */
+    }
+    .hero-title-text {
+        font-size: 38px; /* Diperkecil */
+        height: auto; /* Kritis: Jangan paksa tinggi, biar menyesuaikan */
+        margin-top: 0; /* Hapus margin negatif */
     }
     .section-title-text {
         font-size: 32px;
     }
     .search-section {
-        margin-top: -60px;
+        /* Hapus posisi absolute dinamis, ganti dengan penempatan statis */
+        position: relative; /* Kritis: Ganti ke relative */
+        top: unset; /* Kritis: Hapus properti top */
+        transform: unset; /* Kritis: Hapus transform */
+        
+        /* Gunakan margin-top negatif untuk menariknya ke atas menimpa hero */
+        margin-top: -60px; /* Nilai yang Anda gunakan */
+        
         padding: 0 15px 40px;
+        width: 100%; /* Gunakan lebar penuh */
+        max-width: unset;
     }
     .search-container-custom {
-        flex-direction: column;
+        /* Kritis: Jadikan input vertical */
+        flex-direction: column; 
         gap: 8px;
-        padding: 10px;
+        padding: 15px;
+        /* Tambahkan style box shadow dan background jika belum ada di base style */
+        background-color: white; 
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     }
     .search-field-custom {
         width: 100%;
-        flex: none;
+        flex: none; /* Jangan biarkan flex menentukan lebar */
+        /* Hapus border antar field karena akan ditumpuk */
+        border: 1px solid var(--bon-jour);
     }
     .search-button-custom {
+        width: 100%; 
         height: 45px;
     }
     .popular-section,
@@ -625,15 +696,12 @@
         padding: 40px 199px;
     }
     
-    .carousel-card.small,
-    .carousel-card.medium,
-    .carousel-card.large {
-        width: 280px;
-        height: auto;
-        min-height: 360px;
-        opacity: 1;
-        transform: scale(1);
-    }
+.carousel-card {
+    width: 320px;
+    min-height: 380px;
+    opacity: 1;
+    transform: scale(1);
+}
     .carousel-nav-btn {
         width: 35px;
         height: 35px;
@@ -651,12 +719,20 @@
         height: 450px;
     }
     .hero-content {
-        top: 90px;
-        width: 90%;
+        padding-top: 50px; /* Jarak Judul ke atas */
+    }
+    .hero-section {
+        height: 400px; /* Lebih pendek lagi */
+    }
+    .hero-title-text {
+        font-size: 32px;
     }
     .search-section {
-        margin-top: -50px;
+        margin-top: -50px; /* Sesuaikan tarik ke atas */
         padding: 0 10px 30px;
+    }
+    .search-container-custom {
+        padding: 10px;
     }
     .section-title {
         margin-bottom: 30px;

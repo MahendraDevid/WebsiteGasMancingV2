@@ -19,10 +19,6 @@
   "dependencies": {
     "axios": "^1.13.2",
     "bcrypt": "^6.0.0",
-<<<<<<< HEAD
-=======
-    "bcryptjs": "^3.0.3",
->>>>>>> 76890de8f6c6c028e115095ca20e8fd3e4c59717
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^4.21.2",

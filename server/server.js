@@ -8,8 +8,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// ======== ROUTES IMPORT ========
 const authRoutes = require("./src/routes/auth");
-app.use("/api/auth", authRoutes);
+const placeRoutes = require("./src/routes/placeRoutes");
+const ensiklopediaRoutes = require("./src/routes/ensiklopediaRoutes");
 
+// ======== MOUNT ROUTES ========
+app.use("/api/auth", authRoutes);
+app.use("/api/places", placeRoutes);
+app.use("/api/ensiklopedia", ensiklopediaRoutes);
+
+// ======== START SERVER ========
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

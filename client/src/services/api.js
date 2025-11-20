@@ -7,19 +7,13 @@ const apiClient = axios.create({
   },
 })
 
-// Request interceptor for adding auth token (if needed later)
 apiClient.interceptors.request.use(
   (config) => {
-    // You can add auth token here later
-    // const token = localStorage.getItem('token');
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
+    const token = localStorage.getItem('token')
+    if (token) config.headers.Authorization = `Bearer ${token}`
     return config
   },
-  (error) => {
-    return Promise.reject(error)
-  },
+  (error) => Promise.reject(error),
 )
 
 // Response interceptor for handling errors
@@ -133,5 +127,14 @@ export default {
 
   deleteUser(id) {
     return apiClient.delete(`/users/${id}`)
+  },
+
+  // ============ Auth API ============
+  register(data) {
+    return apiClient.post('/auth/register', data)
+  },
+
+  login(data) {
+    return apiClient.post('/auth/login', data)
   },
 }

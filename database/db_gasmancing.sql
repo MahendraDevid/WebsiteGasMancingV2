@@ -49,6 +49,8 @@ CREATE TABLE `tempat_pemancingan` (
   `image_url` varchar(255) DEFAULT NULL,
   `description` text DEFAULT NULL,
   `full_description` longtext DEFAULT NULL,
+  `open_hours` TIME DEFAULT NULL,
+  `close_hours` TIME DEFAULT NULL,
   `total_reviews_count` int(11) DEFAULT 0,
   `average_rating` decimal(2,1) DEFAULT 0.0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -146,15 +148,17 @@ CREATE TABLE `ensiklopedia_media` (
 
 -- Tabel: mitra
 CREATE TABLE mitra (
-  `id_mitra` INT(11) AUTO_INCREMENT PRIMARY KEY,
+  `id_mitra` INT(11) NOT NULL,
   `nama_lengkap` VARCHAR(255) NOT NULL,
-  `email` VARCHAR(255) NOT NULL UNIQUE,
+  `email` VARCHAR(255) NOT NULL,
   `password_hash` VARCHAR(255) NOT NULL,
   `no_telepon` VARCHAR(20),
   `alamat` TEXT,
-  `tgl_daftar` DATETIME DEFAULT CURRENT_TIMESTAMP
+  `tgl_daftar` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `nama_bank` VARCHAR(50) DEFAULT NULL,
+  `no_rekening` VARCHAR(50) DEFAULT NULL,
+  `atas_nama_rekening` VARCHAR(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 
 -- ==========================================================
 -- 4. INSERT DUMMY DATA (Perbaikan Foreign Key pada Kategori Ensiklopedia)
@@ -172,8 +176,8 @@ INSERT INTO `fasilitas` (`id_fasilitas`, `nama_fasilitas`) VALUES
 (1, 'Toilet');
 
 -- Data: tempat_pemancingan
-INSERT INTO `tempat_pemancingan` (`id_tempat`, `title`, `location`, `base_price`, `price_unit`, `image_url`, `description`, `full_description`, `total_reviews_count`, `average_rating`, `created_at`, `updated_at`) VALUES
-(1, 'Pantai Ancol', 'Ancol, Jakarta Utara\r\n', 50000.00, 'Hari', '/img/ancol.png\r\n', 'Tempat pemancingan laut yang populer dengan fasilitas lengkap dan suasana nyaman. Cocok untuk memancing harian.', 'Bayangkan sebuah spot memancing di laut lepas dengan latar belakang silhouette megah Jakarta skyline yang berdiri gagah di kejauhan...', 300, 4.2, '2025-11-19 14:49:45', '2025-11-19 15:09:50', 1);
+INSERT INTO `tempat_pemancingan` (`id_tempat`, `title`, `location`, `base_price`, `price_unit`, `image_url`, `description`, `full_description`, `open_hours`, `close_hours`, `total_reviews_count`, `average_rating`, `created_at`, `updated_at`, `id_mitra`) VALUES
+(1, 'Pantai Ancol', 'Ancol, Jakarta Utara\r\n', 50000.00, 'Hari', '/img/ancol.png\r\n', 'Tempat pemancingan laut yang populer dengan fasilitas lengkap dan suasana nyaman. Cocok untuk memancing harian.', 'Bayangkan sebuah spot memancing di laut lepas dengan latar belakang silhouette megah Jakarta skyline yang berdiri gagah di kejauhan...', '09:00:00', '21:00:00', 300, 4.2, '2025-11-19 14:49:45', '2025-11-19 15:09:50', 1);
 
 -- Data: tempat_fasilitas
 INSERT INTO `tempat_fasilitas` (`id_tempat`, `id_fasilitas`) VALUES
@@ -242,9 +246,9 @@ INSERT INTO `ensiklopedia_media` (`id_media`, `id_artikel`, `media_type`, `media
 (24, 90, 'image', '/img/umpan1.jpg', 'Aneka ukuran senar PE untuk berbagai teknik');
 
 -- Data: mitra
-INSERT INTO `mitra` (`id_mitra`, `nama_lengkap`, `email`, `password_hash`, `no_telepon`, `alamat`, `tgl_daftar`) VALUES
-(1, 'Budi Santoso', 'budi.ancol@mail.com', 'adminAncol123', '081211112222', 'Jalan Marina, Jakarta Utara', NOW()),
-(2, 'Rini Kartika', 'rini.cibiru@mail.com', 'adminCibiru123', '081233334444', 'Komplek Cibiru Indah, Bandung', NOW());
+INSERT INTO `mitra` (`id_mitra`, `nama_lengkap`, `email`, `password_hash`, `no_telepon`, `alamat`, `tgl_daftar`, `nama_bank`, `no_rekening`, `atas_nama_rekening`) VALUES
+(1, 'Budi Santoso', 'budi.ancol@mail.com', 'adminAncol123', '081211112222', 'Jalan Marina, Jakarta Utara', NOW(), 'BCA', '123456789', 'PT ANCOL JAYA ABADI'),
+(2, 'Rini Kartika', 'rini.cibiru@mail.com', 'adminCibiru123', '081233334444', 'Komplek Cibiru Indah, Bandung', NOW(), 'Mandiri', '987654321', 'CV CIBIRU MANCING');
 
 -- ==========================================================
 -- 5. PRIMARY KEYS (Indeks)
@@ -280,7 +284,7 @@ ALTER TABLE `pemesanan` MODIFY `id_pesanan` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `pengguna` MODIFY `id_pengguna` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 ALTER TABLE `review` MODIFY `id_review` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 ALTER TABLE `tempat_pemancingan` MODIFY `id_tempat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-ALTER TABLE `mitra` MODIFY `id_mitra` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `mitra` MODIFY `id_mitra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 
 -- ==========================================================

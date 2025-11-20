@@ -47,6 +47,11 @@ export default {
     return apiClient.get(`/places/${id}`)
   }, // Search places by keyword
 
+  getEquipmentListByPlace(placeId) {
+    // Asumsi endpoint di backend adalah /item_sewa/place/{id_tempat}
+    return apiClient.get(`/item_sewa/place/${placeId}`)
+  },
+
   searchPlaces(params) {
     // ✅ Terima objek params
     return apiClient.get('/places/search', { params: params })

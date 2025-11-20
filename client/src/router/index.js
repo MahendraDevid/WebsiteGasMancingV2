@@ -11,6 +11,8 @@ import Profile from '@/views/Profile/ProfileView.vue'
 import DetailPesanan from '@/views/DetailPesanan/DetailPesanan.vue'
 import Index from '@/views/Index/IndexView.vue'
 import FormUlasanView from '@/views/FormUlasan/FormUlasanView.vue'
+import MitraLandingView from '@/views/Mitra/MitraLandingView.vue';
+import MitraRegistrationView from '@/views/Mitra/MitraRegistrationView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -80,6 +82,18 @@ const router = createRouter({
       name: 'formulasan', // Nama ini harus sama dengan di router.push
       component: FormUlasanView,
       props: true // Opsional, tapi good practice agar parameter bisa jadi props
+    },
+      // Route Halaman Utama Mitra
+    {
+      path: '/mitra',
+      name: 'mitra-landing',
+      component: MitraLandingView
+    },
+    // Route Form Pendaftaran
+    {
+      path: '/mitra/daftar',
+      name: 'mitra-register',
+      component: MitraRegistrationView
     },
   ],
 })

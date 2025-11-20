@@ -1,7 +1,7 @@
 <template>
   <div class="index-container">
     <h1 style="text-align: center; font-size: 30px;">Indeks Website GasMancing</h1>
-    
+
     <div class="info-kelompok">
       <strong>Nama Kelompok:</strong> GasMancing <br>
       <strong>Nomor Kelompok:</strong> Kelompok 4 </br>
@@ -22,7 +22,7 @@
             Muhammad Rangga Nur Praditha (NIM: 2400297)
         </li>
     </ol>
-      
+
     </div>
 
     <nav class="halaman-nav">
@@ -37,6 +37,8 @@
         <li><router-link to="/pesanan">7. List Pesanan Saya</router-link></li>
         <li><router-link to="/profile">8. Edit Profile</router-link></li>
         <li><router-link to="/detailpesanan/1">9. Detail Pesanan</router-link></li>
+        <li><router-link to="/mitra">10. Landing View Kemitraan</router-link></li>
+        <li><router-link to="/mitra/daftar">11. Daftar Kemitraan</router-link></li>
         </ul>
     </nav>
   </div>

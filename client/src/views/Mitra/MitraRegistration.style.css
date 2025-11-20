@@ -1,0 +1,721 @@
+/* =========================================
+   LAYOUT HALAMAN & CONTAINER
+   ========================================= */
+.registration-page-wrapper {
+  background-color: var(--bg-blue);
+  min-height: 100vh;
+  padding: 120px 20px 80px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.registration-container {
+  width: 100%;
+  max-width: 850px;
+}
+
+/* =========================================
+   STEPPER (Indikator 1-2-3)
+   ========================================= */
+.stepper-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  padding: 0 20px;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--dove-gray);
+  position: relative;
+  z-index: 1;
+  min-width: 80px;
+}
+
+.step-item span {
+  font-size: 14px;
+  text-align: center;
+}
+
+.step-item.active {
+  color: var(--bay-of-many);
+  font-weight: 700;
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--white);
+  border: 2px solid var(--bon-jour);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  transition: all 0.3s;
+  font-size: 16px;
+}
+
+.step-item.active .step-circle {
+  background-color: var(--bay-of-many);
+  border-color: var(--bay-of-many);
+  color: var(--white);
+}
+
+.step-line {
+  flex-grow: 1;
+  height: 2px;
+  background-color: var(--bon-jour);
+  margin: 0 10px;
+  transform: translateY(-14px);
+}
+
+/* =========================================
+   FORM CARD & INPUT DASAR
+   ========================================= */
+.form-card {
+  background-color: var(--white);
+  border-radius: 15px;
+  padding: 40px;
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.step-title {
+  font-size: 28px;
+  color: var(--bay-of-many);
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: var(--licorice);
+  font-size: 15px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 12px 15px;
+  border: 2px solid var(--bon-jour);
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+  width: 100%;
+  background-color: #fff;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--bay-of-many);
+}
+
+/* --- UPDATED: Divider Tanpa Garis --- */
+.divider {
+  margin: 35px 0 15px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--bay-of-many);
+  border: none; /* Garis dihapus sesuai request */
+  padding-bottom: 0;
+}
+
+.info-text {
+  color: var(--dove-gray);
+  font-size: 14px;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+/* =========================================
+   BARU: PROPERTY PHOTO UPLOADER (Step 1)
+   ========================================= */
+.property-photo-uploader {
+  width: 100%;
+  height: 220px; /* Ukuran besar */
+  border: 2px dashed var(--bon-jour);
+  border-radius: 10px;
+  background-color: #fcfcfc;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 5px;
+}
+
+.property-photo-uploader:hover {
+  border-color: var(--bay-of-many);
+  background-color: rgba(13, 47, 100, 0.03);
+}
+
+.property-photo-uploader input[type="file"] {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.photo-placeholder {
+  text-align: center;
+  color: var(--dove-gray);
+  pointer-events: none;
+}
+
+.photo-placeholder span {
+  display: block;
+  font-size: 40px;
+  margin-bottom: 10px;
+  color: var(--bon-jour);
+}
+
+.photo-placeholder p {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.photo-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+/* =========================================
+   PR1: CHECKBOX FASILITAS (GRID STYLE)
+   ========================================= */
+.checkbox-grid {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.checkbox-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border: 2px solid var(--bon-jour);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: #fff;
+  user-select: none;
+}
+
+.checkbox-card:hover {
+  border-color: var(--bay-of-many);
+  background-color: rgba(13, 47, 100, 0.02);
+}
+
+.checkbox-card input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--bay-of-many);
+  cursor: pointer;
+}
+
+/* =========================================
+   PR2: DYNAMIC ITEMS (PERALATAN)
+   ========================================= */
+.items-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.item-card {
+  border: 1px solid var(--bon-jour);
+  border-radius: 10px;
+  padding: 20px;
+  background-color: #fcfcfc;
+  position: relative;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.item-header h4 {
+  margin: 0;
+  color: var(--bay-of-many);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.btn-remove {
+  background-color: #ffecec;
+  color: #d9534f;
+  border: 1px solid #ffcccc;
+  padding: 5px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn-remove:hover {
+  background-color: #ffdddd;
+}
+
+.item-body {
+  display: flex;
+  gap: 25px;
+}
+
+.item-image-upload {
+  width: 110px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.preview-box {
+  width: 110px;
+  height: 110px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dove-gray);
+  font-size: 13px;
+  font-weight: 600;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 2px dashed #ccc;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.preview-box:hover {
+  border-color: var(--bay-of-many);
+  color: var(--bay-of-many);
+}
+
+.item-image-upload input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.item-inputs {
+  flex-grow: 1;
+}
+
+.btn-add-item {
+  width: 100%;
+  padding: 15px;
+  background-color: transparent;
+  border: 2px dashed var(--bay-of-many);
+  color: var(--bay-of-many);
+  font-weight: 700;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 10px;
+}
+
+.btn-add-item:hover {
+  background-color: rgba(13, 47, 100, 0.05);
+}
+
+/* =========================================
+   PR3: HALAMAN KONFIRMASI
+   ========================================= */
+.confirmation-view .summary-section {
+  background-color: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  border: 1px solid #eee;
+}
+
+.summary-section h3 {
+  font-size: 18px;
+  color: var(--bay-of-many);
+  margin-bottom: 15px;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 8px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 30px;
+}
+
+.sum-item {
+  color: var(--licorice);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.sum-item strong {
+  color: var(--dove-gray);
+  font-weight: 600;
+}
+
+.sum-item.full {
+  grid-column: 1 / -1;
+}
+
+.summary-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sum-item-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px;
+  background: var(--white);
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.sum-img-thumb {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  background-color: #ddd;
+  background-size: cover;
+  background-position: center;
+}
+
+.sum-item-detail {
+  display: flex;
+  flex-direction: column;
+}
+
+.sum-item-detail strong {
+  font-size: 15px;
+  color: var(--bay-of-many);
+}
+
+.sum-item-detail p {
+  margin: 0;
+  font-size: 13px;
+  color: #666;
+}
+
+.badge-type {
+  display: inline-block;
+  background: #e2e6ea;
+  color: #495057;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.empty-msg {
+  font-style: italic;
+  color: #999;
+  text-align: center;
+  padding: 10px;
+}
+
+/* Checkbox Persetujuan */
+.agreement-box {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  font-size: 15px;
+  color: var(--dove-gray);
+  line-height: 1.5;
+}
+
+.checkbox-container input {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  accent-color: var(--bay-of-many);
+}
+
+.agreement-text a {
+  color: var(--bay-of-many);
+  text-decoration: underline;
+  font-weight: 700;
+}
+
+/* =========================================
+   TOMBOL NAVIGASI
+   ========================================= */
+.form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 40px;
+  justify-content: flex-end;
+}
+
+.btn-back,
+.btn-next,
+.btn-submit {
+  padding: 14px 35px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.btn-back {
+  background-color: transparent;
+  border: 2px solid var(--bon-jour);
+  color: var(--dove-gray);
+}
+
+.btn-back:hover {
+  background-color: #f0f0f0;
+  color: var(--black);
+}
+
+.btn-next,
+.btn-submit {
+  background-color: var(--bay-of-many);
+  color: var(--white);
+  box-shadow: 0 4px 10px rgba(13, 47, 100, 0.2);
+}
+
+.btn-next:hover,
+.btn-submit:hover {
+  background-color: #0d2f64;
+  transform: translateY(-2px);
+}
+
+/* =========================================
+   MODAL (POPUP)
+   ========================================= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  backdrop-filter: blur(3px);
+}
+
+.modal-content {
+  background-color: var(--white);
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 450px;
+  text-align: center;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  animation: popUp 0.3s ease-out;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes popUp {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-content h2 {
+  color: var(--bay-of-many);
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.modal-content p {
+  color: var(--dove-gray);
+  margin-bottom: 25px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Modal Syarat & Ketentuan */
+.terms-modal {
+  max-width: 600px;
+  text-align: left;
+}
+
+.terms-modal h2 {
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+.terms-scroll-area {
+  max-height: 350px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  background: #fcfcfc;
+}
+
+.terms-scroll-area h3 {
+  font-size: 16px;
+  color: var(--bay-of-many);
+  margin-top: 20px;
+  margin-bottom: 8px;
+}
+
+.terms-scroll-area h3:first-child {
+  margin-top: 0;
+}
+
+.terms-scroll-area p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.success-icon-circle {
+  width: 70px;
+  height: 70px;
+  background-color: #D4EDDA;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px auto;
+}
+
+.check-icon {
+  stroke: #155724;
+}
+
+.modal-close-btn {
+  background-color: var(--bay-of-many);
+  color: var(--white);
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.2s;
+}
+
+.modal-close-btn:hover {
+  background-color: #0d2f64;
+}
+
+/* =========================================
+   RESPONSIVE (MOBILE)
+   ========================================= */
+@media (max-width: 600px) {
+  .registration-page-wrapper {
+    padding: 100px 15px 60px 15px;
+  }
+
+  .form-card {
+    padding: 25px 20px;
+  }
+
+  .stepper-wrapper {
+    padding: 0;
+  }
+
+  .step-circle {
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
+  }
+
+  .step-item span {
+    font-size: 12px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .item-body {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .item-image-upload,
+  .preview-box {
+    width: 100%;
+    height: 160px;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn-back, .btn-next, .btn-submit {
+    width: 100%;
+  }
+}

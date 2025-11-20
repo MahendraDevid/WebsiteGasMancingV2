@@ -12,11 +12,15 @@ app.use(express.json());
 const authRoutes = require("./src/routes/auth");
 const placeRoutes = require("./src/routes/placeRoutes");
 const ensiklopediaRoutes = require("./src/routes/ensiklopediaRoutes");
+const itemSewaRoutes = require("./src/routes/itemSewaRoutes");
+const bookingRoutes = require("./src/routes/bookingRoutes");
 
 // ======== MOUNT ROUTES ========
 app.use("/api/auth", authRoutes);
 app.use("/api/places", placeRoutes);
 app.use("/api/ensiklopedia", ensiklopediaRoutes);
+app.use("/api/item_sewa", itemSewaRoutes);
+app.use("/api/booking", bookingRoutes);
 
 // ======== START SERVER ========
 const PORT = process.env.PORT || 3000;

@@ -22,6 +22,11 @@ const goToSearch = () => {
     })
 }
 
+const goToMitra = () => {
+        // Navigasi ke rute page kemitraan
+    router.push({ name: 'mitra-landing' })
+}
+
 function goToDetail(id) {
     router.push({
         name: 'DetailTempatPemancing',
@@ -310,6 +315,21 @@ onMounted(() => {
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="9 18 15 12 9 6"></polyline>
                         </svg>
+                    </button>
+                </div>
+            </section>
+
+            <section class="mitra-section">
+                <div class="mitra-banner-wrapper">
+                    <img src="/img/mitra_ad.jpg" alt="Gabung Mitra Gas Mancing" class="mitra-image" />
+
+                    <div class="mitra-text-overlay">
+                        <h2>Daftarkan Properti Anda!</h2>
+                        <p>Bergabunglah menjadi mitra kami dan tingkatkan pendapatan bisnis Anda sekarang.</p>
+                    </div>
+
+                    <button class="mitra-button" @click="goToMitra">
+                        Gabung Sekarang
                     </button>
                 </div>
             </section>

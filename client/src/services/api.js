@@ -109,13 +109,13 @@ export default {
   // ============ Users API ============
   // Get all users
 
-  getAllUsers() {
-    return apiClient.get('/users')
-  }, // Get user by ID
+    getAllUsers() {
+      return apiClient.get('/users')
+    }, // Get user by ID
 
-  getUserById(id) {
-    return apiClient.get(`/users/${id}`)
-  }, // Create new user
+    getUserById(id) {
+      return apiClient.get(`/users/${id}`)
+    }, // Create new user
 
   createUser(data) {
     return apiClient.post('/users', data)

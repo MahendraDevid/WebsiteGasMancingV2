@@ -769,3 +769,165 @@
         padding: 40px 710px;
     }
 }
+
+/* --- MITRA SECTION STYLES --- */
+
+.mitra-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.mitra-banner-wrapper {
+    position: relative;
+    /* Mengurangi lebar menjadi sekitar 80% dari sebelumnya (1520px -> 1200px) */
+    max-width: 1400px;
+    width: 95%;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    /* Agar wrapper berada di tengah */
+    margin: 0 auto;
+}
+
+.mitra-image {
+  width: 100%;
+    height: 380px;
+    display: block;
+    object-fit: cover;
+    /* Sedikit mengurangi min-height agar proporsional */
+    min-height: 350px;
+    /* Opsional: Gelapkan sedikit gambar agar tulisan putih terbaca */
+    filter: brightness(0.85);
+}
+
+/* --- TEKS AJAKAN --- */
+.mitra-text-overlay {
+    position: absolute;
+    top: 10%; /* Posisi di atas */
+    left: 6%;
+    max-width: 1000px;
+    z-index: 10;
+    color: var(--white);
+    text-align: left;
+
+}
+
+.mitra-text-overlay h2 {
+    font-size: 77px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5); /* Bayangan agar teks jelas */
+    line-height: 0.9;
+    color: #f0f0f0;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9), -1px -1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.mitra-text-overlay p {
+    font-size: 21px;
+    font-weight: 500;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    color: #f0f0f0;
+    text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.9);
+}
+
+/* --- TOMBOL --- */
+.mitra-button {
+    position: absolute;
+    /* Rasio 5:1 (Total 6 bagian, tombol di 5/6 = ~83%) */
+    top: 80%;
+    right: 6%;
+    transform: translateY(-50%);
+
+    background-color: var(--bay-of-many);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: 14px 30px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    z-index: 10;
+    white-space: nowrap; /* Agar teks tidak turun baris */
+}
+
+.mitra-button:hover {
+    background-color: #0f3166;
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* --- Responsive --- */
+
+@media (max-width: 1024px) {
+  .mitra-banner-wrapper {
+        width: 95%; /* Di HP biarkan agak lebar biar jelas */
+        height: 300px;
+    }
+    .mitra-text-overlay h2 {
+        font-size: 50px;
+    }
+
+    .mitra-text-overlay p {
+        font-size: 16px;
+    }
+
+    .mitra-button {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .mitra-banner-wrapper {
+        width: 95%; /* Di HP biarkan agak lebar biar jelas */
+        height: 300px;
+    }
+
+    .mitra-image {
+        min-height: 250px; /* Tinggi minimal di HP */
+    }
+
+    .mitra-text-overlay {
+        top: 15%;
+        left: 5%;
+        right: 5%;
+
+    }
+
+    .mitra-text-overlay h2 {
+        font-size: 32px;
+    }
+
+    .mitra-text-overlay p {
+        font-size: 14px;
+        display: block; /* Pastikan tetap muncul */
+    }
+
+    .mitra-button {
+        padding: 10px 20px;
+        font-size: 14px;
+        top: 80%;
+        right: 5%;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Penyesuaian untuk layar kecil sekali */
+    .mitra-text-overlay h2 {
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+    .mitra-text-overlay p {
+        font-size: 12px;
+        max-width: 70%; /* Supaya tidak nabrak tombol kalau layar sempit */
+    }
+    .mitra-button {
+        top: 82%;
+        right: 5%;
+        padding: 8px 15px;
+        font-size: 12px;
+    }
+}

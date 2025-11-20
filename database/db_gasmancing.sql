@@ -52,7 +52,8 @@ CREATE TABLE `tempat_pemancingan` (
   `total_reviews_count` int(11) DEFAULT 0,
   `average_rating` decimal(2,1) DEFAULT 0.0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `id_mitra` INT(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Tabel: tempat_fasilitas (Many-to-Many Place <-> Facility)
@@ -143,6 +144,17 @@ CREATE TABLE `ensiklopedia_media` (
   `keterangan` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Tabel: mitra
+CREATE TABLE mitra (
+  `id_mitra` INT(11) AUTO_INCREMENT PRIMARY KEY,
+  `nama_lengkap` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) NOT NULL UNIQUE,
+  `password_hash` VARCHAR(255) NOT NULL,
+  `no_telepon` VARCHAR(20),
+  `alamat` TEXT,
+  `tgl_daftar` DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 -- ==========================================================
 -- 4. INSERT DUMMY DATA (Perbaikan Foreign Key pada Kategori Ensiklopedia)
@@ -161,7 +173,7 @@ INSERT INTO `fasilitas` (`id_fasilitas`, `nama_fasilitas`) VALUES
 
 -- Data: tempat_pemancingan
 INSERT INTO `tempat_pemancingan` (`id_tempat`, `title`, `location`, `base_price`, `price_unit`, `image_url`, `description`, `full_description`, `total_reviews_count`, `average_rating`, `created_at`, `updated_at`) VALUES
-(1, 'Pantai Ancol', 'Ancol, Jakarta Utara\r\n', 50000.00, 'Hari', '/img/ancol.png\r\n', 'Tempat pemancingan laut yang populer dengan fasilitas lengkap dan suasana nyaman. Cocok untuk memancing harian.', 'Bayangkan sebuah spot memancing di laut lepas dengan latar belakang silhouette megah Jakarta skyline yang berdiri gagah di kejauhan...', 300, 4.2, '2025-11-19 14:49:45', '2025-11-19 15:09:50');
+(1, 'Pantai Ancol', 'Ancol, Jakarta Utara\r\n', 50000.00, 'Hari', '/img/ancol.png\r\n', 'Tempat pemancingan laut yang populer dengan fasilitas lengkap dan suasana nyaman. Cocok untuk memancing harian.', 'Bayangkan sebuah spot memancing di laut lepas dengan latar belakang silhouette megah Jakarta skyline yang berdiri gagah di kejauhan...', 300, 4.2, '2025-11-19 14:49:45', '2025-11-19 15:09:50', 1);
 
 -- Data: tempat_fasilitas
 INSERT INTO `tempat_fasilitas` (`id_tempat`, `id_fasilitas`) VALUES
@@ -229,6 +241,10 @@ INSERT INTO `ensiklopedia_media` (`id_media`, `id_artikel`, `media_type`, `media
 (23, 80, 'image', '/img/pancing2.jpg', 'Joran karbon dengan desain minimalis'),
 (24, 90, 'image', '/img/umpan1.jpg', 'Aneka ukuran senar PE untuk berbagai teknik');
 
+-- Data: mitra
+INSERT INTO `mitra` (`id_mitra`, `nama_lengkap`, `email`, `password_hash`, `no_telepon`, `alamat`, `tgl_daftar`) VALUES
+(1, 'Budi Santoso', 'budi.ancol@mail.com', 'adminAncol123', '081211112222', 'Jalan Marina, Jakarta Utara', NOW()),
+(2, 'Rini Kartika', 'rini.cibiru@mail.com', 'adminCibiru123', '081233334444', 'Komplek Cibiru Indah, Bandung', NOW());
 
 -- ==========================================================
 -- 5. PRIMARY KEYS (Indeks)
@@ -246,6 +262,7 @@ ALTER TABLE `pengguna` ADD PRIMARY KEY (`id_pengguna`), ADD UNIQUE KEY `email` (
 ALTER TABLE `review` ADD PRIMARY KEY (`id_review`), ADD KEY `id_tempat` (`id_tempat`), ADD KEY `id_pengguna` (`id_pengguna`);
 ALTER TABLE `tempat_fasilitas` ADD PRIMARY KEY (`id_tempat`,`id_fasilitas`), ADD KEY `id_fasilitas` (`id_fasilitas`);
 ALTER TABLE `tempat_pemancingan` ADD PRIMARY KEY (`id_tempat`);
+ALTER TABLE `mitra` ADD PRIMARY KEY (`id_mitra`), ADD UNIQUE KEY `email` (`email`);
 
 
 -- ==========================================================
@@ -263,6 +280,7 @@ ALTER TABLE `pemesanan` MODIFY `id_pesanan` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `pengguna` MODIFY `id_pengguna` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 ALTER TABLE `review` MODIFY `id_review` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 ALTER TABLE `tempat_pemancingan` MODIFY `id_tempat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `mitra` MODIFY `id_mitra` int(11) NOT NULL AUTO_INCREMENT;
 
 
 -- ==========================================================
@@ -280,5 +298,6 @@ ALTER TABLE `pembayaran` ADD CONSTRAINT `pembayaran_ibfk_1` FOREIGN KEY (`id_pes
 ALTER TABLE `pemesanan` ADD CONSTRAINT `pemesanan_ibfk_1` FOREIGN KEY (`id_pengguna`) REFERENCES `pengguna` (`id_pengguna`), ADD CONSTRAINT `pemesanan_ibfk_2` FOREIGN KEY (`id_tempat`) REFERENCES `tempat_pemancingan` (`id_tempat`);
 ALTER TABLE `review` ADD CONSTRAINT `review_ibfk_1` FOREIGN KEY (`id_tempat`) REFERENCES `tempat_pemancingan` (`id_tempat`), ADD CONSTRAINT `review_ibfk_2` FOREIGN KEY (`id_pengguna`) REFERENCES `pengguna` (`id_pengguna`);
 ALTER TABLE `tempat_fasilitas` ADD CONSTRAINT `tempat_fasilitas_ibfk_1` FOREIGN KEY (`id_tempat`) REFERENCES `tempat_pemancingan` (`id_tempat`), ADD CONSTRAINT `tempat_fasilitas_ibfk_2` FOREIGN KEY (`id_fasilitas`) REFERENCES `fasilitas` (`id_fasilitas`);
+ALTER TABLE `tempat_pemancingan` ADD CONSTRAINT `tempat_pemancingan_ibfk_3` FOREIGN KEY (`id_mitra`) REFERENCES `mitra` (`id_mitra`) ON DELETE SET NULL;
 
 COMMIT;

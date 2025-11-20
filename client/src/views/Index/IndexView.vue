@@ -19,7 +19,7 @@
             Mahendra Devid Putra Anwar (NIM : 2407792)
         </li>
         <li>
-            Muhammad Rangga Nur Praditha (NIM: 2400297)
+            Muhammad Rangga Nur Praditha (NIM: 2400297)
         </li>
     </ol>
 

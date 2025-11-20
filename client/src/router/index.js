@@ -67,8 +67,8 @@ const router = createRouter({
       component: Pesanan,
     },
     {
-      path: '/booking',
-      name: 'booking',
+      path: '/booking/:id',
+      name: 'Booking',
       component: Booking,
       meta: { hideFooter: true }
     },

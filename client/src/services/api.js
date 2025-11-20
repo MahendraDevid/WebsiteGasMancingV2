@@ -53,6 +53,11 @@ export default {
     return apiClient.get(`/places/${id}`)
   }, // Search places by keyword
 
+  getEquipmentListByPlace(placeId) {
+    // Asumsi endpoint di backend adalah /item_sewa/place/{id_tempat}
+    return apiClient.get(`/item_sewa/place/${placeId}`)
+  },
+
   searchPlaces(params) {
     // ✅ Terima objek params
     return apiClient.get('/places/search', { params: params })
@@ -80,8 +85,8 @@ export default {
     return apiClient.get(`/ensiklopedia/${id}`)
   },
 
-   // ============ Booking API ============
-   getAllBookings() {
+  // ============ Booking API ============
+  getAllBookings() {
     return apiClient.get('/booking')
   },
   getBookingById(id) {
@@ -91,12 +96,12 @@ export default {
 
   createBooking(data) {
     return apiClient.post('/booking', data)
-  }, 
-  
+  },
+
   // Get booking by ID
   getUserBookings(userId) {
     return apiClient.get(`/booking/user/${userId}`)
-  }, 
+  },
 
   // Update booking status
   updateBookingStatus(id, status) {
@@ -105,8 +110,8 @@ export default {
 
   deleteBooking(id) {
     return apiClient.delete(`/booking/${id}`)
-  }, 
-  
+  },
+
   // ============ Users API ============
   // Get all users
 

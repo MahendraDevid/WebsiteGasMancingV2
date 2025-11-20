@@ -105,9 +105,19 @@ function handlePayment() {
     </main>
   </div>
   
-  <FooterPayment
-    variant="button"
-    :buttonText="buttonText"
-    @submit="handlePayment"
-  />
+    <div v-if="loading">
+        <p>Memuat detail pembayaran...</p>
+    </div>
+    
+    <div v-else-if="order" class="payment-page-container">
+        <PaymentBox 
+            title="Pembayaran" 
+            :totalPrice="order.totalCost" 
+            :orderNumber="order.nomor_pesanan" 
+        />
+        </div>
+    
+    <div v-else>
+        <p>Detail pesanan tidak ditemukan.</p>
+    </div>
 </template>

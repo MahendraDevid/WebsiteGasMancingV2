@@ -39,6 +39,58 @@
     flex-shrink: 0;
 }
 
+/* --- Styling Tambahan untuk Error 404 di BookingView --- */
+
+.error-container-404 {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+    margin: 40px auto; 
+    width: 100%;
+    max-width: 800px; 
+}
+
+.error-content-404 {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 50px;
+    /* Box Shadow yang halus untuk meniru tampilan kartu */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+    text-align: center;
+    width: 100%;
+}
+
+.error-title-404 {
+    color: #e74c3c; /* Merah terang */
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.error-message-404 {
+    color: #555;
+    margin-bottom: 30px;
+    font-size: 1rem;
+}
+
+.error-button-404 {
+    background-color: #3498db; /* Warna biru */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.error-button-404:hover {
+    background-color: #2980b9;
+}
+
+/* Pastikan juga style untuk .booking-page-wrapper Anda memiliki margin top yang cukup jika ada header fixed */
+/* ... Style BookingView lainnya ... */
+
 .spot-info-content h1 {
     font-size: 28px;
     font-weight: 600;

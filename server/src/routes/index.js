@@ -6,15 +6,13 @@ const router = express.Router();
 // Import route modules
 const userRoutes = require("./userRoutes");
 const placeRoutes = require("./placeRoutes");
-// === TAMBAHKAN INI ===
 const ensiklopediaRoutes = require("./ensiklopediaRoutes");
-// =====================
+const bookingRoutes = require("./bookingRoutes");
 
 // Use route modules
 router.use("/users", userRoutes);
 router.use("/places", placeRoutes);
-// === TAMBAHKAN INI ===
 router.use("/ensiklopedia", ensiklopediaRoutes);
-// =====================
+router.use("/booking", bookingRoutes);
 
 module.exports = router;

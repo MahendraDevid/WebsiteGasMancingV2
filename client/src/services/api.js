@@ -7,19 +7,13 @@ const apiClient = axios.create({
   },
 })
 
-// Request interceptor for adding auth token (if needed later)
 apiClient.interceptors.request.use(
   (config) => {
-    // You can add auth token here later
-    // const token = localStorage.getItem('token');
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
+    const token = localStorage.getItem('token')
+    if (token) config.headers.Authorization = `Bearer ${token}`
     return config
   },
-  (error) => {
-    return Promise.reject(error)
-  },
+  (error) => Promise.reject(error),
 )
 
 // Response interceptor for handling errors
@@ -53,6 +47,11 @@ export default {
     return apiClient.get(`/places/${id}`)
   }, // Search places by keyword
 
+  getEquipmentListByPlace(placeId) {
+    // Asumsi endpoint di backend adalah /item_sewa/place/{id_tempat}
+    return apiClient.get(`/item_sewa/place/${placeId}`)
+  },
+
   searchPlaces(params) {
     // ✅ Terima objek params
     return apiClient.get('/places/search', { params: params })
@@ -80,8 +79,8 @@ export default {
     return apiClient.get(`/ensiklopedia/${id}`)
   },
 
-   // ============ Booking API ============
-   getAllBookings() {
+  // ============ Booking API ============
+  getAllBookings() {
     return apiClient.get('/booking')
   },
   getBookingById(id) {
@@ -128,5 +127,14 @@ export default {
 
   deleteUser(id) {
     return apiClient.delete(`/users/${id}`)
+  },
+
+  // ============ Auth API ============
+  register(data) {
+    return apiClient.post('/auth/register', data)
+  },
+
+  login(data) {
+    return apiClient.post('/auth/login', data)
   },
 }

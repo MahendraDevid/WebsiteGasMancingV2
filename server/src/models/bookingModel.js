@@ -223,15 +223,15 @@ class BookingModel {
   // CREATE NEW BOOKING
   // =======================================================
   static async create(bookingData) {
-    const { 
-      id_pengguna, 
-      id_tempat, 
+    const {
+      id_pengguna,
+      id_tempat,
       nomor_pesanan,
       tgl_mulai_sewa,
       durasi_sewa_jam,
       num_people,
       total_biaya,
-      status_pesanan = 'Menunggu Pembayaran'
+      status_pesanan = "Menunggu Pembayaran",
     } = bookingData;
 
     const query = `
@@ -249,10 +249,55 @@ class BookingModel {
       durasi_sewa_jam,
       num_people,
       total_biaya,
-      status_pesanan
+      status_pesanan,
     ]);
 
     return result.insertId;
+  }
+
+  // =======================================================
+  // CREATE DETAIL ITEM
+  // =======================================================
+  // File: models/bookingModel.js (static async createDetailItem)
+
+  static async createDetailItem(detailData) {
+    const {
+      id_pesanan,
+      id_item,
+      kuantitas,
+      harga_satuan_saat_pesan,
+      subtotal,
+    } = detailData;
+
+    const query = `
+        INSERT INTO detail_pemesanan_item 
+        (id_pesanan, id_item, kuantitas, harga_satuan_saat_pesan, subtotal)
+        VALUES (?, ?, ?, ?, ?)
+    `.trim();
+
+    const [result] = await db.query(query, [
+      id_pesanan,
+      id_item,
+      kuantitas,
+      harga_satuan_saat_pesan,
+      subtotal,
+    ]);
+
+    return result.insertId; // atau return result jika tidak perlu ID
+  }
+
+  // Tambahkan fungsi untuk mencari item sewa berdasarkan nama
+  // ASUMSI: Ini akan diletakkan di ItemModel.js. Jika tidak ada, letakkan di sini.
+  // Mari kita buat model baru ItemModel (atau gunakan BookingModel sementara jika ItemModel belum dibuat)
+  // Kita akan menggunakan BookingModel untuk menyederhanakan.
+  static async findItemByName(itemName) {
+    const query = `
+        SELECT id_item, price
+        FROM item_sewa
+        WHERE nama_item = ?
+    `.trim();
+    const [result] = await db.query(query, [itemName]);
+    return result.length > 0 ? result[0] : null;
   }
 
   // =======================================================

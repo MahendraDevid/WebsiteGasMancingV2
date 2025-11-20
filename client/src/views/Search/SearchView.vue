@@ -148,7 +148,7 @@ const handleBooking = (id) => {
             <div v-if="isLoading" class="loading-message">Memuat hasil...</div>
 
             <div v-else-if="paginatedResults.length">
-                <div class="result-card" v-for="item in paginatedResults" :key="item.id">
+                <div class="result-card" v-for="item in paginatedResults" :key="item.id_tempat">
 
                     <!-- Image -->
                     <div class="card-image-section">
@@ -195,7 +195,7 @@ const handleBooking = (id) => {
                             </div>
 
                             <div class="card-button-wrapper">
-                                <button class="button-booking" @click="handleBooking(item.id)">
+                                <button class="button-booking" @click="handleBooking(item.id_tempat)">
                                     Detail
                                 </button>
                             </div>

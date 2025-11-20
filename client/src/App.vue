@@ -1,126 +1,166 @@
 <template>
   <div id="app-wrapper">
-    <Navbar 
-      @open-modal="openModal" 
-      :is-logged-in="isLoggedIn"
-      @logout="handleLogout"
-      @toggle-profile="handleToggleProfile" 
-    /> 
-    
+
+    <!-- NAVBAR -->
+    <Navbar :is-logged-in="isLoggedIn" @open-modal="openModal" @logout="handleLogout"
+      @toggle-profile="handleToggleProfile" />
+
+    <!-- MAIN CONTENT -->
     <main class="main-content">
-      <RouterView /> 
+      <RouterView />
     </main>
-    
+
+    <!-- FOOTER -->
     <Footer v-if="!route.meta.hideFooter" />
 
-    <LoginRegisterModal
-      :is-visible="isModalVisible && modalType === 'login'"
-      title="Masuk Akun"
-      modal-type="login"
-      @close="closeModal"
-      @login="handleUserLogin"
-      @open-modal="openModal" 
-    />
-    <LoginRegisterModal
-      :is-visible="isModalVisible && modalType === 'register'"
-      title="Daftar Akun Baru"
-      modal-type="register"
-      @close="closeModal"
-      @register="handleUserRegistration" 
-      @open-modal="openModal" 
-    />
+    <!-- SINGLE UNIVERSAL MODAL (Login / Register / Edit Profile) -->
+    <LoginRegisterModal :is-visible="isModalVisible" :modal-type="modalType" @close="closeModal"
+      @login="handleUserLogin" @register="handleUserRegistration" @edit-profile="handleUpdateProfile"
+      @open-modal="openModal" />
 
-    <UserProfileDropdown 
-      :is-visible="isProfileVisible"
-      @close="handleToggleProfile(false)"
-      @logout="handleLogout"
-      @edit-profile="handleOpenEditProfile"
-    />
+    <!-- PROFILE DROPDOWN -->
+    <UserProfileDropdown :is-visible="isProfileVisible" @close="handleToggleProfile(false)" @logout="handleLogout"
+      @edit-profile="handleOpenEditProfile" />
+
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { RouterView } from 'vue-router'
-import Navbar from './components/NavBar.vue' 
-// BARU: Impor komponen Modal
-import LoginRegisterModal from '@/components/LoginRegister.vue'
-import { useRoute } from 'vue-router'
+import { ref } from "vue"
+import { useRoute, RouterView } from "vue-router"
 
-//  Data/State untuk mengontrol Modal (Dipindahkan dari HomeView)
-import Footer from './components/Footer.vue' 
-// Impor dropdown profil
-import UserProfileDropdown from '@/components/UserProfileDropdown.vue';
+// Components
+import Navbar from "./components/NavBar.vue"
+import Footer from "./components/Footer.vue"
+import LoginRegisterModal from "@/components/LoginRegister.vue"
+import UserProfileDropdown from "@/components/UserProfileDropdown.vue"
 
-// --- STATE AUTENTIKASI ---
-const isLoggedIn = ref(false); 
+// Route
+const route = useRoute()
 
-// --- STATE MODAL LOGIN/REGISTER ---
-const isModalVisible = ref(false);
-const modalType = ref('');
-const route = useRoute();
+// ================================
+// AUTH STATE
+// ================================
+const isLoggedIn = ref(!!localStorage.getItem("token"))
 
-// --- STATE MODAL PROFIL ---
-const isProfileVisible = ref(false); // State untuk dropdown profil
+// ================================
+// MODAL SYSTEM
+// ================================
+const isModalVisible = ref(false)
+const modalType = ref("") // "login" | "register" | "edit-profile"
 
-// --- FUNGSI MODAL (LOGIN/REG/EDIT) ---
 const openModal = (type) => {
-  console.log(`[App] Buka Modal: ${type}`);
-  modalType.value = type;
-  isModalVisible.value = true;
-  document.body.style.overflow = 'hidden';
-  isProfileVisible.value = false; // Tutup dropdown profil jika terbuka
-};
+  modalType.value = type
+  isModalVisible.value = true
+  isProfileVisible.value = false
+  document.body.style.overflow = "hidden"
+}
 
 const closeModal = () => {
-  isModalVisible.value = false;
-  modalType.value = '';
-  document.body.style.overflow = '';
-};
+  isModalVisible.value = false
+  modalType.value = ""
+  document.body.style.overflow = ""
+}
 
-// --- FUNGSI DROPDOWN PROFIL ---
+// ================================
+// PROFILE DROPDOWN
+// ================================
+const isProfileVisible = ref(false)
+
 const handleToggleProfile = (forceState) => {
-  // forceState digunakan oleh tombol close
-  if (typeof forceState === 'boolean') {
-    isProfileVisible.value = forceState;
+  if (typeof forceState === "boolean") {
+    isProfileVisible.value = forceState
   } else {
-    isProfileVisible.value = !isProfileVisible.value;
+    isProfileVisible.value = !isProfileVisible.value
+  }
+}
+
+const handleOpenEditProfile = () => {
+  isProfileVisible.value = false
+  openModal("edit-profile")
+}
+
+// ================================
+// LOGIN HANDLER
+// ================================
+const handleUserLogin = async ({ email, password }) => {
+  try {
+    const res = await fetch("http://localhost:3000/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || "Login gagal");
+      return;
+    }
+
+    // Save login data
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    isLoggedIn.value = true;
+    closeModal();
+
+  } catch (err) {
+    console.error(err);
+    alert("Kesalahan server");
   }
 };
 
-const handleOpenEditProfile = () => {
-  isProfileVisible.value = false; // Tutup dropdown
-  openModal('edit-profile'); // Buka modal edit profile
+// ================================
+// REGISTER HANDLER
+// ================================
+const handleUserRegistration = async ({ nama_lengkap, email, password }) => {
+  try {
+    const res = await fetch("http://localhost:3000/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nama_lengkap, email, password })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || "Registrasi gagal");
+      return;
+    }
+
+    alert("Registrasi berhasil!");
+
+    // Move to login screen
+    closeModal();
+    openModal("login");
+
+  } catch (err) {
+    console.error(err);
+    alert("Kesalahan server");
+  }
 };
 
-// --- FUNGSI AUTENTIKASI ---
-const handleUserLogin = (data) => {
-  console.log('LOGIN diproses:', data);
-  isLoggedIn.value = true; 
-  closeModal();
-};
-
-const handleUserRegistration = (data) => {
-  console.log('REGISTER diproses:', data);
-  isLoggedIn.value = true; 
-  closeModal();
-};
-
+// ================================
+// LOGOUT HANDLER
+// ================================
 const handleLogout = () => {
-  console.log('User logout.');
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
   isLoggedIn.value = false;
-  isProfileVisible.value = false; // Tutup dropdown jika sedang terbuka
+  isProfileVisible.value = false;
 };
 
-const handleUpdateProfile = (data) => {
-  console.log('PROFIL DIPERBARUI:', data);
-  // Kirim data ke backend...
+// ================================
+// UPDATE PROFILE (FUTURE FEATURE)
+// ================================
+const handleUpdateProfile = (payload) => {
+  console.log("Profile updated:", payload);
   closeModal();
 };
 </script>
 
 <style scoped>
-/* Anda mungkin memiliki style global di sini, atau membiarkannya kosong jika sudah di main.css */
 #app-wrapper {
   min-height: 100vh;
   display: flex;
@@ -129,6 +169,6 @@ const handleUpdateProfile = (data) => {
 
 .main-content {
   flex-grow: 1;
-  padding-top: 75px; 
+  padding-top: 75px;
 }
 </style>

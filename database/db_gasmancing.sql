@@ -150,7 +150,7 @@ CREATE TABLE `ensiklopedia_media` (
 CREATE TABLE mitra (
   `id_mitra` INT(11) NOT NULL,
   `nama_lengkap` VARCHAR(255) NOT NULL,
-  `email` VARCHAR(255) NOT NULL UNIQUE,
+  `email` VARCHAR(255) NOT NULL,
   `password_hash` VARCHAR(255) NOT NULL,
   `no_telepon` VARCHAR(20),
   `alamat` TEXT,
@@ -249,6 +249,48 @@ INSERT INTO `ensiklopedia_media` (`id_media`, `id_artikel`, `media_type`, `media
 INSERT INTO `mitra` (`id_mitra`, `nama_lengkap`, `email`, `password_hash`, `no_telepon`, `alamat`, `tgl_daftar`, `nama_bank`, `no_rekening`, `atas_nama_rekening`) VALUES
 (1, 'Budi Santoso', 'budi.ancol@mail.com', 'adminAncol123', '081211112222', 'Jalan Marina, Jakarta Utara', NOW(), 'BCA', '123456789', 'PT ANCOL JAYA ABADI'),
 (2, 'Rini Kartika', 'rini.cibiru@mail.com', 'adminCibiru123', '081233334444', 'Komplek Cibiru Indah, Bandung', NOW(), 'Mandiri', '987654321', 'CV CIBIRU MANCING');
+
+
+INSERT INTO `pemesanan` (`id_pesanan`, `id_pengguna`, `id_tempat`, `nomor_pesanan`, `tgl_pesan`, `tgl_mulai_sewa`, `durasi_sewa_jam`, `num_people`, `total_biaya`, `status_pesanan`) VALUES
+(1, 1, 1, 'B-291478729', '2025-11-20', '2025-11-06', 1, 1, 50000.00, 'Menunggu Pembayaran'),
+(2, 1, 1, 'B-295234960', '2025-11-20', '2025-11-06', 1, 1, 60000.00, 'Menunggu Pembayaran'),
+(3, 1, 1, 'B-403269696', '2025-11-20', '2025-11-20', 1, 1, 50000.00, 'Menunggu Pembayaran'),
+(4, 1, 1, 'B-543918631', '2025-11-20', '2025-11-13', 1, 1, 50000.00, 'Menunggu Pembayaran'),
+(5, 1, 1, 'B-552964274', '2025-11-20', '2025-11-14', 1, 1, 50000.00, 'Menunggu Pembayaran'),
+(6, 1, 1, 'B-096454166', '2025-11-20', '2025-11-21', 1, 1, 50000.00, 'Menunggu Pembayaran'),
+(7, 1, 1, 'B-170969408', '2025-11-20', '2025-11-21', 1, 1, 50000.00, 'Menunggu Pembayaran'),
+(8, 1, 1, 'B-178858288', '2025-11-20', '2025-11-21', 1, 1, 50000.00, 'Menunggu Pembayaran'),
+(9, 1, 1, 'B-482349294', '2025-11-20', '2025-11-07', 1, 1, 140000.00, 'Menunggu Pembayaran'),
+(10, 1, 1, 'B-355804865', '2025-11-20', '2025-11-29', 2, 2, 345000.00, 'Menunggu Pembayaran'),
+(11, 1, 1, 'B-391796605', '2025-11-20', '2025-11-28', 2, 4, 610000.00, 'Menunggu Pembayaran'),
+(12, 1, 1, 'B-120532787', '2025-11-20', '0000-00-00', 1, 1, 50000.00, 'Menunggu Pembayaran'),
+(13, 1, 1, 'B-139927629', '2025-11-20', '2025-11-18', 1, 1, 50000.00, 'Menunggu Pembayaran'),
+(14, 1, 1, 'B-260733392', '2025-11-20', '2025-11-28', 1, 1, 100000.00, 'Menunggu Pembayaran'),
+(15, 1, 1, 'B-517380309', '2025-11-20', '2025-11-28', 1, 1, 100000.00, 'Menunggu Pembayaran'),
+(16, 1, 1, 'B-538685739', '2025-11-20', '2025-11-19', 3, 2, 310000.00, 'Menunggu Pembayaran'),
+(17, 1, 1, 'B-320209530', '2025-11-20', '2025-11-29', 1, 1, 50000.00, 'Menunggu Pembayaran'),
+(18, 1, 1, 'B-783093834', '2025-11-20', '2025-11-12', 1, 1, 50000.00, 'Menunggu Pembayaran'),
+(19, 1, 1, 'B-779007594', '2025-11-20', '2025-11-07', 1, 1, 95000.00, 'Menunggu Pembayaran'),
+(20, 1, 1, 'B-821219969', '2025-11-20', '2025-11-08', 1, 1, 70000.00, 'Menunggu Pembayaran'),
+(21, 1, 1, 'B-623829657', '2025-11-20', '2025-11-22', 1, 1, 50000.00, 'Menunggu Pembayaran'),
+(22, 1, 1, 'B-097281720', '2025-11-20', '2025-11-12', 1, 1, 70000.00, 'Menunggu Pembayaran'),
+(23, 1, 1, 'B-111103716', '2025-11-20', '2025-11-14', 1, 1, 70000.00, 'Menunggu Pembayaran'),
+(24, 1, 1, 'B-987654321', '2025-11-20', '2025-11-25', 3, 2, 450000.00, 'Menunggu Pembayaran'),
+(25, 1, 1, 'B-113955306', '2025-11-20', '2025-11-06', 1, 1, 70000.00, 'Menunggu Pembayaran'),
+(26, 1, 1, 'B-930474977', '2025-11-20', '2025-11-29', 1, 1, 120000.00, 'Menunggu Pembayaran'),
+(27, 1, 1, 'B-140870390', '2025-11-21', '2025-11-27', 1, 1, 145000.00, 'Menunggu Pembayaran'),
+(28, 1, 1, 'B-229735870', '2025-11-21', '2025-12-04', 1, 1, 90000.00, 'Menunggu Pembayaran'),
+(29, 1, 1, 'B-254180301', '2025-11-21', '2025-12-04', 1, 1, 115000.00, 'Menunggu Pembayaran'),
+(30, 1, 1, 'B-389211863', '2025-11-21', '2025-11-19', 1, 1, 120000.00, 'Menunggu Pembayaran'),
+(31, 1, 1, 'B-453534703', '2025-11-21', '2025-12-06', 9, 2, 990000.00, 'Menunggu Pembayaran');
+
+INSERT INTO `detail_pemesanan_item` (`id_detail`, `id_pesanan`, `id_item`, `kuantitas`, `harga_satuan_saat_pesan`, `subtotal`) VALUES
+(1, 24, 1, 1, 25000.00, 25000.00),
+(2, 24, 2, 2, 20000.00, 40000.00),
+(3, 30, 1, 2, 25000.00, 50000.00),
+(4, 30, 2, 1, 20000.00, 20000.00),
+(5, 31, 1, 2, 25000.00, 50000.00),
+(6, 31, 2, 2, 20000.00, 40000.00);
 
 -- ==========================================================
 -- 5. PRIMARY KEYS (Indeks)

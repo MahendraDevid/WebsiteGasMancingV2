@@ -1,5 +1,3 @@
-// routes/index.js
-
 const express = require("express");
 const router = express.Router();
 
@@ -10,6 +8,8 @@ const ensiklopediaRoutes = require("./ensiklopediaRoutes");
 const bookingRoutes = require("./bookingRoutes");
 const itemSewaRoutes = require("./itemSewaRoutes");
 const reviewRoutes = require("./reviewRoutes");
+const mitraRoutes = require("./mitraRoutes");
+const paymentRoutes = require("./paymentRoutes");
 
 // Use route modules
 router.use("/users", userRoutes);
@@ -18,5 +18,7 @@ router.use("/ensiklopedia", ensiklopediaRoutes);
 router.use("/booking", bookingRoutes);
 router.use("/item_sewa", itemSewaRoutes);
 router.use("/review", reviewRoutes);
+router.use("/mitra", mitraRoutes);
+router.use("/payment", paymentRoutes);
 
 module.exports = router;

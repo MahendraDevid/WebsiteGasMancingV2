@@ -16,9 +16,8 @@ class PlaceModel {
 
     // Q2: Ambil SEMUA fasilitas untuk SEMUA tempat
     const [allFacilities] = await db.query(
-      `SELECT 
-                tf.id_tempat, 
-                f.nama_fasilit as 
+      `SELECT tf.id_tempat, 
+            f.nama_fasilitas 
             FROM tempat_fasilitas tf
             JOIN fasilitas f ON tf.id_fasilitas = f.id_fasilitas
             WHERE tf.id_tempat IN (?)`,

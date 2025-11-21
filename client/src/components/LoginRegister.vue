@@ -30,7 +30,7 @@
             <div class="password-row">
               <input :type="showPassword ? 'text' : 'password'" class="input-card" v-model="password" required />
               <button type="button" class="pwd-toggle" @click="togglePassword">
-                {{ showPassword ? '🙈' : '👁️' }}
+                <img :src="showPassword ? eyeShowIcon : eyeHideIcon" alt="toggle password" class="icon-eye" />
               </button>
             </div>
           </div>
@@ -54,7 +54,8 @@
             <div class="password-row">
               <input :type="showPassword ? 'text' : 'password'" class="input-card" v-model="password" required />
               <button type="button" class="pwd-toggle" @click="togglePassword">
-                {{ showPassword ? '🙈' : '👁️' }}
+                <img :src="showPassword ? IconEyeClosed : IconEyeOpen" alt="toggle password visibility"
+                  class="pwd-icon" />
               </button>
             </div>
           </div>
@@ -86,6 +87,8 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
+import IconEyeOpen from '@/components/icons/IconEyeOpen.png'
+import IconEyeClosed from '@/components/icons/IconEyeClosed.png'
 
 const props = defineProps({
   isVisible: Boolean,
@@ -321,6 +324,12 @@ async function handleAuth() {
   border-radius: 8px;
   margin-bottom: 12px;
   font-size: 14px;
+}
+
+.pwd-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
 
 /* Responsive */

@@ -18,7 +18,7 @@ class PlaceModel {
     const [allFacilities] = await db.query(
       `SELECT 
                 tf.id_tempat, 
-                f.nama_fasilitas 
+                f.nama_fasilit as 
             FROM tempat_fasilitas tf
             JOIN fasilitas f ON tf.id_fasilitas = f.id_fasilitas
             WHERE tf.id_tempat IN (?)`,

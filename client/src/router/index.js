@@ -11,8 +11,8 @@ import Profile from '@/views/Profile/ProfileView.vue'
 import DetailPesanan from '@/views/DetailPesanan/DetailPesanan.vue'
 import Index from '@/views/Index/IndexView.vue'
 import FormUlasanView from '@/views/FormUlasan/FormUlasanView.vue'
-import MitraLandingView from '@/views/Mitra/MitraLandingView.vue';
-import MitraRegistrationView from '@/views/Mitra/MitraRegistrationView.vue';
+import MitraLandingView from '@/views/Mitra/MitraLandingView.vue'
+import MitraRegistrationView from '@/views/Mitra/MitraRegistrationView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,7 +38,7 @@ const router = createRouter({
       component: Profile,
     },
     {
-    path: '/search',
+      path: '/search',
       name: 'search',
       component: Search,
       props: (route) => ({ location: route.query.location }),
@@ -47,19 +47,19 @@ const router = createRouter({
       path: '/payment',
       name: 'payment',
       component: Payment,
-      meta: { hideFooter: true }
+      meta: { hideFooter: true },
     },
     {
       path: '/paymentconfirmation',
       name: 'paymentconfirmation',
       component: PaymentConfirmation,
-      meta: { hideFooter: true }
+      meta: { hideFooter: true },
     },
     {
       path: '/detail/:id',
       name: 'DetailTempatPemancing',
       component: DetailTempatPemancingan,
-      props: true
+      props: true,
     },
     {
       path: '/pesanan',
@@ -70,30 +70,32 @@ const router = createRouter({
       path: '/booking/:id',
       name: 'Booking',
       component: Booking,
-      meta: { hideFooter: true }
+      meta: { hideFooter: true },
     },
     {
       path: '/detailpesanan/:orderId',
       name: 'detailpesanan',
       component: DetailPesanan,
+      // Menambahkan props: true agar orderId bisa diakses sebagai prop di DetailPesanan
+      props: true,
     },
     {
       path: '/ulasan/:orderId',
       name: 'formulasan', // Nama ini harus sama dengan di router.push
       component: FormUlasanView,
-      props: true // Opsional, tapi good practice agar parameter bisa jadi props
+      props: true, // Opsional, tapi good practice agar parameter bisa jadi props
     },
-      // Route Halaman Utama Mitra
+    // Route Halaman Utama Mitra
     {
       path: '/mitra',
       name: 'mitra-landing',
-      component: MitraLandingView
+      component: MitraLandingView,
     },
     // Route Form Pendaftaran
     {
       path: '/mitra/daftar',
       name: 'mitra-register',
-      component: MitraRegistrationView
+      component: MitraRegistrationView,
     },
   ],
 })

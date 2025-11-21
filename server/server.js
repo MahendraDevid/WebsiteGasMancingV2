@@ -8,14 +8,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ======== ROUTES IMPORT ========
 const authRoutes = require("./src/routes/auth");
 const placeRoutes = require("./src/routes/placeRoutes");
 const ensiklopediaRoutes = require("./src/routes/ensiklopediaRoutes");
 const itemSewaRoutes = require("./src/routes/itemSewaRoutes");
 const bookingRoutes = require("./src/routes/bookingRoutes");
 
-// ======== MOUNT ROUTES ========
+
+app.use("/api/", authRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/places", placeRoutes);
 app.use("/api/ensiklopedia", ensiklopediaRoutes);

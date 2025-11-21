@@ -9,6 +9,8 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   (config) => {
+    // NOTE: Implementasi ini menggunakan localStorage, pastikan Anda menggunakan
+    // sistem otentikasi yang sama di aplikasi Anda (e.g. Firebase Auth)
     const token = localStorage.getItem('token')
     if (token) config.headers.Authorization = `Bearer ${token}`
     return config
@@ -79,7 +81,7 @@ export default {
     return apiClient.get(`/ensiklopedia/${id}`)
   },
 
-  // ============ Booking API ============
+  // ============ Booking API (Sudah ada, tapi kita fokus ke Pesanan) ============
   getAllBookings() {
     return apiClient.get('/booking')
   },
@@ -109,13 +111,13 @@ export default {
   // ============ Users API ============
   // Get all users
 
-    getAllUsers() {
-      return apiClient.get('/users')
-    }, // Get user by ID
+  getAllUsers() {
+    return apiClient.get('/users')
+  }, // Get user by ID
 
-    getUserById(id) {
-      return apiClient.get(`/users/${id}`)
-    }, // Create new user
+  getUserById(id) {
+    return apiClient.get(`/users/${id}`)
+  }, // Create new user
 
   createUser(data) {
     return apiClient.post('/users', data)
@@ -136,5 +138,32 @@ export default {
 
   login(data) {
     return apiClient.post('/auth/login', data)
+  },
+
+  // ============ Pesanan API (BARU) ============
+  /**
+   * Mengambil semua pesanan pengguna yang sedang login.
+   * Endpoint: GET /api/pesanan/my-orders
+   */
+  getAllPesananByUserId() {
+    // ID pengguna harusnya diambil dari token di interceptor, jadi endpoint ini
+    // tidak memerlukan ID sebagai argumen.
+    return apiClient.get('/pesanan/my-orders')
+  },
+
+  /**
+   * Membatalkan pesanan.
+   * Endpoint: POST /api/pesanan/cancel/:id
+   */
+  cancelPesanan(id) {
+    return apiClient.post(`/pesanan/cancel/${id}`)
+  },
+
+  /**
+   * Membuat pesanan baru (biasanya dipanggil dari halaman Booking/Payment)
+   * Endpoint: POST /api/pesanan/create
+   */
+  createPesanan(data) {
+    return apiClient.post('/pesanan/create', data)
   },
 }

@@ -13,20 +13,23 @@
     <!-- FOOTER -->
     <Footer v-if="!route.meta.hideFooter" />
 
-    <!-- SINGLE UNIVERSAL MODAL (Login / Register / Edit Profile) -->
-    <LoginRegisterModal :is-visible="isModalVisible" :modal-type="modalType" @close="closeModal"
-      @login="handleUserLogin" @register="handleUserRegistration" @edit-profile="handleUpdateProfile"
-      @open-modal="openModal" />
+    <!-- LOGIN / REGISTER MODAL -->
+    <LoginRegisterModal :is-visible="isModalVisible" :modal-type="modalType" :title="modalTitle"
+      @close="closeModal"
+      @login="handleUserLogin"
+      @register="handleUserRegistration"
+      @open-modal="openModal"
+      />
 
-    <!-- PROFILE DROPDOWN -->
-    <UserProfileDropdown :is-visible="isProfileVisible" @close="handleToggleProfile(false)" @logout="handleLogout"
-      @edit-profile="handleOpenEditProfile" />
+      <!-- PROFILE DROPDOWN -->
+      <UserProfileDropdown :is-visible="isProfileVisible" @close="handleToggleProfile(false)" @logout="handleLogout"
+        @edit-profile="handleOpenEditProfile" />
 
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, computed } from "vue"
 import { useRoute, RouterView } from "vue-router"
 
 // Components
@@ -35,7 +38,7 @@ import Footer from "./components/Footer.vue"
 import LoginRegisterModal from "@/components/LoginRegister.vue"
 import UserProfileDropdown from "@/components/UserProfileDropdown.vue"
 
-// Route
+// Router
 const route = useRoute()
 
 // ================================
@@ -47,7 +50,15 @@ const isLoggedIn = ref(!!localStorage.getItem("token"))
 // MODAL SYSTEM
 // ================================
 const isModalVisible = ref(false)
-const modalType = ref("") // "login" | "register" | "edit-profile"
+const modalType = ref("")   // login | register | edit-profile
+
+// 🔥 FIX — title is generated here (not inside modal)
+const modalTitle = computed(() => {
+  if (modalType.value === "login") return "Masuk Akun"
+  if (modalType.value === "register") return "Daftar Akun"
+  if (modalType.value === "edit-profile") return "Edit Profil"
+  return ""
+})
 
 const openModal = (type) => {
   modalType.value = type
@@ -89,27 +100,26 @@ const handleUserLogin = async ({ email, password }) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password })
-    });
+    })
 
-    const data = await res.json();
+    const data = await res.json()
 
     if (!res.ok) {
-      alert(data.message || "Login gagal");
-      return;
+      alert(data.message || "Login gagal")
+      return
     }
 
-    // Save login data
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
+    localStorage.setItem("token", data.token)
+    localStorage.setItem("user", JSON.stringify(data.user))
 
-    isLoggedIn.value = true;
-    closeModal();
+    isLoggedIn.value = true
+    closeModal()
 
   } catch (err) {
-    console.error(err);
-    alert("Kesalahan server");
+    console.error(err)
+    alert("Kesalahan server")
   }
-};
+}
 
 // ================================
 // REGISTER HANDLER
@@ -120,44 +130,41 @@ const handleUserRegistration = async ({ nama_lengkap, email, password }) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nama_lengkap, email, password })
-    });
+    })
 
-    const data = await res.json();
+    const data = await res.json()
 
     if (!res.ok) {
-      alert(data.message || "Registrasi gagal");
-      return;
+      alert(data.message || "Registrasi gagal")
+      return
     }
 
-    alert("Registrasi berhasil!");
-
-    // Move to login screen
-    closeModal();
-    openModal("login");
+    alert("Registrasi berhasil!")
+    closeModal()
+    openModal("login")
 
   } catch (err) {
-    console.error(err);
-    alert("Kesalahan server");
+    console.error(err)
+    alert("Kesalahan server")
   }
-};
+}
 
 // ================================
-// LOGOUT HANDLER
+// LOGOUT
 // ================================
 const handleLogout = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
-  isLoggedIn.value = false;
-  isProfileVisible.value = false;
-};
+  localStorage.removeItem("token")
+  localStorage.removeItem("user")
+  isLoggedIn.value = false
+  isProfileVisible.value = false
+}
 
 // ================================
-// UPDATE PROFILE (FUTURE FEATURE)
+// UPDATE PROFILE (NEXT FEATURE)
 // ================================
-const handleUpdateProfile = (payload) => {
-  console.log("Profile updated:", payload);
-  closeModal();
-};
+const handleUpdateProfile = () => {
+  closeModal()
+}
 </script>
 
 <style scoped>

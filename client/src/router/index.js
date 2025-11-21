@@ -73,6 +73,12 @@ const router = createRouter({
       meta: { hideFooter: true }
     },
     {
+      path: '/booking/create/:id',
+      name: 'Booking',
+      component: Booking,
+      meta: { hideFooter: true }
+    },
+    {
       path: '/detailpesanan/:orderId',
       name: 'detailpesanan',
       component: DetailPesanan,

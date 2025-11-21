@@ -89,7 +89,7 @@ export default {
   // Create new booking
 
   createBooking(data) {
-    return apiClient.post('/booking', data)
+    return apiClient.post('/booking/create', data)
   },
 
   // Get booking by ID

@@ -137,4 +137,21 @@ export default {
   login(data) {
     return apiClient.post('/auth/login', data)
   },
+
+  // ============ Mitra API ============
+  createMitra(data) {
+      return apiClient.post('/mitra/register', data);
+  },
+
+  getMitraById(id) {
+    return apiClient.get(`/mitra/${id}`);
+  },
+
+  updateMitra(id, data) {
+    return apiClient.put(`/mitra/${id}`, data);
+  },
+
+  deleteMitra(id) {
+    return apiClient.delete(`/mitra/${id}`);
+  }
 }

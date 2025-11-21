@@ -1,10 +1,11 @@
 <script setup>
-import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { ref, computed } from 'vue' // Tambahkan computed
+import { RouterLink, useRoute } from 'vue-router' // Tambahkan useRoute
 
 const isMenuOpen = ref(false)
+const route = useRoute(); // Hook untuk mengambil info route saat ini
 
-// BARU: Menerima prop 'isLoggedIn' dari App.vue
+// Props dari App.vue
 defineProps({
   isLoggedIn: {
     type: Boolean,
@@ -12,34 +13,35 @@ defineProps({
   }
 })
 
-// BARU: Menambahkan 'toggleProfile' dan 'logout' ke emits
 const emit = defineEmits(['openModal', 'toggleProfile', 'logout']);
 
-// Fungsi ini HANYA akan dipanggil jika !isLoggedIn
+// LOGIC BARU: Cek apakah sedang di halaman Mitra
+// Asumsinya path halaman mitra diawali dengan "/mitra"
+const isMitraPage = computed(() => {
+  return route.path.startsWith('/mitra');
+});
+
 const handleAuthClick = (type) => {
     console.log(`[Navbar] Event: openModal(${type})`);
     isMenuOpen.value = false;
-    emit('openModal', type); 
+    emit('openModal', type);
 };
 
-// BARU: Fungsi untuk menangani klik ikon profil (Desktop)
 const handleProfileClick = () => {
     console.log("[Navbar] Event: toggleProfile");
-    isMenuOpen.value = false; 
-    emit('toggleProfile'); // Memberi tahu App.vue untuk toggle dropdown
+    isMenuOpen.value = false;
+    emit('toggleProfile');
 };
 
-// BARU: Fungsi untuk menangani logout (Mobile)
 const handleLogoutClick = () => {
   isMenuOpen.value = false;
   console.log("[Navbar] Event: logout");
   emit('logout');
 }
 
-// BARU: Fungsi untuk menangani klik "Profil Saya" (Mobile)
 const handleProfileClickMobile = () => {
   isMenuOpen.value = false;
-  emit('toggleProfile'); // Ini juga akan toggle dropdown
+  emit('toggleProfile');
 }
 </script>
 
@@ -52,24 +54,34 @@ const handleProfileClickMobile = () => {
         </div>
         <span class="logo-text">Gas Mancing</span>
       </router-link>
-      
+
       <button class="menu-toggle" @click="isMenuOpen = !isMenuOpen">
         <span></span><span></span><span></span>
       </button>
 
       <nav class="menu-desktop">
-        <router-link to="/" class="menu-item">Beranda</router-link>
-        <router-link to="/pesanan" class="menu-item">Pesanan Saya</router-link>
-        <router-link to="/ensiklopedia" class="menu-item">Ensiklopedia</router-link>
+
+        <template v-if="!isMitraPage">
+          <router-link to="/" class="menu-item">Beranda</router-link>
+          <router-link to="/pesanan" class="menu-item">Pesanan Saya</router-link>
+          <router-link to="/ensiklopedia" class="menu-item">Ensiklopedia</router-link>
+        </template>
+
+        <template v-else>
+           <router-link to="/mitra" class="menu-item">Beranda Mitra</router-link>
+          <router-link to="#" class="menu-item">Properti Saya</router-link>
+        </template>
+
         <router-link to="/index" class="menu-item">Indeks Halaman</router-link>
+
       </nav>
-      
+
       <div class="auth-buttons">
           <template v-if="!isLoggedIn">
             <button class="btn-masuk" @click="handleAuthClick('login')">Masuk</button>
             <button class="btn-daftar" @click="handleAuthClick('register')">Daftar</button>
           </template>
-          
+
           <template v-else>
             <button class="user-profile-button" @click="handleProfileClick">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -83,17 +95,25 @@ const handleProfileClickMobile = () => {
 
   <nav :class="['menu-mobile', { active: isMenuOpen }]">
     <button class="menu-close" @click="isMenuOpen = false">&times;</button>
-    
-    <router-link to="/" class="menu-item" @click="isMenuOpen = false">Beranda</router-link>
-    <a href="#" class="menu-item" @click="isMenuOpen = false">Pesanan Saya</a>
-    <router-link to="/ensiklopedia" class="menu-item" @click="isMenuOpen = false">Ensiklopedia</router-link>
+
+    <template v-if="!isMitraPage">
+      <router-link to="/" class="menu-item" @click="isMenuOpen = false">Beranda</router-link>
+      <router-link to="/pesanan" class="menu-item" @click="isMenuOpen = false">Pesanan Saya</router-link>
+      <router-link to="/ensiklopedia" class="menu-item" @click="isMenuOpen = false">Ensiklopedia</router-link>
+    </template>
+
+    <template v-else>
+      <router-link to="/mitra" class="menu-item" @click="isMenuOpen = false">Beranda Mitra</router-link>
+      <a href="#" class="menu-item" @click="isMenuOpen = false">Properti Saya</a>
+    </template>
+
     <router-link to="/index" class="menu-item" @click="isMenuOpen = false">Indeks Halaman</router-link>
-    
+
     <div v-if="!isLoggedIn" class="menu-auth">
         <button class="btn-masuk" @click="handleAuthClick('login')">Masuk</button>
         <button class="btn-daftar" @click="handleAuthClick('register')">Daftar</button>
     </div>
-    
+
     <div v-else class="menu-auth">
       <a href="#" class="menu-item" @click="handleProfileClickMobile">Profil Saya</a>
       <a href="#" class="menu-item logout" @click="handleLogoutClick">Keluar</a>
@@ -102,7 +122,9 @@ const handleProfileClickMobile = () => {
 </template>
 
 <style scoped>
-/* Pindahkan semua style Navbar, Menu, dan Tombol Auth dari main.css ke sini */
+/* PASTE SEMUA CSS ANDA YANG LAMA DISINI.
+   SAYA TIDAK MENGUBAH SATUPUN KODE CSS.
+*/
 
 .logo-image-file {
   width: 100%;

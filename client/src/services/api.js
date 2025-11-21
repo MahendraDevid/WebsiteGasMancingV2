@@ -106,6 +106,58 @@ export default {
     return apiClient.delete(`/booking/${id}`)
   },
 
+
+
+  // ============ Review API (BARU) ============
+
+  /* Ambil review berdasarkan ID Tempat, Endpoint: GET /api/review/place/:placeId*/
+  getReviewByPlace(placeId) {
+    return apiClient.get(`/review/place/${placeId}`)
+  },
+
+  /*Ambil history review user, Endpoint: GET /api/review/user/:userId*/
+  getReviewByUser(userId) {
+    return apiClient.get(`/review/user/${userId}`)
+  },
+
+  /*Buat review baru, Data: { id_tempat, id_pengguna, score, comment }, Endpoint: POST /api/review*/
+  createReview(data) {
+    return apiClient.post('/review', data)
+  },
+
+  /*Hapus review, Endpoint: DELETE /api/review/:id, Note: Kita kirim placeId di body agar backend bisa update rating tempat*/
+  deleteReview(id, placeId = null) {
+    return apiClient.delete(`/review/${id}`, {
+      data: { placeId } // Axios delete butuh properti 'data' untuk kirim body
+    })
+  },
+
+  // ============ Payment API ============
+  // Membuat pembayaran baru
+  createPayment(data) {
+    // data harus berisi: { id_pesanan, payment_method, jumlah_bayar }
+    return apiClient.post('/payment', data)
+  },
+
+  // Mengambil data pembayaran berdasarkan ID Pesanan
+  getPaymentByBookingId(bookingId) {
+    return apiClient.get(`/payment/booking/${bookingId}`)
+  },
+
+  // Update status pembayaran (Manual / Admin)
+  updatePaymentStatus(idPesanan, status) {
+    // Backend controller mengharapkan key "status_pembayaran"
+    return apiClient.patch(`/payment/${idPesanan}/status`, {
+      status_pembayaran: status
+    })
+  },
+
+  // Simulasi Webhook (Untuk Testing Frontend tanpa Payment Gateway asli)
+  simulatePaymentWebhook(data) {
+    // data: { kode_bayar, status }
+    return apiClient.post('/payment/webhook/simulate', data)
+  },
+
   // ============ Users API ============
   // Get all users
 

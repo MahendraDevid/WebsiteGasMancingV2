@@ -258,7 +258,11 @@ const handleCheckoutClick = async () => {
       // PERBAIKAN KUNCI DI SINI:
       router.push({
         name: 'payment', // Pastikan namanya lowercase: 'payment'
-        query: { orderId: orderId }, // Ganti params menjadi query
+        query: {
+          orderId: orderId,
+          total: totalPriceFormatted.value,
+          equipment: selectedEquipmentParams.value
+        },
       })
     } else {
       alert(`Gagal membuat pemesanan: ${response.data.message}`)

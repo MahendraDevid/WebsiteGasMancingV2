@@ -1,6 +1,7 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue' // Tambahkan onMounted
 import { useRoute, useRouter } from 'vue-router'
+import api from '@/services/api';
 
 import Navbar from '@/components/NavBar.vue'
 import PaymentBox from '@/components/PaymentBox.vue'
@@ -8,18 +9,38 @@ import FooterPayment from '@/components/FooterPayment.vue'
 
 import './PaymentView.style.css'
 
-const selectedOption = ref('bri')
-const openCategory = ref('bank')
-
-// Router & Route
 const route = useRoute()
 const router = useRouter()
 
-// Ambil data dari halaman sebelumnya
-const totalHarga = ref(route.query.total || 'Rp 0')
-// Pastikan equipment diambil sebagai string (kalau undefined jadi string array kosong)
+// =======================================================
+// Data Status & Inputs
+// =======================================================
+const submitting = ref(false)
+const selectedOption = ref('bri')
+const openCategory = ref('bank')
+
+// Ambil data penting dari halaman sebelumnya melalui query params
+// ASUMSI: orderId atau bookingId juga dikirim sebagai query parameter
+const orderId = route.query.orderId // <--- PENTING: ID PESANAN
+const totalHargaString = ref(route.query.total || 'Rp 0') 
 const equipmentString = route.query.equipment || '[]'
 
+// Data yang diambil dari API (jika perlu, tapi untuk sekarang kita fokus ke totalCost)
+const orderData = ref(null) 
+
+// =======================================================
+// Fungsi Utility: Konversi Harga dari String ke Number
+// =======================================================
+const cleanCurrencyString = (currencyStr) => {
+    if (!currencyStr) return 0;
+    // Menghapus "Rp", spasi, koma (jika digunakan sebagai pemisah ribuan)
+    const cleanStr = currencyStr.replace(/Rp/g, '').replace(/\./g, '').replace(/,/g, '').trim();
+    return parseFloat(cleanStr);
+};
+
+// =======================================================
+// Hitungan dan Pilihan
+// =======================================================
 const bankOptions = ['bri', 'bni', 'VISA', 'MASTERCARD']
 const qrOptions = ['qris']
 
@@ -34,19 +55,64 @@ function toggleCategory(category) {
 }
 
 const buttonText = computed(() => {
+  if (submitting.value) return 'Memproses...'
   if (isCategorySelected('bank')) return 'Bayar Dengan Virtual Account'
   if (isCategorySelected('qr')) return 'Bayar Dengan QRIS'
   return 'Pilih Pembayaran'
 })
 
-function handlePayment() {
-  console.log(`Memproses pembayaran dengan: ${selectedOption.value}`)
+// =======================================================
+// FUNGSI UTAMA: Mengirim Data Pembayaran ke Backend
+// =======================================================
+async function handlePayment() {
+  if (submitting.value || !orderId) return
+  if (!selectedOption.value) {
+    alert('Mohon pilih metode pembayaran terlebih dahulu.')
+    return
+  }
 
-  // Kita oper lagi data yang kita terima ke halaman konfirmasi
-  // encodeURIComponent penting agar karakter spesial di JSON tidak merusak URL
-  router.push(
-    `/paymentconfirmation?total=${encodeURIComponent(totalHarga.value)}&equipment=${encodeURIComponent(equipmentString)}`
-  )
+  submitting.value = true
+
+  // 1. Siapkan Payload
+  const paymentAmount = cleanCurrencyString(totalHargaString.value)
+  
+  if (paymentAmount <= 0) {
+      alert('Total biaya tidak valid.')
+      submitting.value = false
+      return
+  }
+
+  const payload = {
+    id_pesanan: parseInt(orderId), // Kirim ID Pesanan (harus integer)
+    payment_method: selectedOption.value,
+    jumlah_bayar: paymentAmount, // Kirim harga dalam bentuk numerik
+  }
+
+  try {
+    // 2. Panggil API createPayment (POST /api/payment)
+    const response = await api.createPayment(payload)
+
+    const paymentData = response.data.data
+    
+    // 3. Sukses: Redirect ke halaman konfirmasi dengan data pembayaran
+    router.push({
+      path: '/paymentconfirmation',
+      query: {
+        orderId: orderId,
+        paymentCode: paymentData.kode_bayar, // Kode bayar dari backend
+        paymentMethod: selectedOption.value,
+        qrisImage: paymentData.image_qris, // URL QRIS dari backend (simulasi)
+        total: totalHargaString.value,
+        equipment: equipmentString
+      }
+    })
+
+  } catch (error) {
+    console.error('Gagal membuat pembayaran:', error.response?.data || error)
+    alert('Gagal memproses pembayaran. Silakan coba lagi. Pastikan ID pesanan sudah benar dan belum lunas.')
+  } finally {
+    submitting.value = false
+  }
 }
 </script>
 
@@ -57,7 +123,7 @@ function handlePayment() {
     <main class="payment-content">
       <PaymentBox
         title="Pembayaran"
-        :totalPrice="totalHarga" 
+        :totalPrice="totalHargaString" 
       />
 
       <section class="payment-methods">
@@ -105,19 +171,8 @@ function handlePayment() {
     </main>
   </div>
   
-    <div v-if="loading">
-        <p>Memuat detail pembayaran...</p>
-    </div>
-    
-    <div v-else-if="order" class="payment-page-container">
-        <PaymentBox 
-            title="Pembayaran" 
-            :totalPrice="order.totalCost" 
-            :orderNumber="order.nomor_pesanan" 
-        />
-        </div>
-    
-    <div v-else>
-        <p>Detail pesanan tidak ditemukan.</p>
-    </div>
+  <FooterPayment 
+    :buttonText="buttonText" 
+    @click-action="handlePayment" 
+  />
 </template>

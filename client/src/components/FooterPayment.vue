@@ -31,7 +31,7 @@ const props = defineProps({
 })
 
 // Emits
-const emit = defineEmits(['submit'])
+const emit = defineEmits(['click-action'])
 const router = useRouter()
 
 // Loading state
@@ -47,7 +47,7 @@ async function onButtonClick() {
     await new Promise(resolve => setTimeout(resolve, 600))
     router.push(props.nextRoute)
   } else {
-    emit('submit')
+    emit('click-action')
   }
 
   isProcessing.value = false

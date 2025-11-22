@@ -88,7 +88,6 @@
     background-color: #2980b9;
 }
 
-/* Pastikan juga style untuk .booking-page-wrapper Anda memiliki margin top yang cukup jika ada header fixed */
 /* ... Style BookingView lainnya ... */
 
 .spot-info-content h1 {
@@ -221,40 +220,7 @@
 }
 
 
-/* Responsive */
-@media (max-width: 768px) {
-    .booking-page-wrapper {
-        padding: 100px 20px 120px 20px; 
-    }
-    .spot-info-card {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 15px;
-    }
-    .spot-info-image {
-        width: 100%;
-        height: 180px;
-    }
-    .spot-info-content h1 {
-        font-size: 24px;
-    }
-    .booking-inputs {
-        grid-template-columns: 1fr; 
-        gap: 15px;
-    }
-    .booking-form-section {
-        padding: 20px;
-    }
-    .equipment-grid {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    }
-    .equipment-box img {
-        width: 40px;
-        height: 40px;
-    }
-}
-
-/* TAMBAHAN BARU: HANYA UNTUK MERAPIKAN TOMBOL + DAN - (Agar fiturnya jalan tapi desainnya tetap minimalis) */
+/* TAMBAHAN BARU: HANYA UNTUK MERAPIKAN TOMBOL + DAN - */
 .qty-control {
     display: flex;
     align-items: center;
@@ -297,4 +263,133 @@
     font-weight: 600;
     color: var(--licorice);
     min-width: 15px;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 90%;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.modal-content h2 {
+    margin-top: 15px;
+    color: #333;
+}
+
+.modal-content p {
+    margin: 10px 0 25px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.modal-close-btn {
+    background-color: var(--btn-blue); /* Menggunakan variabel default blue */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+.modal-close-btn:hover {
+    background-color: var(--bay-of-many);
+}
+
+/* Gaya Ikon Sukses */
+.success-icon-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: #28a745; /* Hijau */
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+.success-icon-circle .check-icon {
+    stroke: white;
+}
+
+/* GAYA KHUSUS UNTUK ERROR */
+.error-icon-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: #dc3545; /* Merah */
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    animation: shake 0.5s;
+}
+.error-icon-circle .x-icon {
+    stroke: white;
+}
+
+/* Animasi Shake (Opsional, untuk efek error) */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-10px); }
+  80% { transform: translateX(10px); }
+  100% { transform: translateX(0); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .booking-page-wrapper {
+        padding: 100px 20px 120px 20px; 
+    }
+    .spot-info-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+    }
+    .spot-info-image {
+        width: 100%;
+        height: 180px;
+    }
+    .spot-info-content h1 {
+        font-size: 24px;
+    }
+    .booking-inputs {
+        grid-template-columns: 1fr; 
+        gap: 15px;
+    }
+    .booking-form-section {
+        padding: 20px;
+    }
+    .equipment-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+    .equipment-box img {
+        width: 40px;
+        height: 40px;
+    }
 }

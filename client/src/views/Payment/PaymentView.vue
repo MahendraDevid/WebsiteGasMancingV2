@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue' // Tambahkan onMounted
 import { useRoute, useRouter } from 'vue-router'
-import api from '@/services/api';
+import api from '@/services/api'
 
 import Navbar from '@/components/NavBar.vue'
 import PaymentBox from '@/components/PaymentBox.vue'

@@ -136,7 +136,7 @@ export default {
   // 1. Create Payment
   createPayment(data) {
     // Backend Route: router.post('/payment/create', ...)
-    return apiClient.post('/payment/create', data)
+    return apiClient.post('/payment', data)
   },
 
   // 2. Get Payment by Booking ID
@@ -149,7 +149,7 @@ export default {
   updatePaymentStatus(idPesanan, status) {
     // Backend Route: router.put('/payment/update-status/:id_pesanan', ...)
     // Perhatikan method PUT dan URL update-status
-    return apiClient.put(`/payment/update-status/${idPesanan}`, {
+    return apiClient.put(`/payment/${idPesanan}/status`, {
       status_pembayaran: status
     })
   },
@@ -157,12 +157,12 @@ export default {
   // 4. Simulasi Webhook
   simulatePaymentWebhook(data) {
     // Backend Route: router.post('/payment/webhook-simulation', ...)
-    return apiClient.post('/payment/webhook-simulation', data)
+    return apiClient.post('/payment/webhook/simulate', data)
   },
 
   // ============ Payment Confirmation API ============
   getPaymentConfirmation(nomorPesanan) {
-    // Backend Route: router.get('/payment-confirmation/:nomorPesanan', ...)
+    // Backend Route: router.get('/paymentConfirmation/:nomorPesanan', ...)
     return apiClient.get(`/paymentConfirmation/${nomorPesanan}`)
   },
 

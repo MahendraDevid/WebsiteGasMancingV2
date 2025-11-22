@@ -108,9 +108,7 @@ export default {
     return apiClient.delete(`/booking/${id}`)
   },
 
-
-
-  // ============ Review API (BARU) ============
+  // ============ Review API ============
 
   /* Ambil review berdasarkan ID Tempat, Endpoint: GET /api/review/place/:placeId*/
   getReviewByPlace(placeId) {
@@ -135,29 +133,37 @@ export default {
   },
 
   // ============ Payment API ============
-  // Membuat pembayaran baru
+  // 1. Create Payment
   createPayment(data) {
-    // data harus berisi: { id_pesanan, payment_method, jumlah_bayar }
-    return apiClient.post('/payment', data)
+    // Backend Route: router.post('/payment/create', ...)
+    return apiClient.post('/payment/create', data)
   },
 
-  // Mengambil data pembayaran berdasarkan ID Pesanan
+  // 2. Get Payment by Booking ID
   getPaymentByBookingId(bookingId) {
+    // Backend Route: router.get('/payment/booking/:bookingId', ...)
     return apiClient.get(`/payment/booking/${bookingId}`)
   },
 
-  // Update status pembayaran (Manual / Admin)
+  // 3. Update Payment Status (Admin/Manual)
   updatePaymentStatus(idPesanan, status) {
-    // Backend controller mengharapkan key "status_pembayaran"
-    return apiClient.patch(`/payment/${idPesanan}/status`, {
+    // Backend Route: router.put('/payment/update-status/:id_pesanan', ...)
+    // Perhatikan method PUT dan URL update-status
+    return apiClient.put(`/payment/update-status/${idPesanan}`, {
       status_pembayaran: status
     })
   },
 
-  // Simulasi Webhook (Untuk Testing Frontend tanpa Payment Gateway asli)
+  // 4. Simulasi Webhook
   simulatePaymentWebhook(data) {
-    // data: { kode_bayar, status }
-    return apiClient.post('/payment/webhook/simulate', data)
+    // Backend Route: router.post('/payment/webhook-simulation', ...)
+    return apiClient.post('/payment/webhook-simulation', data)
+  },
+
+  // ============ Payment Confirmation API ============
+  getPaymentConfirmation(nomorPesanan) {
+    // Backend Route: router.get('/payment-confirmation/:nomorPesanan', ...)
+    return apiClient.get(`/paymentConfirmation/${nomorPesanan}`)
   },
 
   // ============ Users API ============

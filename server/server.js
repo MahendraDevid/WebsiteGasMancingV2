@@ -15,10 +15,9 @@ const placeRoutes = require("./src/routes/placeRoutes");
 const ensiklopediaRoutes = require("./src/routes/ensiklopediaRoutes");
 const itemSewaRoutes = require("./src/routes/itemSewaRoutes");
 const bookingRoutes = require("./src/routes/bookingRoutes");
-
-
 const reviewRoutes = require("./src/routes/reviewRoutes");
 const paymentRoutes = require("./src/routes/paymentRoutes");
+const paymentConfirmationRoutes = require("./src/routes/paymentConfirmationRoutes");
 // --- PERBAIKAN DISINI (Tambahkan /routes/) ---
 const mitraRoutes = require("./src/routes/mitraRoutes"); 
 // --------------------------------------------
@@ -31,11 +30,9 @@ app.use("/api/places", placeRoutes);
 app.use("/api/ensiklopedia", ensiklopediaRoutes);
 app.use("/api/item_sewa", itemSewaRoutes);
 app.use("/api/booking", bookingRoutes);
-
-
 app.use("/api/review", reviewRoutes);
 app.use("/api/payment", paymentRoutes);
-// Route Mitra
+app.use("/api/paymentConfirmation", paymentConfirmationRoutes);
 app.use("/api/mitra", mitraRoutes);
 
 // ======== START SERVER ========

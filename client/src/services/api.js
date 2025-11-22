@@ -108,11 +108,7 @@ export default {
     return apiClient.delete(`/booking/${id}`)
   },
 
-<<<<<<< HEAD
   // ============ Review API ============
-=======
-  // ============ Review API (BARU) ============
->>>>>>> 3cf25955041e94bd186907ef986fb610784edf24
 
   /* Ambil review berdasarkan ID Tempat, Endpoint: GET /api/review/place/:placeId*/
   getReviewByPlace(placeId) {

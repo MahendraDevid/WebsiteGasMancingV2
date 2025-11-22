@@ -33,13 +33,10 @@ app.use("/api/places", placeRoutes);
 app.use("/api/ensiklopedia", ensiklopediaRoutes);
 app.use("/api/item_sewa", itemSewaRoutes);
 app.use("/api/booking", bookingRoutes);
-<<<<<<< HEAD
-=======
 app.use("/api/pesanan", pesananRoutes);
 app.use("/api/users", userRoutes);
 
 
->>>>>>> 3cf25955041e94bd186907ef986fb610784edf24
 app.use("/api/review", reviewRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/paymentConfirmation", paymentConfirmationRoutes);

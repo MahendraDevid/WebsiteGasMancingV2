@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
+import api from '@/services/api';
 import './FormUlasanView.style.css';
 
 const router = useRouter();
@@ -10,51 +11,106 @@ const orderId = route.params.orderId;
 // State Form
 const rating = ref(0);
 const comment = ref('');
-const orderData = ref(null);
+const orderData = ref(null); // Akan diisi data booking/pesanan yang sebenarnya
+const loading = ref(true); // Status loading data
+const submitting = ref(false); // Status submit form
 
 // State Modal
 const showSuccessModal = ref(false);
 
+// ID Pengguna (PENTING: Ganti dengan ID pengguna yang sedang login)
+// Asumsi: Anda mendapatkan ID dari sesi/token setelah login
+const currentUserId = 1; // <--- GANTI INI DENGAN ID USER ASLI DARI SESI/STORE
+
+// =======================================================
+// FUNGSI: Mengambil Detail Pesanan (Untuk mendapatkan Place ID)
+// =======================================================
+async function fetchOrderData() {
+    loading.value = true;
+    try {
+        // Panggil API untuk mendapatkan detail pesanan
+        const response = await api.getBookingById(orderId);
+        const data = response.data.data;
+
+        // Data yang kita butuhkan: Place ID (untuk payload review) dan info tampilan
+        orderData.value = {
+            id: data.id,
+            placeId: data.placeId, // Kunci: id_tempat di backend
+            title: data.placeTitle,
+            location: data.placeLocation,
+            image: data.placeImage,
+            date: data.startDate // Menggunakan tanggal mulai sewa/pesanan
+        };
+    } catch (error) {
+        console.error("Gagal mengambil detail pesanan:", error.response?.data || error.message);
+        alert("Gagal memuat data pesanan. Silakan coba lagi.");
+        router.push({ name: 'pesanan' }); // Kembali jika gagal
+    } finally {
+        loading.value = false;
+    }
+}
+
 onMounted(() => {
-  // Dummy data untuk simulasi
-  orderData.value = {
-    id: orderId,
-    title: 'Pantai Ancol',
-    location: 'Ancol, Jakarta Barat',
-    image: '/img/ancol.png',
-    date: '23/10/2025'
-  };
+    fetchOrderData(); 
 });
 
 const setRating = (star) => {
-  rating.value = star;
+    rating.value = star;
 };
 
-const submitReview = () => {
-  if (rating.value === 0) {
-    alert("Mohon berikan bintang terlebih dahulu.");
-    return;
-  }
+// =======================================================
+// FUNGSI: Mengirim Ulasan
+// =======================================================
+const submitReview = async () => {
+    if (rating.value === 0) {
+        alert("Mohon berikan bintang terlebih dahulu.");
+        return;
+    }
+    if (submitting.value) return; // Mencegah double submit
+    
+    if (!orderData.value) {
+        alert("Detail pesanan belum termuat.");
+        return;
+    }
+    
+    // 1. Persiapan Payload
+    const reviewPayload = {
+        id_tempat: orderData.value.placeId, // Diambil dari data yang di-fetch
+        id_pengguna: currentUserId,
+        score: rating.value,
+        comment: comment.value,
+    };
 
-  console.log({
-    orderId: orderId,
-    rating: rating.value,
-    comment: comment.value
-  });
+    submitting.value = true;
 
-  // Munculkan Modal Ceklis
-  showSuccessModal.value = true;
+    try {
+        // 2. Panggil API Review (POST /api/review)
+        await api.createReview(reviewPayload);
+
+        // 3. Sukses: Munculkan Modal dan Redirect
+        showSuccessModal.value = true;
+
+    } catch (error) {
+        console.error("Gagal mengirim ulasan:", error.response?.data || error.message);
+        alert("Gagal mengirim ulasan: " + (error.response?.data?.message || "Kesalahan server."));
+    } finally {
+        submitting.value = false;
+    }
 };
 
 const closeModal = () => {
-  showSuccessModal.value = false;
-  router.push({ name: 'pesanan' }); // Redirect ke pesanan
+    showSuccessModal.value = false;
+    router.push({ name: 'pesanan' }); // Redirect ke pesanan
 };
 </script>
 
 <template>
   <main class="ulasan-page-wrapper">
-    <div class="ulasan-container">
+    <div v-if="loading" class="loading-overlay">
+        <p>Memuat detail pesanan...</p>
+    </div>
+    
+    <div v-else class="ulasan-container">
       <h1 class="ulasan-title">Beri Ulasan</h1>
 
       <div v-if="orderData" class="order-summary-card">
@@ -92,7 +148,13 @@ const closeModal = () => {
           ></textarea>
         </div>
 
-        <button class="button-submit-review" @click="submitReview">Kirim Ulasan</button>
+        <button 
+            class="button-submit-review" 
+            @click="submitReview" 
+            :disabled="submitting || loading"
+        >
+            {{ submitting ? 'Mengirim...' : 'Kirim Ulasan' }}
+        </button>
       </div>
     </div>
 

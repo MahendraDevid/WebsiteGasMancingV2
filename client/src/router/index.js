@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore'
 import Home from '@/views/Home/HomeView.vue'
 import Search from '@/views/Search/SearchView.vue'
 import Payment from '@/views/Payment/PaymentView.vue'
@@ -17,6 +18,7 @@ import MitraRegistrationView from '@/views/Mitra/MitraRegistrationView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    // Public Routes
     {
       path: '/',
       name: 'home',
@@ -33,27 +35,10 @@ const router = createRouter({
       component: Ensiklopedia,
     },
     {
-      path: '/profile',
-      name: 'profile',
-      component: Profile,
-    },
-    {
       path: '/search',
       name: 'search',
       component: Search,
       props: (route) => ({ location: route.query.location }),
-    },
-    {
-      path: '/payment',
-      name: 'payment',
-      component: Payment,
-      meta: { hideFooter: true },
-    },
-    {
-      path: '/paymentconfirmation',
-      name: 'paymentconfirmation',
-      component: PaymentConfirmation,
-      meta: { hideFooter: true },
     },
     {
       path: '/detail/:id',
@@ -61,49 +46,99 @@ const router = createRouter({
       component: DetailTempatPemancingan,
       props: true,
     },
+
+    // Protected Routes (require authentication)
+    {
+      path: '/profile',
+      name: 'profile',
+      component: Profile,
+      meta: { requiresAuth: true },
+    },
     {
       path: '/pesanan',
       name: 'pesanan',
       component: Pesanan,
-    },
-    {
-      path: '/booking/:id',
-      name: 'Booking',
-      component: Booking,
-      meta: { hideFooter: true },
-    },
-    {
-      path: '/booking/create/:id',
-      name: 'Booking',
-      component: Booking,
-      meta: { hideFooter: true }
+      meta: { requiresAuth: true },
     },
     {
       path: '/detailpesanan/:orderId',
       name: 'detailpesanan',
       component: DetailPesanan,
-      // Menambahkan props: true agar orderId bisa diakses sebagai prop di DetailPesanan
       props: true,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/booking/:id',
+      name: 'Booking',
+      component: Booking,
+      meta: {
+        hideFooter: true,
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/booking/create/:id',
+      name: 'BookingCreate',
+      component: Booking,
+      meta: {
+        hideFooter: true,
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/payment',
+      name: 'payment',
+      component: Payment,
+      meta: {
+        hideFooter: true,
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/paymentconfirmation',
+      name: 'paymentconfirmation',
+      component: PaymentConfirmation,
+      meta: {
+        hideFooter: true,
+        requiresAuth: true,
+      },
     },
     {
       path: '/ulasan/:orderId',
-      name: 'formulasan', // Nama ini harus sama dengan di router.push
+      name: 'formulasan',
       component: FormUlasanView,
-      props: true, // Opsional, tapi good practice agar parameter bisa jadi props
+      props: true,
+      meta: { requiresAuth: true },
     },
-    // Route Halaman Utama Mitra
+
+    // Mitra Routes
     {
       path: '/mitra',
       name: 'mitra-landing',
       component: MitraLandingView,
     },
-    // Route Form Pendaftaran
     {
       path: '/mitra/daftar',
       name: 'mitra-register',
       component: MitraRegistrationView,
     },
   ],
+})
+
+// Navigation Guard FIX
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
+
+  if (to.meta.requiresAuth) {
+    if (!authStore.isAuthenticated) {
+      // Redirect ke home
+      next({ name: 'home' })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
 })
 
 export default router

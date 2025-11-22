@@ -15,6 +15,9 @@ const placeRoutes = require("./src/routes/placeRoutes");
 const ensiklopediaRoutes = require("./src/routes/ensiklopediaRoutes");
 const itemSewaRoutes = require("./src/routes/itemSewaRoutes");
 const bookingRoutes = require("./src/routes/bookingRoutes");
+const userRoutes = require("./src/routes/userRoutes");
+const pesananRoutes = require("./src/routes/pesananRoutes");
+
 const reviewRoutes = require("./src/routes/reviewRoutes");
 const paymentRoutes = require("./src/routes/paymentRoutes");
 const paymentConfirmationRoutes = require("./src/routes/paymentConfirmationRoutes");
@@ -30,6 +33,13 @@ app.use("/api/places", placeRoutes);
 app.use("/api/ensiklopedia", ensiklopediaRoutes);
 app.use("/api/item_sewa", itemSewaRoutes);
 app.use("/api/booking", bookingRoutes);
+<<<<<<< HEAD
+=======
+app.use("/api/pesanan", pesananRoutes);
+app.use("/api/users", userRoutes);
+
+
+>>>>>>> 3cf25955041e94bd186907ef986fb610784edf24
 app.use("/api/review", reviewRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/paymentConfirmation", paymentConfirmationRoutes);

@@ -14,13 +14,13 @@ class PlaceModel {
 
     const placeIds = places.map((p) => p.id_tempat);
 
-    // Q2: Ambil SEMUA fasilitas untuk SEMUA tempat
     const [allFacilities] = await db.query(
-      `SELECT tf.id_tempat, 
-            f.nama_fasilitas 
-            FROM tempat_fasilitas tf
-            JOIN fasilitas f ON tf.id_fasilitas = f.id_fasilitas
-            WHERE tf.id_tempat IN (?)`,
+      `SELECT 
+      tf.id_tempat, 
+      f.nama_fasilitas AS nama_fasilitas
+      FROM tempat_fasilitas tf
+      JOIN fasilitas f ON tf.id_fasilitas = f.id_fasilitas
+      WHERE tf.id_tempat IN (?)`,
       [placeIds]
     );
 

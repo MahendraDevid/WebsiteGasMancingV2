@@ -108,7 +108,11 @@ export default {
     return apiClient.delete(`/booking/${id}`)
   },
 
+<<<<<<< HEAD
   // ============ Review API ============
+=======
+  // ============ Review API (BARU) ============
+>>>>>>> 3cf25955041e94bd186907ef986fb610784edf24
 
   /* Ambil review berdasarkan ID Tempat, Endpoint: GET /api/review/place/:placeId*/
   getReviewByPlace(placeId) {
@@ -128,7 +132,7 @@ export default {
   /*Hapus review, Endpoint: DELETE /api/review/:id, Note: Kita kirim placeId di body agar backend bisa update rating tempat*/
   deleteReview(id, placeId = null) {
     return apiClient.delete(`/review/${id}`, {
-      data: { placeId } // Axios delete butuh properti 'data' untuk kirim body
+      data: { placeId }, // Axios delete butuh properti 'data' untuk kirim body
     })
   },
 
@@ -190,14 +194,47 @@ export default {
   },
 
   // ============ Auth API ============
-  register(data) {
-    return apiClient.post('/auth/register', data)
+register(data) {
+  return apiClient.post('/auth/register', data)
+},
+
+login(data) {
+  return apiClient.post('/auth/login', data)
+},
+
+getProfile() {
+  return apiClient.get('/auth/me')
+},
+
+  // ============ Pesanan API ============
+  getAllPesananByUserId() {
+    return apiClient.get('/pesanan/my-orders')
   },
 
-  login(data) {
-    return apiClient.post('/auth/login', data)
+  cancelPesanan(id) {
+    return apiClient.post(`/pesanan/cancel/${id}`)
   },
 
+  createPesanan(data) {
+    return apiClient.post('/pesanan/create', data)
+  },
+
+  // ============ Mitra API ============
+  createMitra(data) {
+    return apiClient.post('/mitra/register', data)
+  },
+
+  getMitraById(id) {
+    return apiClient.get(`/mitra/${id}`)
+  },
+
+  updateMitra(id, data) {
+    return apiClient.put(`/mitra/${id}`, data)
+  },
+
+  deleteMitra(id) {
+    return apiClient.delete(`/mitra/${id}`)
+  },
   // ============ Mitra API ============
   createMitra(data) {
       return apiClient.post('/mitra/register', data);

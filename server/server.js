@@ -13,7 +13,8 @@ const placeRoutes = require("./src/routes/placeRoutes");
 const ensiklopediaRoutes = require("./src/routes/ensiklopediaRoutes");
 const itemSewaRoutes = require("./src/routes/itemSewaRoutes");
 const bookingRoutes = require("./src/routes/bookingRoutes");
-
+const userRoutes = require("./src/routes/userRoutes");
+const pesananRoutes = require("./src/routes/pesananRoutes");
 
 app.use("/api/", authRoutes);
 app.use("/api/auth", authRoutes);
@@ -21,6 +22,8 @@ app.use("/api/places", placeRoutes);
 app.use("/api/ensiklopedia", ensiklopediaRoutes);
 app.use("/api/item_sewa", itemSewaRoutes);
 app.use("/api/booking", bookingRoutes);
+app.use("/api/pesanan", pesananRoutes);
+app.use("/api/users", userRoutes);
 
 // ======== START SERVER ========
 const PORT = process.env.PORT || 3000;

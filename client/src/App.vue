@@ -14,45 +14,46 @@
     <Footer v-if="!route.meta.hideFooter" />
 
     <!-- LOGIN / REGISTER MODAL -->
-    <LoginRegisterModal :is-visible="isModalVisible" :modal-type="modalType" :title="modalTitle"
-      @close="closeModal"
-      @login="handleUserLogin"
-      @register="handleUserRegistration"
-      @open-modal="openModal"
-      />
+    <LoginRegisterModal :is-visible="isModalVisible" :modal-type="modalType" :title="modalTitle" @close="closeModal"
+      @login="handleUserLogin" @register="handleUserRegistration" @open-modal="openModal"
+      @success="handleAuthSuccess" />
 
-      <!-- PROFILE DROPDOWN -->
-      <UserProfileDropdown :is-visible="isProfileVisible" @close="handleToggleProfile(false)" @logout="handleLogout"
-        @edit-profile="handleOpenEditProfile" />
+
+    <!-- PROFILE DROPDOWN -->
+    <UserProfileDropdown :is-visible="isProfileVisible" @close="handleToggleProfile(false)" @logout="handleLogout"
+      @edit-profile="handleOpenEditProfile" />
 
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue"
+import { ref, computed, onMounted } from "vue"
 import { useRoute, RouterView } from "vue-router"
 
-// Components
 import Navbar from "./components/NavBar.vue"
 import Footer from "./components/Footer.vue"
 import LoginRegisterModal from "@/components/LoginRegister.vue"
 import UserProfileDropdown from "@/components/UserProfileDropdown.vue"
 
-// Router
+import { useAuthStore } from "@/stores/authStore"
+const authStore = useAuthStore()
+
 const route = useRoute()
 
-// ================================
-// AUTH STATE
-// ================================
-const isLoggedIn = ref(!!localStorage.getItem("token"))
+// 🔥 Restore user saat reload halaman
+onMounted(() => {
+  authStore.loadUserFromStorage()
+})
+
+// 🔥 isLoggedIn reactive dari Pinia
+const isLoggedIn = computed(() => authStore.isAuthenticated)
 
 // ================================
 // MODAL SYSTEM
 // ================================
 const isModalVisible = ref(false)
-const modalType = ref("")   // login | register | edit-profile
+const modalType = ref("")
 
-// 🔥 FIX — title is generated here (not inside modal)
 const modalTitle = computed(() => {
   if (modalType.value === "login") return "Masuk Akun"
   if (modalType.value === "register") return "Daftar Akun"
@@ -73,99 +74,42 @@ const closeModal = () => {
   document.body.style.overflow = ""
 }
 
-// ================================
 // PROFILE DROPDOWN
-// ================================
 const isProfileVisible = ref(false)
-
-const handleToggleProfile = (forceState) => {
-  if (typeof forceState === "boolean") {
-    isProfileVisible.value = forceState
-  } else {
-    isProfileVisible.value = !isProfileVisible.value
-  }
+const handleToggleProfile = () => {
+  isProfileVisible.value = !isProfileVisible.value
 }
 
-const handleOpenEditProfile = () => {
-  isProfileVisible.value = false
-  openModal("edit-profile")
-}
-
-// ================================
-// LOGIN HANDLER
-// ================================
+// LOGIN
 const handleUserLogin = async ({ email, password }) => {
-  try {
-    const res = await fetch("http://localhost:3000/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
-    })
-
-    const data = await res.json()
-
-    if (!res.ok) {
-      alert(data.message || "Login gagal")
-      return
-    }
-
-    localStorage.setItem("token", data.token)
-    localStorage.setItem("user", JSON.stringify(data.user))
-
-    isLoggedIn.value = true
-    closeModal()
-
-  } catch (err) {
-    console.error(err)
-    alert("Kesalahan server")
-  }
+  const result = await authStore.login({ email, password })
+  if (result.success) closeModal()
+  else alert(result.error)
 }
 
-// ================================
-// REGISTER HANDLER
-// ================================
+// REGISTER
 const handleUserRegistration = async ({ nama_lengkap, email, password }) => {
-  try {
-    const res = await fetch("http://localhost:3000/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nama_lengkap, email, password })
-    })
-
-    const data = await res.json()
-
-    if (!res.ok) {
-      alert(data.message || "Registrasi gagal")
-      return
-    }
-
-    alert("Registrasi berhasil!")
+  const result = await authStore.register({ nama_lengkap, email, password })
+  if (result.success) {
     closeModal()
     openModal("login")
-
-  } catch (err) {
-    console.error(err)
-    alert("Kesalahan server")
-  }
+  } else alert(result.error)
 }
 
-// ================================
 // LOGOUT
-// ================================
 const handleLogout = () => {
-  localStorage.removeItem("token")
-  localStorage.removeItem("user")
-  isLoggedIn.value = false
+  authStore.logout()
   isProfileVisible.value = false
 }
 
-// ================================
-// UPDATE PROFILE (NEXT FEATURE)
-// ================================
-const handleUpdateProfile = () => {
+const handleAuthSuccess = () => {
+  // setelah login, navbar langsung berubah
+  authStore.loadUserFromStorage()
+  isProfileVisible.value = false
   closeModal()
 }
 </script>
+
 
 <style scoped>
 #app-wrapper {

@@ -87,16 +87,19 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
+import { useAuthStore } from '@/stores/authStore'
 import IconEyeOpen from '@/components/icons/IconEyeOpen.png'
 import IconEyeClosed from '@/components/icons/IconEyeClosed.png'
 
 const props = defineProps({
   isVisible: Boolean,
   title: String,
-  modalType: String, // controlled by App.vue
+  modalType: String,
 })
 
-const emit = defineEmits(['close', 'login', 'register', 'openModal'])
+const emit = defineEmits(['close', 'openModal', 'success'])
+
+const authStore = useAuthStore()
 
 const email = ref('')
 const password = ref('')
@@ -107,7 +110,6 @@ const loading = ref(false)
 const errorMessage = ref('')
 const modalId = 'login-modal-' + uuidv4()
 
-// Reset form whenever opened
 watch(() => props.isVisible, (open) => open && resetForm())
 
 function resetForm() {
@@ -124,7 +126,6 @@ function togglePassword() {
   showPassword.value = !showPassword.value
 }
 
-// 🔥 FIXED SWITCH — NO INTERNAL STATE
 function switchModal() {
   const next = props.modalType === "login" ? "register" : "login"
   emit("openModal", next)
@@ -142,32 +143,68 @@ function showError(msg) {
 
 async function handleAuth() {
   errorMessage.value = ''
+  loading.value = true
 
-  if (props.modalType === 'register') {
-    if (!namaLengkap.value || !email.value || !password.value || !konfirmasiPassword.value) {
-      return showError('Lengkapi semua field pendaftaran.')
-    }
-    if (password.value !== konfirmasiPassword.value) {
-      return showError('Password tidak cocok.')
-    }
-    if (password.value.length < 6) {
-      return showError('Password minimal 6 karakter.')
-    }
+  try {
+    if (props.modalType === 'register') {
+      // Validasi
+      if (!namaLengkap.value || !email.value || !password.value || !konfirmasiPassword.value) {
+        showError('Lengkapi semua field pendaftaran.')
+        loading.value = false
+        return
+      }
+      if (password.value !== konfirmasiPassword.value) {
+        showError('Password tidak cocok.')
+        loading.value = false
+        return
+      }
+      if (password.value.length < 6) {
+        showError('Password minimal 6 karakter.')
+        loading.value = false
+        return
+      }
 
-    emit('register', {
-      nama_lengkap: namaLengkap.value,
-      email: email.value,
-      password: password.value,
-    })
-  } else {
-    if (!email.value || !password.value) {
-      return showError('Lengkapi email dan password.')
-    }
+      // Call Register
+      const result = await authStore.register({
+        nama_lengkap: namaLengkap.value,
+        email: email.value,
+        password: password.value,
+      })
 
-    emit('login', {
-      email: email.value,
-      password: password.value,
-    })
+      if (result.success) {
+        emit('success', { type: 'register' })
+        // Auto switch to login
+        setTimeout(() => {
+          switchModal()
+        }, 100)
+      } else {
+        showError(result.error || 'Registrasi gagal')
+      }
+    } else {
+      // Login
+      if (!email.value || !password.value) {
+        showError('Lengkapi email dan password.')
+        loading.value = false
+        return
+      }
+
+      const result = await authStore.login({
+        email: email.value,
+        password: password.value,
+      })
+
+      if (result.success) {
+        emit('success', { type: 'login' })
+        closeModal()
+      } else {
+        showError(result.error || 'Login gagal')
+      }
+    }
+  } catch (error) {
+    showError('Terjadi kesalahan. Silakan coba lagi.')
+    console.error('Auth error:', error)
+  } finally {
+    loading.value = false
   }
 }
 </script>

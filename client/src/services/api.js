@@ -108,6 +108,56 @@ export default {
     return apiClient.delete(`/booking/${id}`)
   },
 
+  // ============ Review API (BARU) ============
+
+  /* Ambil review berdasarkan ID Tempat, Endpoint: GET /api/review/place/:placeId*/
+  getReviewByPlace(placeId) {
+    return apiClient.get(`/review/place/${placeId}`)
+  },
+
+  /*Ambil history review user, Endpoint: GET /api/review/user/:userId*/
+  getReviewByUser(userId) {
+    return apiClient.get(`/review/user/${userId}`)
+  },
+
+  /*Buat review baru, Data: { id_tempat, id_pengguna, score, comment }, Endpoint: POST /api/review*/
+  createReview(data) {
+    return apiClient.post('/review', data)
+  },
+
+  /*Hapus review, Endpoint: DELETE /api/review/:id, Note: Kita kirim placeId di body agar backend bisa update rating tempat*/
+  deleteReview(id, placeId = null) {
+    return apiClient.delete(`/review/${id}`, {
+      data: { placeId }, // Axios delete butuh properti 'data' untuk kirim body
+    })
+  },
+
+  // ============ Payment API ============
+  // Membuat pembayaran baru
+  createPayment(data) {
+    // data harus berisi: { id_pesanan, payment_method, jumlah_bayar }
+    return apiClient.post('/payment', data)
+  },
+
+  // Mengambil data pembayaran berdasarkan ID Pesanan
+  getPaymentByBookingId(bookingId) {
+    return apiClient.get(`/payment/booking/${bookingId}`)
+  },
+
+  // Update status pembayaran (Manual / Admin)
+  updatePaymentStatus(idPesanan, status) {
+    // Backend controller mengharapkan key "status_pembayaran"
+    return apiClient.patch(`/payment/${idPesanan}/status`, {
+      status_pembayaran: status,
+    })
+  },
+
+  // Simulasi Webhook (Untuk Testing Frontend tanpa Payment Gateway asli)
+  simulatePaymentWebhook(data) {
+    // data: { kode_bayar, status }
+    return apiClient.post('/payment/webhook/simulate', data)
+  },
+
   // ============ Users API ============
   // Get all users
 
@@ -132,38 +182,45 @@ export default {
   },
 
   // ============ Auth API ============
-  register(data) {
-    return apiClient.post('/auth/register', data)
-  },
+register(data) {
+  return apiClient.post('/auth/register', data)
+},
 
-  login(data) {
-    return apiClient.post('/auth/login', data)
-  },
+login(data) {
+  return apiClient.post('/auth/login', data)
+},
 
-  // ============ Pesanan API (BARU) ============
-  /**
-   * Mengambil semua pesanan pengguna yang sedang login.
-   * Endpoint: GET /api/pesanan/my-orders
-   */
+getProfile() {
+  return apiClient.get('/auth/me')
+},
+
+  // ============ Pesanan API ============
   getAllPesananByUserId() {
-    // ID pengguna harusnya diambil dari token di interceptor, jadi endpoint ini
-    // tidak memerlukan ID sebagai argumen.
     return apiClient.get('/pesanan/my-orders')
   },
 
-  /**
-   * Membatalkan pesanan.
-   * Endpoint: POST /api/pesanan/cancel/:id
-   */
   cancelPesanan(id) {
     return apiClient.post(`/pesanan/cancel/${id}`)
   },
 
-  /**
-   * Membuat pesanan baru (biasanya dipanggil dari halaman Booking/Payment)
-   * Endpoint: POST /api/pesanan/create
-   */
   createPesanan(data) {
     return apiClient.post('/pesanan/create', data)
+  },
+
+  // ============ Mitra API ============
+  createMitra(data) {
+    return apiClient.post('/mitra/register', data)
+  },
+
+  getMitraById(id) {
+    return apiClient.get(`/mitra/${id}`)
+  },
+
+  updateMitra(id, data) {
+    return apiClient.put(`/mitra/${id}`, data)
+  },
+
+  deleteMitra(id) {
+    return apiClient.delete(`/mitra/${id}`)
   },
 }

@@ -17,16 +17,16 @@ const emit = defineEmits(['openModal', 'toggleProfile', 'logout']);
 
 // Fungsi ini HANYA akan dipanggil jika !isLoggedIn
 const handleAuthClick = (type) => {
-    console.log(`[Navbar] Event: openModal(${type})`);
-    isMenuOpen.value = false;
-    emit('openModal', type); 
+  console.log(`[Navbar] Event: openModal(${type})`);
+  isMenuOpen.value = false;
+  emit('openModal', type);
 };
 
 // BARU: Fungsi untuk menangani klik ikon profil (Desktop)
 const handleProfileClick = () => {
-    console.log("[Navbar] Event: toggleProfile");
-    isMenuOpen.value = false; 
-    emit('toggleProfile'); // Memberi tahu App.vue untuk toggle dropdown
+  console.log("[Navbar] Event: toggleProfile");
+  isMenuOpen.value = false;
+  emit('toggleProfile'); // Memberi tahu App.vue untuk toggle dropdown
 };
 
 // BARU: Fungsi untuk menangani logout (Mobile)
@@ -52,7 +52,7 @@ const handleProfileClickMobile = () => {
         </div>
         <span class="logo-text">Gas Mancing</span>
       </router-link>
-      
+
       <button class="menu-toggle" @click="isMenuOpen = !isMenuOpen">
         <span></span><span></span><span></span>
       </button>
@@ -63,37 +63,40 @@ const handleProfileClickMobile = () => {
         <router-link to="/ensiklopedia" class="menu-item">Ensiklopedia</router-link>
         <router-link to="/index" class="menu-item">Indeks Halaman</router-link>
       </nav>
-      
+
       <div class="auth-buttons">
-          <template v-if="!isLoggedIn">
-            <button class="btn-masuk" @click="handleAuthClick('login')">Masuk</button>
-            <button class="btn-daftar" @click="handleAuthClick('register')">Daftar</button>
-          </template>
-          
-          <template v-else>
-            <button class="user-profile-button" @click="handleProfileClick">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-              </svg>
-            </button>
-          </template>
+        <template v-if="!isLoggedIn">
+          <button class="btn-masuk" @click="handleAuthClick('login')">Masuk</button>
+          <button class="btn-daftar" @click="handleAuthClick('register')">Daftar</button>
+        </template>
+
+        <template v-else>
+          <button class="user-profile-button" @click="handleProfileClick">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+            </svg>
+          </button>
+        </template>
       </div>
     </div>
   </header>
 
   <nav :class="['menu-mobile', { active: isMenuOpen }]">
     <button class="menu-close" @click="isMenuOpen = false">&times;</button>
-    
+
     <router-link to="/" class="menu-item" @click="isMenuOpen = false">Beranda</router-link>
-    <a href="#" class="menu-item" @click="isMenuOpen = false">Pesanan Saya</a>
+    <router-link to="/pesanan" class="menu-item" @click="isMenuOpen = false">
+      Pesanan Saya
+    </router-link>
     <router-link to="/ensiklopedia" class="menu-item" @click="isMenuOpen = false">Ensiklopedia</router-link>
     <router-link to="/index" class="menu-item" @click="isMenuOpen = false">Indeks Halaman</router-link>
-    
+
     <div v-if="!isLoggedIn" class="menu-auth">
-        <button class="btn-masuk" @click="handleAuthClick('login')">Masuk</button>
-        <button class="btn-daftar" @click="handleAuthClick('register')">Daftar</button>
+      <button class="btn-masuk" @click="handleAuthClick('login')">Masuk</button>
+      <button class="btn-daftar" @click="handleAuthClick('register')">Daftar</button>
     </div>
-    
+
     <div v-else class="menu-auth">
       <a href="#" class="menu-item" @click="handleProfileClickMobile">Profil Saya</a>
       <a href="#" class="menu-item logout" @click="handleLogoutClick">Keluar</a>
@@ -113,7 +116,8 @@ const handleProfileClickMobile = () => {
 
 /* NAVBAR STYLES */
 .navbar {
-  position: fixed; /* Menggunakan 'fixed' agar selalu di atas */
+  position: fixed;
+  /* Menggunakan 'fixed' agar selalu di atas */
   top: 0;
   left: 0;
   right: 0;
@@ -316,10 +320,12 @@ const handleProfileClickMobile = () => {
   cursor: pointer;
   transition: all 0.3s ease;
 }
+
 .user-profile-button:hover {
   background-color: #f0f0f0;
   transform: scale(1.05);
 }
+
 .user-profile-button svg {
   width: 24px;
   height: 24px;
@@ -329,6 +335,7 @@ const handleProfileClickMobile = () => {
 .menu-mobile .menu-item.logout {
   color: #d9534f;
 }
+
 .menu-mobile .menu-item.logout:hover {
   background-color: rgba(217, 83, 79, 0.1);
 }
@@ -339,18 +346,23 @@ const handleProfileClickMobile = () => {
     padding: 15px 20px;
     height: 76px;
   }
+
   .menu-desktop {
     display: none;
   }
+
   .menu-toggle {
     display: flex;
   }
+
   .menu-mobile {
     display: flex;
   }
+
   .auth-buttons {
     display: none;
   }
+
   .logo-text {
     font-size: 18px;
   }
@@ -361,9 +373,11 @@ const handleProfileClickMobile = () => {
     /* padding: 12px 15px; */
     height: 76px;
   }
+
   .logo {
     font-size: 16px;
   }
+
   .logo-icon {
     width: 32px;
     height: 32px;

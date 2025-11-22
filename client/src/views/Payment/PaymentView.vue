@@ -117,7 +117,6 @@ async function handlePayment() {
 </script>
 
 <template>
-  <Navbar />
   
   <div class="payment-page">
     <main class="payment-content">

@@ -3,9 +3,12 @@ import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
 import api from '@/services/api';
 import './FormUlasanView.style.css';
+import { useAuthStore } from '../../stores/authStore';
 
 const router = useRouter();
 const route = useRoute();
+const authStore = useAuthStore();
+
 const orderId = route.params.orderId;
 
 // State Form
@@ -18,9 +21,7 @@ const submitting = ref(false); // Status submit form
 // State Modal
 const showSuccessModal = ref(false);
 
-// ID Pengguna (PENTING: Ganti dengan ID pengguna yang sedang login)
-// Asumsi: Anda mendapatkan ID dari sesi/token setelah login
-const currentUserId = 1; // <--- GANTI INI DENGAN ID USER ASLI DARI SESI/STORE
+const currentUserId = authStore.currentUser?.id_pengguna;
 
 // =======================================================
 // FUNGSI: Mengambil Detail Pesanan (Untuk mendapatkan Place ID)
@@ -43,7 +44,7 @@ async function fetchOrderData() {
         };
     } catch (error) {
         console.error("Gagal mengambil detail pesanan:", error.response?.data || error.message);
-        alert("Gagal memuat data pesanan. Silakan coba lagi.");
+        console.error("Gagal memuat data pesanan. Kembali ke halaman pesanan.");
         router.push({ name: 'pesanan' }); // Kembali jika gagal
     } finally {
         loading.value = false;
@@ -51,6 +52,17 @@ async function fetchOrderData() {
 }
 
 onMounted(() => {
+      if (!orderId) {
+        console.error('ID Pesanan tidak ditemukan.');
+        router.push({ name: 'pesanan' });
+        return;
+    }
+    if (!currentUserId) {
+        console.error('Pengguna belum login. Arahkan ke halaman login.');
+        // Jika belum login, arahkan ke login dan simpan rute saat ini sebagai redirect
+        router.push({ name: 'login', query: { redirect: route.fullPath } });
+        return;
+    }
     fetchOrderData(); 
 });
 
@@ -62,14 +74,20 @@ const setRating = (star) => {
 // FUNGSI: Mengirim Ulasan
 // =======================================================
 const submitReview = async () => {
+    if (!currentUserId) {
+        console.error("Pengguna tidak terautentikasi. Gagal mengirim ulasan.");
+        router.push({ name: 'login', query: { redirect: route.fullPath } });
+        return;
+    }
+    
     if (rating.value === 0) {
-        alert("Mohon berikan bintang terlebih dahulu.");
+        alert("Mohon berikan rating bintang sebelum mengirim ulasan.");
         return;
     }
     if (submitting.value) return; // Mencegah double submit
     
-    if (!orderData.value) {
-        alert("Detail pesanan belum termuat.");
+    if (!orderData.value || !orderData.value.placeId) {
+        console.error("Detail pesanan atau ID Tempat belum termuat.");
         return;
     }
     

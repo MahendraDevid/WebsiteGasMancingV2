@@ -1,5 +1,25 @@
 <template>
   <main class="booking-page-wrapper">
+    
+    <!-- ======================================================= -->
+    <!-- MODAL ERROR BARU (Untuk validasi field atau kegagalan API) -->
+    <!-- ======================================================= -->
+    <div v-if="showErrorModal" class="modal-overlay">
+      <div class="modal-content">
+        <div class="error-icon-circle">
+          <!-- Ikon Silang (X) untuk Error -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="x-icon">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </div>
+        <h2>Aksi Gagal!</h2>
+        <!-- Menampilkan pesan error dari state, menggunakan v-html untuk memproses tag bold (**) dari pesan -->
+        <p v-html="errorMessage"></p> 
+        <button class="modal-close-btn" @click="closeErrorModal">Tutup</button>
+      </div>
+    </div>
+
     <div v-if="loading" class="loading-state">
       <p>Memuat data tempat pemancingan...</p>
     </div>
@@ -72,10 +92,10 @@
             >
               <img
                 :src="item.icon"
-                :alt="item.nama_item"
+                :alt="item.name"
                 onerror="this.onerror=null; this.src='https://placehold.co/60x60/A2B9E4/FFFFFF?text=Icon'"
               />
-              <span class="equipment-name">{{ item.nama_item }}</span>
+              <span class="equipment-name">{{ item.name }}</span>
               <span class="equipment-price">{{ formatCurrency(item.price) }}</span>
 
               <div class="qty-control">
@@ -111,9 +131,11 @@ import { useRoute, useRouter } from 'vue-router'
 import api from '@/services/api'
 import './BookingView.style.css'
 import FooterPayment from '../../components/FooterPayment.vue'
+import { useAuthStore } from '../../stores/authStore'
 
 const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
 
 const spotInfo = ref(null)
 const loading = ref(true)
@@ -122,13 +144,32 @@ const bookingDate = ref('')
 const duration = ref(1)
 const numPeople = ref(1)
 const equipment = ref({})
+// Asumsi ini adalah state dan fungsi untuk modal sukses/ulasan yang ada di prompt
+const showSuccessModal = ref(false)
+const closeModal = () => { showSuccessModal.value = false }
+
 
 const isSubmitting = ref(false)
 
 // Ubah menjadi ref kosong yang akan diisi dari API
 const equipmentList = ref([]) // <-- Diisi dari API
 
-// File: BookingView.vue <script setup>
+
+// --- STATE BARU UNTUK MODAL ERROR ---
+const showErrorModal = ref(false)
+const errorMessage = ref('')
+
+const openErrorModal = (message) => {
+    errorMessage.value = message
+    showErrorModal.value = true
+}
+
+const closeErrorModal = () => {
+    showErrorModal.value = false
+    errorMessage.value = ''
+}
+// ------------------------------------
+
 
 const loadSpotData = async () => {
     loading.value = true;
@@ -211,16 +252,37 @@ const initializeEquipmentState = () => {
   equipment.value = initialState
 }
 
-// File: BookingView.vue <script setup>
-
-// ... (semua code di atas sama) ...
-
 const handleCheckoutClick = async () => {
-  // ... (validasi, isSubmitting, dll.) ...
+  // --- 1. VALIDASI FIELD BOOKING ---
+  if (!bookingDate.value) {
+      openErrorModal('Mohon isi **Tanggal** pemesanan.')
+      return
+  }
+  // Pastikan nilai adalah angka yang valid dan minimal 1
+  if (!duration.value || typeof duration.value !== 'number' || duration.value < 1) {
+      openErrorModal('Durasi sewa minimal **1 jam**.')
+      return
+  }
+  // Pastikan nilai adalah angka yang valid dan minimal 1
+  if (!numPeople.value || typeof numPeople.value !== 'number' || numPeople.value < 1) {
+      openErrorModal('Jumlah orang minimal **1 orang**.')
+      return
+  }
+  // ------------------------------------
+  
+  const currentUser = authStore.currentUser;
+  const loggedInUserId = currentUser ? currentUser.id_pengguna : null;
+
+  if(!loggedInUserId) {
+    // Mengganti alert dengan modal error
+    openErrorModal('Anda harus **login** terlebih dahulu untuk melanjutkan pemesanan.')
+    router.push({ name: 'login', query: { redirect: route.fullPath } });
+    return;
+  }
 
   const placeId = spotInfo.value.id
   if (!placeId) {
-    alert('Data Tempat tidak lengkap.')
+    openErrorModal('Data Tempat tidak lengkap.')
     return
   }
 
@@ -231,7 +293,7 @@ const handleCheckoutClick = async () => {
   // --- PAYLOAD FINAL YANG DIKIRIM KE BACKEND ---
   const bookingPayload = {
     // DATA UTAMA UNTUK TABEL PEMESANAN (pemesanan)
-    id_pengguna: 1, // <<< GANTI ID PENGGUNA ASLI
+    id_pengguna: loggedInUserId, // <<< GANTI ID PENGGUNA ASLI
     id_tempat: placeId,
     nomor_pesanan: generateOrderNumber(),
     tgl_mulai_sewa: bookingDate.value,
@@ -247,6 +309,7 @@ const handleCheckoutClick = async () => {
   console.log('Final Booking Payload:', bookingPayload)
 
   try {
+    isSubmitting.value = true
     // 2. Panggil API
     const response = await api.createBooking(bookingPayload)
 
@@ -258,18 +321,20 @@ const handleCheckoutClick = async () => {
       // PERBAIKAN KUNCI DI SINI:
       router.push({
         name: 'payment', // Pastikan namanya lowercase: 'payment'
-        query: {
+        query: { 
           orderId: orderId,
           total: totalPriceFormatted.value,
           equipment: selectedEquipmentParams.value
-        },
+         },
       })
     } else {
-      alert(`Gagal membuat pemesanan: ${response.data.message}`)
+      // Tampilkan modal error jika API gagal tapi memberikan pesan
+      openErrorModal(`Gagal membuat pemesanan: ${response.data.message}`)
     }
   } catch (error) {
     console.error('Error saat submit booking:', error)
-    alert('Terjadi kesalahan saat memproses pemesanan. Cek konsol untuk detail.')
+    // Tampilkan modal error untuk error jaringan/server
+    openErrorModal('Terjadi kesalahan saat memproses pemesanan. Mohon coba lagi.')
   } finally {
     isSubmitting.value = false
   }
@@ -279,7 +344,7 @@ onMounted(() => {
   loadSpotData()
 })
 
-// LOGIKA HARGA, QTY, DAN FORMATTING (SAMA SEPERTI SEBELUMNYA)
+// LOGIKA HARGA, QTY, DAN FORMATTING
 const equipmentPrice = computed(() => {
   let total = 0
   if (!equipment.value) return 0
@@ -309,7 +374,6 @@ const formatCurrency = (value) => {
 
 const totalPriceFormatted = computed(() => formatCurrency(totalPrice.value))
 
-// File: BookingView.vue <script setup>
 
 function increaseQty(id) {
   // Pastikan 'id' yang diterima (id_item) ada di objek equipment

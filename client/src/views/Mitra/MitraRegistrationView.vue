@@ -1,13 +1,19 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import api from '../../services/api';
+// import api from '../../services/api'; // Opsional: kalau mau pakai api langsung
 import './MitraRegistration.style.css';
+
+// 1. IMPORT AUTH STORE (Ini yang tadi kurang)
+import { useAuthStore } from '@/stores/authStore'; // <--- TAMBAHKAN INI
 
 const router = useRouter();
 const currentStep = ref(1);
 const showSuccessModal = ref(false);
 const showTermsModal = ref(false);
+
+// 2. Inisialisasi Store (Sekarang tidak akan error karena sudah di-import)
+const authStore = useAuthStore(); 
 
 // --- Opsi Data Statis ---
 const facilityOptions = [
@@ -16,12 +22,11 @@ const facilityOptions = [
   { id: 3, name: 'Parkiran' }
 ];
 
+// ... (Sisa kode ke bawah sama persis, tidak perlu diubah) ...
 const itemTypeOptions = ['Peralatan', 'Umpan', 'Fasilitas Berbayar', 'Lainnya'];
 const itemUnitOptions = ['Pcs/Item', 'Kg', 'Bungkus', 'Jam', 'Hari', 'Tiket'];
 
-// --- Main Form Data ---
 const formData = reactive({
-  // Bagian 1: Properti (Data ini disimpan terpisah/nanti)
   namaProperti: '',
   deskripsi: '',
   fotoProperti: null,
@@ -33,24 +38,17 @@ const formData = reactive({
   satuanSewa: 'Jam',
   fasilitas: [],
   items: [],
-
-  // Bagian 2: Mitra (Data Diri - NAMA VARIABEL DISAMAKAN DENGAN DATABASE)
-  nama_lengkap: '',        // Database: nama_lengkap
-  no_telepon: '',          // Database: no_telepon
-  email: '',               // Database: email
-  password: '',            // Input user (nanti dikirim sebagai password_hash)
-
-  // Bagian 2: Bank
-  nama_bank: 'BCA',        // Database: nama_bank
-  no_rekening: '',         // Database: no_rekening
-  atas_nama_rekening: '',  // Database: atas_nama_rekening
-  alamat: '',              // Database: alamat
-
-  // Step 3
+  nama_lengkap: '',
+  no_telepon: '',
+  email: '',
+  password: '',
+  nama_bank: 'BCA',
+  no_rekening: '',
+  atas_nama_rekening: '',
+  alamat: '',
   agreedToTerms: false
 });
 
-// --- Logic Upload & Item ---
 const handlePropertyPhotoUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
@@ -75,28 +73,16 @@ const handleItemImageUpload = (event, index) => {
   }
 };
 
-const getFacilityNames = () => {
-  return facilityOptions.filter(opt => formData.fasilitas.includes(opt.id)).map(opt => opt.name).join(', ');
-};
-
-const formatRupiah = (number) => {
-  if (!number) return 'Rp 0';
-  return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(number);
-};
-
-// --- Navigasi ---
-function nextStep() {
+const nextStep = () => {
   if (currentStep.value === 1) {
     if (!formData.namaProperti || !formData.alamatProperti) {
       return alert("Mohon lengkapi Nama dan Alamat Properti.");
     }
-    // Auto-fill alamat mitra dari alamat properti jika kosong
     if (!formData.alamat) {
         formData.alamat = formData.alamatProperti;
     }
     currentStep.value = 2;
   } else if (currentStep.value === 2) {
-    // VALIDASI: Pastikan Password diisi
     if (!formData.nama_lengkap || !formData.no_telepon || !formData.email || !formData.password) {
       return alert("Mohon lengkapi Data Pemilik (Nama, Email, Password, No HP).");
     }
@@ -104,39 +90,39 @@ function nextStep() {
   }
 }
 
-function prevStep() {
+const prevStep = () => {
   if (currentStep.value > 1) currentStep.value--;
 }
 
-// --- SUBMIT LOGIC (LOGIKA UTAMA) ---
 async function submitRegistration() {
   if (!formData.agreedToTerms) return alert("Anda harus menyetujui Syarat & Ketentuan.");
 
   try {
-    // 1. Siapkan Payload (Mapping Data)
-    // Backend membutuhkan field 'password_hash', tapi input kita namanya 'password'
     const payload = {
       ...formData,
       password_hash: formData.password
     };
 
-    // 2. Kirim ke API (api.js yang bersih)
-    const response = await api.createMitra(payload);
+    // Panggil action dari Store yang sudah diperbaiki
+    const result = await authStore.registerMitra(payload);
 
-    console.log("Sukses:", response.data);
-    showSuccessModal.value = true;
+    if (result.success) {
+       console.log("Sukses:", result.message);
+       showSuccessModal.value = true;
+    } else {
+       alert("Gagal: " + result.error);
+    }
 
   } catch (error) {
     console.error("Gagal Daftar:", error);
-    // Ambil pesan error dari backend jika ada
-    const msg = error.response?.data?.message || "Terjadi kesalahan koneksi.";
-    alert("Gagal mendaftar: " + msg);
+    alert("Terjadi kesalahan sistem.");
   }
 }
 
 function finishRegistration() {
   showSuccessModal.value = false;
-  router.push({ name: 'mitra-landing' });
+  // Pastikan route 'mitra-landing' atau 'home' ada di router.js
+  router.push('/'); 
 }
 </script>
 

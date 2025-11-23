@@ -202,23 +202,16 @@ getProfile() {
   return apiClient.get('/auth/me')
 },
 
-  // ============ Pesanan API ============
-  getAllPesananByUserId() {
-    return apiClient.get('/pesanan/my-orders')
-  },
-
-  cancelPesanan(id) {
-    return apiClient.post(`/pesanan/cancel/${id}`)
-  },
-
-  createPesanan(data) {
-    return apiClient.post('/pesanan/create', data)
-  },
-
-  // ============ Mitra API ============
+// ============ Mitra API ============
   createMitra(data) {
     return apiClient.post('/mitra/register', data)
   },
+
+  // --- TAMBAHKAN INI (Wajib untuk Login Mitra) ---
+  loginMitra(data) {
+    return apiClient.post('/mitra/login', data)
+  },
+  // -----------------------------------------------
 
   getMitraById(id) {
     return apiClient.get(`/mitra/${id}`)
@@ -231,22 +224,6 @@ getProfile() {
   deleteMitra(id) {
     return apiClient.delete(`/mitra/${id}`)
   },
-  // ============ Mitra API ============
-  createMitra(data) {
-      return apiClient.post('/mitra/register', data);
-  },
-
-  getMitraById(id) {
-    return apiClient.get(`/mitra/${id}`);
-  },
-
-  updateMitra(id, data) {
-    return apiClient.put(`/mitra/${id}`, data);
-  },
-
-  deleteMitra(id) {
-    return apiClient.delete(`/mitra/${id}`);
-  }
   // // ============ Pesanan API (BARU) ============
   // /**
   //  * Mengambil semua pesanan pengguna yang sedang login.

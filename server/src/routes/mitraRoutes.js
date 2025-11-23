@@ -8,6 +8,9 @@ const mitraController = require('../controllers/mitraController');
 // Ubah '/' menjadi '/register' agar cocok dengan Frontend Vue
 router.post('/register', mitraController.createMitra); 
 
+// TAMBAHKAN ROUTE LOGIN INI:
+router.post('/login', mitraController.login);
+
 // 2. READ (Get By ID)
 router.get('/:id', mitraController.getMitraById);
 

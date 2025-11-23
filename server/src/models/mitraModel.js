@@ -38,6 +38,12 @@ class MitraModel {
         return rows[0];
     }
 
+    static async findByEmail(email) {
+        const query = `SELECT * FROM mitra WHERE email = ?`;
+        const [rows] = await db.query(query, [email]);
+        return rows[0];
+    }
+
     /**
      * Mengupdate Data Mitra
      * Fitur: Hanya mengupdate kolom yang dikirim saja (Dynamic Query)

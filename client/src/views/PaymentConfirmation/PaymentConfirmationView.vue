@@ -1,6 +1,7 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue' // Tambah onMounted
 import { useRoute } from 'vue-router'
+import api from '@/services/api' // Pastikan import API ada
 
 import Navbar from '@/components/NavBar.vue'
 import PaymentBox from '@/components/PaymentBox.vue'
@@ -9,27 +10,67 @@ import './PaymentConfirmationView.style.css'
 
 const route = useRoute()
 
-// Data dari query
-const kodeBayar = ref('8881081234567890');
+// ==========================================
+// 1. Data Setup
+// ==========================================
+// Ambil parameter dari URL
+const orderId = route.query.orderId
+const kodeBayar = ref(route.query.paymentCode || '8881081234567890');
 const totalHarga = ref(route.query.total || 'Rp 0')
-const nomorPesanan = ref(42);
-const lokasi = ref('Ancol, Jakarta barat');
-const tanggal = ref('12 Desember 2025');
-const jumlahOrang = ref(1);
 
-// PERBAIKAN PARSING DATA PERALATAN
-const equipmentList = ref([]);
+// Variable Reactive untuk data Pesanan
+const dataBooking = ref(null) // Untuk menyimpan seluruh object data
+const nomorPesanan = ref('-')
+const lokasi = ref('Memuat lokasi...')
+const tanggal = ref('Memuat tanggal...')
+const jumlahOrang = ref(0)
+const equipmentList = ref([])
 
-try {
-  // Ambil string dari URL, kalau kosong default ke "[]"
-  const rawData = route.query.equipment || '[]';
-  // Ubah string JSON menjadi Array Object
-  equipmentList.value = JSON.parse(rawData);
-} catch (error) {
-  console.error("Gagal membaca data peralatan:", error);
-  equipmentList.value = [];
-}
+// ==========================================
+// 2. Fetch Data dari API (Supaya Nomor Pesanan Muncul)
+// ==========================================
+onMounted(async () => {
+  // A. Parsing Equipment dari URL (Logic yang sudah ada)
+  try {
+    const rawData = route.query.equipment || '[]';
+    equipmentList.value = JSON.parse(rawData);
+  } catch (error) {
+    console.error("Gagal membaca data peralatan:", error);
+    equipmentList.value = [];
+  }
 
+  // B. Ambil Detail Pesanan dari Backend
+  if (orderId) {
+    try {
+      console.log("Mengambil data konfirmasi untuk ID:", orderId);
+      const response = await api.getBookingById(orderId)
+      
+      if (response.data.success) {
+        const data = response.data.data
+        dataBooking.value = data // Simpan ke object utama untuk PaymentBox
+        
+        // Update variable detail agar UI di bawah ikut berubah
+        nomorPesanan.value = data.orderNumber || '-'
+        lokasi.value = data.placeLocation || '-'
+        jumlahOrang.value = data.numPeople || 1
+        
+        // Format Tanggal
+        if (data.startDate) {
+          const dateObj = new Date(data.startDate)
+          tanggal.value = dateObj.toLocaleDateString('id-ID', {
+            day: 'numeric', month: 'long', year: 'numeric'
+          })
+        }
+      }
+    } catch (error) {
+      console.error("Gagal mengambil data pesanan:", error)
+    }
+  }
+})
+
+// ==========================================
+// 3. Helper Functions
+// ==========================================
 function handleCopy() {
   const tempInput = document.createElement('input');
   tempInput.value = kodeBayar.value;
@@ -37,12 +78,7 @@ function handleCopy() {
   tempInput.select();
   document.execCommand('copy');
   document.body.removeChild(tempInput);
-  // Bisa diganti dengan alert atau toast notifikasi
   alert('Kode bayar berhasil disalin!');
-}
-
-function handleConfirmation() {
-  console.log('Proses pembayaran dikonfirmasi!');
 }
 </script>
 
@@ -56,11 +92,11 @@ function handleConfirmation() {
       <PaymentBox
         title=""
         :totalPrice="totalHarga" 
-        :orderNumber="nomorPesanan" 
+        :nomorPesanan="dataBooking?.orderNumber || 'Memuat...'"
       />
       
       <section class="confirmation-details-wrapper">
-        <h2 class="section-subtitle">Konfirmasi Pembayaran</h2>
+        <h2 class="section-subtitle">Detail Pesanan</h2>
         
         <div class="payment-code-section">
           <span class="code-label">Kode Bayar :</span>
@@ -95,7 +131,7 @@ function handleConfirmation() {
                         <img src="/img/people.png" class="detail-img-large" alt="Orang">
                     </div>
                     <span class="info-label">Orang</span>
-                    <span class="info-detail">{{ jumlahOrang }}</span>
+                    <span class="info-detail">{{ jumlahOrang }} Orang</span>
                 </div>
             </div>
 
@@ -119,7 +155,7 @@ function handleConfirmation() {
     variant="checkout"
     :leftTitle="'Total'"
     :leftSubtitle="totalHarga"
-    :buttonText="'Bayar Sekarang'"
+    :buttonText="'Cek Status Pesanan'"
     nextRoute="/pesanan"
   />
 </template>

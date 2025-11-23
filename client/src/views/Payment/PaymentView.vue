@@ -1,7 +1,7 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue' // Tambahkan onMounted
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import api from '@/services/api'
+import api from '@/services/api' // Pastikan ini mengarah ke file api.js yang benar
 
 import Navbar from '@/components/NavBar.vue'
 import PaymentBox from '@/components/PaymentBox.vue'
@@ -19,28 +19,52 @@ const submitting = ref(false)
 const selectedOption = ref('bri')
 const openCategory = ref('bank')
 
-// Ambil data penting dari halaman sebelumnya melalui query params
-// ASUMSI: orderId atau bookingId juga dikirim sebagai query parameter
-const orderId = route.query.orderId // <--- PENTING: ID PESANAN
+// Ambil parameter dari URL
+const orderId = route.query.orderId
 const totalHargaString = ref(route.query.total || 'Rp 0') 
 const equipmentString = route.query.equipment || '[]'
 
-// Data yang diambil dari API (jika perlu, tapi untuk sekarang kita fokus ke totalCost)
-const orderData = ref(null) 
+// 1. Variabel Data Booking (Reactive)
+const dataBooking = ref(null) 
 
 // =======================================================
-// Fungsi Utility: Konversi Harga dari String ke Number
+// LIFECYCLE: Ambil Data Pesanan
+// =======================================================
+onMounted(async () => {
+  if (orderId) {
+    try {
+      console.log("Mencari Order ID:", orderId);
+      const response = await api.getBookingById(orderId)
+      
+      if (response.data.success) {
+        console.log("Data Ditemukan:", response.data.data);
+        
+        // 1. Simpan seluruh data response ke dataBooking
+        dataBooking.value = response.data.data
+        
+        // 2. Format Total Harga
+        if (response.data.data.totalCost) {
+           const numericPrice = parseFloat(response.data.data.totalCost);
+           totalHargaString.value = 'Rp ' + numericPrice.toLocaleString('id-ID');
+        }
+        
+        // HAPUS BARIS INI (Ini penyebab error karena nomorPesanan tidak didefinisikan sebagai ref)
+        // nomorPesanan.value = response.data.data.nomor_pesanan || '-'; 
+      }
+    } catch (error) {
+      console.error("Gagal mengambil detail pesanan:", error)
+    }
+  }
+})
+// =======================================================
+// Fungsi Utility & Handle Payment
 // =======================================================
 const cleanCurrencyString = (currencyStr) => {
     if (!currencyStr) return 0;
-    // Menghapus "Rp", spasi, koma (jika digunakan sebagai pemisah ribuan)
     const cleanStr = currencyStr.replace(/Rp/g, '').replace(/\./g, '').replace(/,/g, '').trim();
     return parseFloat(cleanStr);
 };
 
-// =======================================================
-// Hitungan dan Pilihan
-// =======================================================
 const bankOptions = ['bri', 'bni', 'VISA', 'MASTERCARD']
 const qrOptions = ['qris']
 
@@ -61,9 +85,6 @@ const buttonText = computed(() => {
   return 'Pilih Pembayaran'
 })
 
-// =======================================================
-// FUNGSI UTAMA: Mengirim Data Pembayaran ke Backend
-// =======================================================
 async function handlePayment() {
   if (submitting.value || !orderId) return
   if (!selectedOption.value) {
@@ -72,8 +93,6 @@ async function handlePayment() {
   }
 
   submitting.value = true
-
-  // 1. Siapkan Payload
   const paymentAmount = cleanCurrencyString(totalHargaString.value)
   
   if (paymentAmount <= 0) {
@@ -83,25 +102,22 @@ async function handlePayment() {
   }
 
   const payload = {
-    id_pesanan: parseInt(orderId), // Kirim ID Pesanan (harus integer)
+    id_pesanan: parseInt(orderId),
     payment_method: selectedOption.value,
-    jumlah_bayar: paymentAmount, // Kirim harga dalam bentuk numerik
+    jumlah_bayar: paymentAmount,
   }
 
   try {
-    // 2. Panggil API createPayment (POST /api/payment)
     const response = await api.createPayment(payload)
-
     const paymentData = response.data.data
     
-    // 3. Sukses: Redirect ke halaman konfirmasi dengan data pembayaran
     router.push({
       path: '/paymentconfirmation',
       query: {
         orderId: orderId,
-        paymentCode: paymentData.kode_bayar, // Kode bayar dari backend
+        paymentCode: paymentData.kode_bayar,
         paymentMethod: selectedOption.value,
-        qrisImage: paymentData.image_qris, // URL QRIS dari backend (simulasi)
+        qrisImage: paymentData.image_qris,
         total: totalHargaString.value,
         equipment: equipmentString
       }
@@ -109,7 +125,8 @@ async function handlePayment() {
 
   } catch (error) {
     console.error('Gagal membuat pembayaran:', error.response?.data || error)
-    alert('Gagal memproses pembayaran. Silakan coba lagi. Pastikan ID pesanan sudah benar dan belum lunas.')
+    const msg = error.response?.data?.message || 'Gagal memproses pembayaran.'
+    alert(msg)
   } finally {
     submitting.value = false
   }
@@ -117,12 +134,13 @@ async function handlePayment() {
 </script>
 
 <template>
-  
   <div class="payment-page">
     <main class="payment-content">
+      
       <PaymentBox
         title="Pembayaran"
         :totalPrice="totalHargaString" 
+        :nomorPesanan="dataBooking?.orderNumber || 'Memuat...'"
       />
 
       <section class="payment-methods">
@@ -135,7 +153,6 @@ async function handlePayment() {
             </div>
             <span class="method-toggle" v-html="openCategory === 'bank' ? '&#9650;' : '&#9660;'"></span>
           </div>
-
           <div class="method-content" v-if="openCategory === 'bank'">
             <div class="payment-option-list">
               <label class="payment-option" v-for="bank in bankOptions" :key="bank">
@@ -154,7 +171,6 @@ async function handlePayment() {
             </div>
             <span class="method-toggle" v-html="openCategory === 'qr' ? '&#9650;' : '&#9660;'"></span>
           </div>
-
           <div class="method-content" v-if="openCategory === 'qr'">
             <div class="payment-option-list">
               <label class="payment-option" for="method-qris">

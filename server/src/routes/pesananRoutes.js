@@ -23,4 +23,8 @@ router.post("/create", authenticateToken, pesananController.createPesanan);
 // Membatalkan pesanan berdasarkan ID.
 router.post("/cancel/:id", authenticateToken, pesananController.cancelPesanan);
 
+// GET /api/pesanan/:id
+// Mengambil detail pesanan berdasarkan ID.
+router.get("/:id", authenticateToken, pesananController.getPesananById);
+
 module.exports = router;

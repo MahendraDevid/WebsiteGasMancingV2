@@ -255,17 +255,17 @@ const initializeEquipmentState = () => {
 const handleCheckoutClick = async () => {
   // --- 1. VALIDASI FIELD BOOKING ---
   if (!bookingDate.value) {
-      openErrorModal('Mohon isi **Tanggal** pemesanan.')
+      openErrorModal('Mohon isi Tanggal pemesanan.')
       return
   }
   // Pastikan nilai adalah angka yang valid dan minimal 1
   if (!duration.value || typeof duration.value !== 'number' || duration.value < 1) {
-      openErrorModal('Durasi sewa minimal **1 jam**.')
+      openErrorModal('Durasi sewa minimal 1 jam.')
       return
   }
   // Pastikan nilai adalah angka yang valid dan minimal 1
   if (!numPeople.value || typeof numPeople.value !== 'number' || numPeople.value < 1) {
-      openErrorModal('Jumlah orang minimal **1 orang**.')
+      openErrorModal('Jumlah orang minimal 1 orang.')
       return
   }
   // ------------------------------------

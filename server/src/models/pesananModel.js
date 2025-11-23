@@ -86,6 +86,41 @@ class PesananModel {
     }
   }
 
+  static async findById(id) {
+    try {
+      // PERHATIKAN: Pastikan nama tabelnya sesuai database kamu 
+      // (apakah 'pemesanan' atau 'id_pesanan'?)
+      // Di kode create sebelumnya kamu pakai 'id_pesanan', jadi saya pakai itu disini.
+      
+      const query = `
+        SELECT 
+          p.id_pesanan,
+          p.nomor_pesanan,
+          p.total_biaya,
+          p.status_pesanan,
+          p.tgl_pesan,
+          p.tgl_mulai_sewa,
+          p.durasi_sewa_jam,
+          p.num_people,
+          t.title AS place_name, 
+          t.location,
+          t.image_url
+        FROM id_pesanan p
+        JOIN tempat_pemancingan t ON p.id_tempat = t.id_tempat
+        WHERE p.id_pesanan = ?
+      `;
+
+      const [rows] = await db.query(query, [id]);
+
+      // Jika data ditemukan, kembalikan object pertama. Jika tidak, null.
+      return rows.length > 0 ? rows[0] : null;
+
+    } catch (error) {
+      console.error("Error in findById:", error);
+      throw error;
+    }
+  }
+
   // ======================================
   // 2. CANCEL PESANAN
   // ======================================

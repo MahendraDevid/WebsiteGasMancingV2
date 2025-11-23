@@ -169,3 +169,35 @@ exports.cancelPesanan = async (req, res) => {
       });
   }
 };
+
+exports.getPesananById = async (req, res) => {
+  try {
+    // Ambil ID dari parameter URL (misal: /api/booking/87 -> id = 87)
+    const orderId = req.params.id; 
+
+    // Panggil Model findById yang sudah kita buat sebelumnya
+    const order = await PesananModel.findById(orderId);
+
+    // Cek jika pesanan tidak ditemukan
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: "Pesanan tidak ditemukan.",
+      });
+    }
+
+    // Kirim data pesanan ke frontend
+    res.status(200).json({
+      success: true,
+      data: order, // Ini berisi { nomor_pesanan: '...', total_biaya: ... }
+    });
+
+  } catch (error) {
+    console.error("Error in getPesananById:", error);
+    res.status(500).json({
+      success: false,
+      error: "Gagal mengambil detail pesanan.",
+      details: error.message,
+    });
+  }
+};

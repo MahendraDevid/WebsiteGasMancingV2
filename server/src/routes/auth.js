@@ -43,6 +43,7 @@ router.post("/register", async (req, res) => {
         id_pengguna: id,
         nama_lengkap,
         email,
+        no_telepon,
         tipe_user: "user",
       },
     });
@@ -105,6 +106,7 @@ router.post("/login", async (req, res) => {
           id_pengguna: user.id_pengguna,
           nama_lengkap: user.nama_lengkap,
           email: user.email,
+          no_telepon: user.no_telepon,
           tipe_user: user.tipe_user,
         },
       },

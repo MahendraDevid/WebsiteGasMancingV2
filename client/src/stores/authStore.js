@@ -121,9 +121,21 @@ export const useAuthStore = defineStore('auth', () => {
       const response = await api.updateProfile(profileData)
 
       if (response.data.success) {
-        user.value = response.data.data
-        localStorage.setItem('user', JSON.stringify(response.data.data))
-        return { success: true }
+        const updatedUser = {
+          ...user.value,
+          ...profileData,
+        }
+
+        delete updatedUser.password 
+        delete updatedUser.password_hash
+
+        user.value = updatedUser
+        localStorage.setItem('user', JSON.stringify(updatedUser))
+
+        return {
+          success: true,
+          message: response.data.message,
+        }
       }
     } catch (err) {
       error.value = err.response?.data?.error || 'Gagal memperbarui profil'

@@ -10,10 +10,8 @@
 
       <form @submit.prevent="handleAuth" class="form-content" novalidate>
 
-        <!-- ERROR -->
         <div v-if="errorMessage" class="form-error" role="alert">{{ errorMessage }}</div>
 
-        <!-- REGISTER FORM -->
         <template v-if="modalType === 'register'">
           <div class="input-group">
             <label class="label-text">Nama Lengkap</label>
@@ -25,12 +23,17 @@
             <input type="email" class="input-card" v-model.trim="email" required />
           </div>
 
+          <div class="input-group">
+            <label class="label-text">Nomor Telepon</label>
+            <input type="tel" class="input-card" v-model.trim="noTelepon" required placeholder="Contoh: 08123456789" />
+          </div>
+
           <div class="input-group password-group">
             <label class="label-text">Password</label>
             <div class="password-row">
               <input :type="showPassword ? 'text' : 'password'" class="input-card" v-model="password" required />
               <button type="button" class="pwd-toggle" @click="togglePassword">
-                <img :src="showPassword ? eyeShowIcon : eyeHideIcon" alt="toggle password" class="icon-eye" />
+                <img :src="showPassword ? IconEyeOpen : IconEyeClosed" alt="toggle password" class="pwd-icon" />
               </button>
             </div>
           </div>
@@ -42,7 +45,6 @@
           </div>
         </template>
 
-        <!-- LOGIN FORM -->
         <template v-if="modalType === 'login'">
           <div class="input-group">
             <label class="label-text">Email</label>
@@ -61,7 +63,6 @@
           </div>
         </template>
 
-        <!-- Submit -->
         <button type="submit" class="login-button" :disabled="loading">
           <span v-if="loading">Memproses…</span>
           <span v-else-if="modalType === 'login'">Masuk</span>
@@ -69,7 +70,6 @@
         </button>
       </form>
 
-      <!-- SWITCH LOGIN <-> REGISTER -->
       <div class="belum-ada-akun-daftar">
         <span class="span0">
           {{ modalType === 'login' ? "Belum ada akun? " : "Sudah punya akun? " }}
@@ -104,6 +104,7 @@ const authStore = useAuthStore()
 const email = ref('')
 const password = ref('')
 const namaLengkap = ref('')
+const noTelepon = ref('') // State Baru
 const konfirmasiPassword = ref('')
 const showPassword = ref(false)
 const loading = ref(false)
@@ -116,6 +117,7 @@ function resetForm() {
   email.value = ''
   password.value = ''
   namaLengkap.value = ''
+  noTelepon.value = '' // Reset State Baru
   konfirmasiPassword.value = ''
   showPassword.value = false
   errorMessage.value = ''
@@ -147,8 +149,8 @@ async function handleAuth() {
 
   try {
     if (props.modalType === 'register') {
-      // Validasi
-      if (!namaLengkap.value || !email.value || !password.value || !konfirmasiPassword.value) {
+      // Validasi (Tambahkan cek noTelepon)
+      if (!namaLengkap.value || !email.value || !noTelepon.value || !password.value || !konfirmasiPassword.value) {
         showError('Lengkapi semua field pendaftaran.')
         loading.value = false
         return
@@ -164,10 +166,11 @@ async function handleAuth() {
         return
       }
 
-      // Call Register
+      // Call Register dengan no_telepon
       const result = await authStore.register({
         nama_lengkap: namaLengkap.value,
         email: email.value,
+        no_telepon: noTelepon.value, // Kirim ke Backend
         password: password.value,
       })
 
@@ -210,6 +213,7 @@ async function handleAuth() {
 </script>
 
 <style scoped>
+/* Style tetap sama seperti sebelumnya */
 :root {
   --white: #ffffff;
   --black: #000000;

@@ -27,6 +27,41 @@ class UserModel {
     );
     return result.insertId;
   }
+
+  static async updateUser(id, userData) {
+    // Bangun query UPDATE secara dinamis
+    const fields = [];
+    const values = [];
+
+    // Daftar kolom yang diizinkan untuk diperbarui
+    const allowedFields = [
+      "nama_lengkap",
+      "email",
+      "no_telepon",
+      "password_hash",
+    ];
+
+    for (const key of allowedFields) {
+      if (userData[key] !== undefined) {
+        fields.push(`${key} = ?`);
+        values.push(userData[key]);
+      }
+    }
+
+    if (fields.length === 0) {
+      // Tidak ada data untuk diperbarui
+      return 0;
+    }
+
+    // Gabungkan bagian SET dan tambahkan ID pengguna ke akhir nilai
+    const query = `UPDATE pengguna SET ${fields.join(
+      ", "
+    )} WHERE id_pengguna = ?`;
+    values.push(id);
+
+    const [result] = await db.query(query, values);
+    return result.affectedRows;
+  }
 }
 
 module.exports = UserModel;

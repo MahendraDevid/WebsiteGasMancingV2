@@ -1,8 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-// import api from '../../services/api'; // Opsional: kalau mau pakai api langsung
-import './MitraRegistration.style.css';
 
 // 1. IMPORT AUTH STORE (Ini yang tadi kurang)
 import { useAuthStore } from '@/stores/authStore'; // <--- TAMBAHKAN INI
@@ -317,3 +315,5 @@ function finishRegistration() {
     </div>
   </main>
 </template>
+
+<style scoped src="./MitraRegistration.style.css"></style>

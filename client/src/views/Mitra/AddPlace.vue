@@ -2,7 +2,6 @@
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import api from '@/services/api';
-import './AddPlace.style.css'; // Import CSS Terpisah
 
 const router = useRouter();
 const isLoading = ref(false);
@@ -125,3 +124,5 @@ const submitForm = async () => {
     </div>
   </div>
 </template>
+
+<style scoped src="./AddPlace.style.css"></style>

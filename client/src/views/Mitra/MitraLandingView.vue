@@ -1,7 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
-import './MitraLanding.style.css';
 
 const router = useRouter();
 const currentUser = ref(null);
@@ -62,3 +61,5 @@ function handleDaftarClick() {
     </div>
   </main>
 </template>
+
+<style scoped src="./MitraLandingView.style.css"></style>

@@ -10,7 +10,7 @@
 
 /* --- WRAPPER UTAMA --- */
 .mitra-property-wrapper {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 100px 20px 40px 20px; /* Padding atas 100px biar gak ketutup Navbar fixed */
   font-family: 'Poppins', sans-serif;
@@ -118,22 +118,23 @@
 }
 
 /* --- BADGE STATUS --- */
+/* --- STATUS BADGE DI TABEL --- */
 .status-badge {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.75rem;
+  padding: 6px 12px; /* Tambah padding agar lebih besar */
+  border-radius: 12px;
+  font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
-  color: white;
-  letter-spacing: 0.5px;
+  color: white !important; /* Force warna teks putih */
+  display: inline-block;
+  min-width: 100px; /* Lebar minimum */
+  text-align: center; /* Border hitam untuk debug */
 }
-.status-badge.lunas { background-color: #28a745; }      /* Hijau */
-.status-badge.menunggu { background-color: #ffc107; color: #333; } /* Kuning */
-.status-badge.dibatalkan { background-color: #dc3545; } /* Merah */
-.status-badge.selesai { background-color: #17a2b8; }    /* Biru Muda */
+.status-badge.lunas { background-color: #28a745 !important; }      /* Hijau */
+.status-badge.menunggu { background-color: #ffc107 !important; color: #000 !important; } /* Kuning dengan teks hitam */
+.status-badge.dibatalkan { background-color: #dc3545 !important; } /* Merah */
+.status-badge.selesai { background-color: #17a2b8 !important; }    /* Biru */
+   /* Biru Muda */
 
 /* --- INFO PESANAN --- */
 .property-title {
@@ -240,6 +241,36 @@
   margin: 0 auto 15px;
 }
 
+/* --- SEARCH CONTAINER --- */
+.search-container {
+  margin: auto;
+  text-align: start;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--bay-of-many);
+  box-shadow: 0 0 5px rgba(13, 47, 100, 0.3);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .search-input {
+    max-width: 100%;
+  }
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -279,5 +310,143 @@
   .btn-manage {
     width: 100%;
     justify-content: center;
+  }
+}
+
+/* --- TABEL CONTAINER --- */
+.table-container {
+  background-color: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 30px 15px rgba(0, 0, 0, 0.03);
+  overflow-x: auto; /* Scroll horizontal di mobile */
+  margin-top: 20px;
+}
+
+/* --- TABEL --- */
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.order-table th, .order-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.order-table th {
+  background-color: var(--bg-blue);
+  font-weight: 700;
+  color: var(--bay-of-many);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+.order-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* --- GAMBAR DI TABEL --- */
+.image-cell {
+  text-align: center;
+}
+
+.table-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+/* --- HIGHLIGHT TOTAL --- */
+.highlight {
+  font-weight: 700;
+  color: var(--bay-of-many);
+}
+
+/* --- STATUS BADGE DI TABEL --- */
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: white;
+  display: inline-block;
+}
+.status-badge.lunas { background-color: #28a745; }
+.status-badge.menunggu { background-color: #ffc107; color: #333; }
+.status-badge.dibatalkan { background-color: #dc3545; }
+.status-badge.selesai { background-color: #17a2b8; }
+
+/* --- ACTION CELL --- */
+.action-cell {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.status-select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-weight: 600;
+  color: var(--text-dark);
+  cursor: pointer;
+  background-color: #fff;
+  font-family: inherit;
+  font-size: 0.8rem;
+  transition: border-color 0.2s;
+}
+.status-select:hover { border-color: #bbb; }
+.status-select:focus { outline: none; border-color: var(--bay-of-many); }
+
+.btn-delete {
+  padding: 6px 12px;
+  border: 1px solid #ffcdd2;
+  background-color: #fff5f5;
+  color: #d32f2f;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+.btn-delete:hover {
+  background-color: #ffebee;
+  border-color: #d32f2f;
+}
+
+.pesanan-wrapper {
+  max-width: 1200px;
+  margin: auto;
+  padding: 30px 30px 30px 30px; /* Padding atas 100px biar gak ketutup Navbar fixed */
+  font-family: 'Poppins', sans-serif;
+  background-color: #FFFFFF;
+}
+
+/* --- RESPONSIVE (MOBILE) --- */
+@media (max-width: 768px) {
+  .order-table th, .order-table td {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+  }
+
+  .table-image {
+    width: 50px;
+    height: 50px;
+  }
+
+  .action-cell {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .status-select, .btn-delete {
+    width: 100%;
+    padding: 8px;
   }
 }

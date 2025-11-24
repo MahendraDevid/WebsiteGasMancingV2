@@ -2,7 +2,6 @@
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
 import api from '@/services/api';
-import './FormUlasanView.style.css';
 import { useAuthStore } from '../../stores/authStore';
 
 const router = useRouter();
@@ -191,3 +190,5 @@ const closeModal = () => {
 
   </main>
 </template>
+
+<style scoped src="./FormUlasanView.style.css"></style>

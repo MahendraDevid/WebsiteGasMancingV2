@@ -95,9 +95,10 @@ class MitraModel {
         SELECT 
             p.id_pesanan,
             tp.title AS nama_tempat,
+            p.nomor_pesanan,
             pg.nama_lengkap AS nama_pemesan,
             pg.no_telepon AS kontak_pemesan,
-            p.tgl_pesan,
+            p.tgl_mulai_sewa,
             p.total_biaya,
             p.status_pesanan,
             tp.image_url AS place_image

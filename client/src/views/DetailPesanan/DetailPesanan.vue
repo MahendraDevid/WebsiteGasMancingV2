@@ -145,4 +145,4 @@ function handleCopy() {
   </div>
 </template>
 
-<style src="./DetailPesanan.style.css" scoped></style>  
+<style scoped src="./DetailPesanan.style.css"></style>  

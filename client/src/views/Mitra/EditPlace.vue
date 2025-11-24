@@ -2,7 +2,6 @@
 import { reactive, ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import api from '@/services/api';
-import './EditPlace.style.css'; // Import CSS Terpisah
 
 const router = useRouter();
 const route = useRoute(); // Ambil ID dari URL
@@ -104,4 +103,4 @@ onMounted(() => loadData());
   </div>
 </template>
 
-
+<style scoped src="./EditPlace.style.css"></style>

@@ -4,7 +4,6 @@ defineOptions({ name: 'SearchPage' })
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import api from '@/services/api'
-import './SearchView.style.css'
 
 const route = useRoute()
 const router = useRouter()
@@ -254,3 +253,5 @@ const handleBooking = (id) => {
     </section>
   </main>
 </template>
+
+<style scoped src="./SearchView.style.css"></style>

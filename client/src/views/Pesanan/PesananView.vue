@@ -308,4 +308,4 @@ function goToLogin() {
   </main>
 </template>
 
-<style src="./PesananView.style.css" scoped></style>
+<style scoped src="./PesananView.style.css" ></style>

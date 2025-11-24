@@ -3,7 +3,6 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
 import api from '@/services/api';
-import './Properti.style.css'; // Import CSS Terpisah
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -126,3 +125,5 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
+<style scoped src="./Properti.style.css"></style>

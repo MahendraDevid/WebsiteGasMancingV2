@@ -1,13 +1,9 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import api from '@/services/api' // Pastikan ini mengarah ke file api.js yang benar
-
-import Navbar from '@/components/NavBar.vue'
+import api from '@/services/api'
 import PaymentBox from '@/components/PaymentBox.vue'
 import FooterPayment from '@/components/FooterPayment.vue'
-
-import './PaymentView.style.css'
 
 const route = useRoute()
 const router = useRouter()
@@ -191,3 +187,5 @@ async function handlePayment() {
     @click-action="handlePayment" 
   />
 </template>
+
+<style scoped src="./PaymentView.style.css"></style>

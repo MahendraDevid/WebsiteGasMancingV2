@@ -1,11 +1,9 @@
 <script setup>
-import { ref, onMounted } from 'vue' // Tambah onMounted
+import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import api from '@/services/api' // Pastikan import API ada
-
+import api from '@/services/api'
 import PaymentBox from '@/components/PaymentBox.vue'
 import FooterPayment from '@/components/FooterPayment.vue'
-import './PaymentConfirmationView.style.css'
 
 const route = useRoute()
 
@@ -176,3 +174,5 @@ function handleCopy() {
     nextRoute="/pesanan"
   />
 </template>
+
+<style scoped src="./PaymentConfirmationView.style.css"></style>

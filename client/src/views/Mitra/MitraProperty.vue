@@ -1,15 +1,16 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/authStore'; // Menggunakan Store
+import { useAuthStore } from '@/stores/authStore';
 import api from '@/services/api';
-import './MitraProperty.style.css'; // Import CSS terpisah
 
 const router = useRouter();
 const authStore = useAuthStore();
 
 const bookings = ref([]);
 const isLoading = ref(true);
+const errorMessage = ref('');
+const searchQuery = ref(''); // Untuk query search
 
 // Helper Format Tanggal & Rupiah
 const formatDate = (dateString) => {
@@ -27,8 +28,18 @@ const mapStatusClass = (status) => {
   return 'menunggu';
 };
 
+// Computed untuk filter bookings berdasarkan search (hanya nama pemesan)
+const filteredBookings = computed(() => {
+  if (!searchQuery.value) return bookings.value;
+  const query = searchQuery.value.toLowerCase();
+  return bookings.value.filter(order =>
+    order.customerName.toLowerCase().includes(query)
+  );
+});
+
 async function fetchBookings() {
   isLoading.value = true;
+  errorMessage.value = '';
 
   if (!authStore.isAuthenticated || !authStore.isMitra) {
     router.push('/');
@@ -45,18 +56,21 @@ async function fetchBookings() {
 
     const res = await api.getPropertyBookings(mitraId);
 
-    // Mapping data dari response backend
-    bookings.value = res.data.data.map(order => ({
-      id: order.id_pesanan,
-      image: order.place_image || 'https://placehold.co/600x400/0D2F64/FFFFFF?text=Kolam+Saya',  // Gambar tempat
-      title: order.nama_tempat,  // Nama tempat
-      customerName: order.nama_pemesan,  // Nama pemesan dari pengguna
-      customerContact: order.kontak_pemesan,  // Kontak pemesan dari pengguna
-      date: formatDate(order.tgl_pesan),  // Tanggal pesan
-      total: order.total_biaya,  // Total biaya
-      status: order.status_pesanan,  // Status pesanan
-      statusClass: mapStatusClass(order.status_pesanan)  // Kelas CSS untuk status
-    }));
+    console.log("Data pesanan dari backend:", res.data.data);
+
+    bookings.value = res.data.data.map(order => {
+      console.log("Status pesanan untuk order ID", order.id_pesanan, ":", order.status_pesanan);
+      return {
+        id: order.id_pesanan,
+        nomorPesanan: order.nomor_pesanan,
+        customerName: order.nama_pemesan,
+        customerContact: order.kontak_pemesan,
+        date: formatDate(order.tgl_mulai_sewa),
+        total: order.total_biaya,
+        status: order.status_pesanan || 'Tidak Diketahui',
+        statusClass: mapStatusClass(order.status_pesanan)
+      };
+    });
   } catch (e) {
     console.error("Gagal mengambil data pesanan:", e);
     errorMessage.value = "Gagal memuat data pesanan. Silakan coba lagi.";
@@ -65,16 +79,16 @@ async function fetchBookings() {
   }
 }
 
-// --- UPDATE STATUS PESANAN ---
+// Update Status Pesanan
 const handleUpdateStatus = async (id, status) => {
   if (!confirm(`Ubah status pesanan ini menjadi ${status}?`)) return;
   try {
     await api.updatePropertyBookingStatus(id, status);
-    fetchBookings(); // Refresh data
+    fetchBookings();
   } catch (e) { alert("Gagal update status"); }
 };
 
-// --- HAPUS PESANAN ---
+// Hapus Pesanan
 const handleDelete = async (id) => {
   if (!confirm("Yakin ingin menghapus riwayat pesanan ini?")) return;
   try {
@@ -83,15 +97,12 @@ const handleDelete = async (id) => {
   } catch (e) { alert("Gagal hapus pesanan"); }
 };
 
-// --- NAVIGASI KE CRUD KOLAM ---
+// Navigasi ke CRUD Kolam
 const goToManagePlaces = () => {
-  // Mengarah ke halaman Properti.vue (List Kolam)
-  // Pastikan nama route di index.js adalah 'mitra-place-list'
   router.push({ name: 'mitra-place-list' });
 };
 
 onMounted(() => {
-  // Pastikan user load dari localstorage jika refresh
   if (!authStore.user) authStore.loadUserFromStorage();
   fetchBookings();
 });
@@ -111,53 +122,62 @@ onMounted(() => {
       </div>
     </div>
 
-    <div v-if="isLoading" class="loading-box">
-      <div class="spinner"></div>
-      <p>Memuat data pesanan...</p>
-    </div>
-
-    <div v-else class="order-list">
-      <div class="order-card" v-for="order in bookings" :key="order.id">
-        <div class="card-image">
-          <img :src="order.image" loading="lazy" alt="Foto Tempat">
-        </div>
-
-        <div class="card-content">
-          <div :class="['status-badge', order.statusClass]">{{ order.status }}</div>
-          <h3 class="property-title">{{ order.title }}</h3>
-
-          <div class="customer-info">
-            <span class="icon">👤</span>
-            <strong>{{ order.customerName }}</strong>
-            <small v-if="order.customerContact">({{ order.customerContact }})</small>
-          </div>
-
-          <div class="info-grid">
-            <div class="grid-item"><span>📅 {{ order.date }}</span></div>
-            <div class="grid-item highlight"><span>Rp {{ formatRupiah(order.total) }}</span></div>
-          </div>
-
-          <div class="action-area">
-            <select class="status-select" :value="order.status"
-              @change="handleUpdateStatus(order.id, $event.target.value)">
-              <option value="Menunggu Pembayaran">Menunggu Bayar</option>
-              <option value="Lunas">Lunas / Dibayar</option>
-              <option value="Selesai">Selesai Mancing</option>
-              <option value="Dibatalkan">Batal</option>
-            </select>
-
-            <button class="btn-delete" @click="handleDelete(order.id)" title="Hapus Riwayat">
-              🗑️
-            </button>
-          </div>
-        </div>
+    <div class="pesanan-wrapper">
+      <!-- Search Input di Atas Tabel -->
+      <div class="search-container">
+        <input type="text" v-model="searchQuery" placeholder="Cari berdasarkan nama pemesan..." class="search-input">
       </div>
 
-      <div v-if="bookings.length === 0" class="empty-state">
-        <div style="font-size: 40px; margin-bottom: 10px;">📭</div>
-        <h3>Belum ada pesanan masuk</h3>
-        <p>Data pesanan dari pelanggan akan muncul di sini.</p>
+      <div v-if="isLoading" class="loading-box">
+        <div class="spinner"></div>
+        <p>Memuat data pesanan...</p>
+      </div>
+
+      <div v-else class="table-container">
+        <table class="order-table">
+          <thead>
+            <tr>
+              <th>No Pesanan</th>
+              <th>Pemesan</th>
+              <th>Orang</th>
+              <th>Tanggal Sewa</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="order in filteredBookings" :key="order.id">
+              <td>{{ order.nomorPesanan }}</td>
+              <td>{{ order.customerName }}</td>
+              <td>{{ order.customerContact || '-' }}</td>
+              <td>{{ order.date }}</td>
+              <td class="highlight">Rp {{ formatRupiah(order.total) }}</td>
+              <td>
+                <span :class="['status-badge', order.statusClass]" v-if="order.status">{{ order.status }}</span>
+                <span v-else style="color: red; font-weight: bold;">DEBUG: Status Kosong</span>
+              </td>
+              <td class="action-cell">
+                <select class="status-select" :value="order.status"
+                  @change="handleUpdateStatus(order.id, $event.target.value)">
+                  <option value="Menunggu Pembayaran">Menunggu Bayar</option>
+                  <option value="Lunas">Lunas / Dibayar</option>
+                  <option value="Selesai">Selesai Mancing</option>
+                  <option value="Dibatalkan">Batal</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div v-if="filteredBookings.length === 0 && !isLoading" class="empty-state">
+          <div style="font-size: 40px; margin-bottom: 10px;">🔍</div>
+          <h3>{{ searchQuery ? 'Tidak ada hasil pencarian' : 'Belum ada pesanan masuk' }}</h3>
+          <p>{{ searchQuery ? 'Coba kata kunci lain.' : 'Data pesanan dari pelanggan akan muncul di sini.' }}</p>
+        </div>
       </div>
     </div>
   </main>
 </template>
+
+<style scoped src="./MitraProperty.style.css"></style>

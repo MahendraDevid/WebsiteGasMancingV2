@@ -60,7 +60,6 @@
 import { ref, onMounted, computed } from 'vue';
 import { useAuthStore } from '../../stores/authStore';
 import api from '@/services/api';
-import './ProfileView.style.css'; // Pastikan CSS bawaan Anda tetap ada
 
 const authStore = useAuthStore();
 
@@ -180,3 +179,5 @@ onMounted(() => {
     loadUserData();
 });
 </script>
+
+<style scoped src="./ProfileView.style.css"></style>

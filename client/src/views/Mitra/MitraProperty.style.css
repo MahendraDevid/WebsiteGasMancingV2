@@ -1,0 +1,283 @@
+/* --- DEFINISI VARIABEL --- */
+:root {
+  --bay-of-many: #0D2F64;   /* Biru Tua */
+  --bg-blue: #f4f7fe;       /* Background Halus */
+  --white: #ffffff;
+  --text-dark: #333;
+  --text-gray: #666;
+  --border-color: #eee;
+}
+
+/* --- WRAPPER UTAMA --- */
+.mitra-property-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 100px 20px 40px 20px; /* Padding atas 100px biar gak ketutup Navbar fixed */
+  font-family: 'Poppins', sans-serif;
+  min-height: 90vh;
+  background-color: var(--bg-blue);
+}
+
+/* --- HEADER SECTION --- */
+.header-section {
+  text-align: center;
+  margin-bottom: 40px;
+  background: var(--white);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--bay-of-many);
+  margin: 0 0 10px 0;
+}
+
+.subtitle {
+  color: var(--text-gray);
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+/* Tombol Navigasi ke CRUD */
+.header-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+  text-align: center;
+}
+
+.btn-manage {
+    background-color: #e8f0fe;
+    color: #0D2F64;
+    border: 1px solid #b8daff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.btn-manage:hover {
+    background-color: #d0e1fd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(13, 47, 100, 0.1);
+}
+
+/* --- ORDER LIST CONTAINER --- */
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* --- ORDER CARD --- */
+.order-card {
+  display: flex;
+  background-color: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid var(--border-color);
+}
+
+.order-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* --- GAMBAR --- */
+.card-image {
+  width: 200px;
+  min-width: 150px;
+  background-color: #eee;
+  position: relative;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* --- KONTEN --- */
+.card-content {
+  padding: 20px 25px;
+  flex-grow: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- BADGE STATUS --- */
+.status-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: white;
+  letter-spacing: 0.5px;
+}
+.status-badge.lunas { background-color: #28a745; }      /* Hijau */
+.status-badge.menunggu { background-color: #ffc107; color: #333; } /* Kuning */
+.status-badge.dibatalkan { background-color: #dc3545; } /* Merah */
+.status-badge.selesai { background-color: #17a2b8; }    /* Biru Muda */
+
+/* --- INFO PESANAN --- */
+.property-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+  color: var(--bay-of-many);
+  padding-right: 120px; /* Biar gak nabrak badge */
+}
+
+.customer-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-dark);
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+.customer-info strong { font-weight: 600; }
+.customer-info small { color: var(--text-gray); }
+.icon { font-size: 1.1rem; }
+
+/* --- GRID HARGA & TANGGAL --- */
+.info-grid {
+  display: flex;
+  gap: 20px;
+  background-color: #f8f9fa;
+  padding: 12px 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #eee;
+}
+
+.grid-item {
+  font-size: 0.95rem;
+  color: var(--text-gray);
+  font-weight: 500;
+}
+
+.grid-item.highlight {
+  color: var(--bay-of-many);
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-left: auto; /* Dorong ke kanan */
+}
+
+/* --- ACTION AREA (Dropdown & Delete) --- */
+.action-area {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: auto; /* Dorong ke bawah */
+}
+
+.status-select {
+  flex-grow: 1;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-weight: 600;
+  color: var(--text-dark);
+  cursor: pointer;
+  background-color: #fff;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+.status-select:hover { border-color: #bbb; }
+.status-select:focus { outline: none; border-color: var(--bay-of-many); }
+
+.btn-delete {
+  padding: 10px 20px;
+  border: 1px solid #ffcdd2;
+  background-color: #fff5f5;
+  color: #d32f2f;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-delete:hover {
+  background-color: #ffebee;
+  border-color: #d32f2f;
+}
+
+/* --- STATE LOADING & EMPTY --- */
+.loading-box, .empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-gray);
+  background-color: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+  font-size: 1.1rem;
+}
+
+/* Spinner Animasi */
+.spinner {
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-top: 3px solid var(--bay-of-many);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* --- RESPONSIVE (MOBILE) --- */
+@media (max-width: 768px) {
+  .mitra-property-wrapper {
+    padding: 90px 15px 30px 15px;
+  }
+
+  .order-card {
+    flex-direction: column;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 180px;
+  }
+
+  .property-title {
+    font-size: 1.2rem;
+    padding-right: 0;
+    margin-top: 30px; /* Jarak biar badge ga nutup judul */
+  }
+
+  .status-badge {
+    top: 15px;
+    right: 15px;
+  }
+
+  .action-area {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-manage {
+    width: 100%;
+    justify-content: center;
+  }
+}

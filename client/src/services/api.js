@@ -224,6 +224,34 @@ getProfile() {
   deleteMitra(id) {
     return apiClient.delete(`/mitra/${id}`)
   },
+  // ============ DASHBOARD PESANAN MITRA (MitraProperty.vue) ============
+  getPropertyBookings(mitraId) {
+    // Mengambil pesanan berdasarkan ID Mitra
+    return apiClient.get(`/property/bookings/${mitraId}`)
+  },
+  updatePropertyBookingStatus(id, status) {
+    return apiClient.put(`/property/bookings/${id}/status`, { status })
+  },
+  deletePropertyBooking(id) {
+    return apiClient.delete(`/property/bookings/${id}`)
+  },
+
+  // ============ CRUD TEMPAT MITRA (Properti.vue) ============
+  // 1. Ambil tempat khusus milik mitra tertentu
+  getPlacesByMitra(mitraId) {
+    // Pastikan backend mendukung query param ?mitra_id=...
+    return apiClient.get(`/places?mitra_id=${mitraId}`)
+  },
+
+  // 4. Update Tempat
+  updatePlace(id, data) {
+     return apiClient.put(`/places/${id}`, data)
+  },
+
+  // 5. Hapus Tempat
+  deletePlace(id) {
+     return apiClient.delete(`/places/${id}`)
+  },
   // // ============ Pesanan API (BARU) ============
   // /**
   //  * Mengambil semua pesanan pengguna yang sedang login.

@@ -13,5 +13,5 @@ router.get("/:id", placeController.getPlaceById);
 
 // POST create new place
 router.post("/", placeController.createPlace);
-
+    
 module.exports = router;

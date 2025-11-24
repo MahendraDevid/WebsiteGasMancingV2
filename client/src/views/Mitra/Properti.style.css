@@ -1,0 +1,275 @@
+/* --- VARIABEL --- */
+:root {
+  --bay-of-many: #0D2F64;
+  --bg-blue: #f4f7fe;
+  --white: #ffffff;
+  --text-dark: #333;
+  --text-gray: #666;
+  --border-light: #eee;
+}
+
+/* --- LAYOUT UTAMA --- */
+.crud-page-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 100px 20px 40px 20px; /* Padding atas agar tidak ketutup navbar */
+  font-family: 'Poppins', sans-serif;
+  min-height: 90vh;
+  background-color: var(--bg-blue);
+}
+
+/* --- NAVIGASI ATAS --- */
+.top-nav {
+  margin-bottom: 20px;
+}
+.btn-back {
+  background: none;
+  border: none;
+  color: var(--text-gray);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  transition: color 0.2s;
+}
+.btn-back:hover {
+  color: var(--bay-of-many);
+  text-decoration: underline;
+}
+
+/* --- HEADER HALAMAN --- */
+.header-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.page-title {
+  color: var(--bay-of-many);
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0 0 5px 0;
+}
+
+.subtitle {
+  color: var(--text-gray);
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* --- TOMBOL TAMBAH --- */
+.btn-add {
+  background-color: var(--bay-of-many);
+  color: var(--white);
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 10px rgba(13, 47, 100, 0.2);
+}
+.btn-add:hover {
+  background-color: #092046;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(13, 47, 100, 0.3);
+}
+.plus-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* --- TABEL --- */
+.table-container {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+  overflow: hidden; /* Untuk border radius */
+  overflow-x: auto; /* Scroll horizontal jika layar kecil */
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px; /* Lebar minimum agar tidak gepeng */
+}
+
+.custom-table th {
+  background: #f8f9fa;
+  color: var(--bay-of-many);
+  padding: 18px 20px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 700;
+  border-bottom: 2px solid var(--border-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.custom-table td {
+  padding: 20px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-dark);
+  vertical-align: middle;
+  font-size: 14px;
+}
+
+.custom-table tr:last-child td {
+  border-bottom: none;
+}
+
+.text-center { text-align: center; }
+
+/* --- ISI TABEL --- */
+.img-wrapper {
+  width: 100px;
+  height: 70px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #eee;
+}
+.thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.place-title {
+  font-size: 16px;
+  color: var(--text-dark);
+  display: block;
+  margin-bottom: 4px;
+}
+.place-hours {
+  font-size: 12px;
+  color: var(--text-gray);
+  background: #f0f2f5;
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.place-location {
+  line-height: 1.4;
+  color: var(--text-gray);
+  max-width: 250px; /* Batasi lebar agar tidak terlalu panjang */
+}
+
+.place-price {
+  font-weight: 700;
+  color: var(--bay-of-many);
+  font-size: 15px;
+}
+.price-unit {
+  color: var(--text-gray);
+  font-size: 12px;
+}
+
+/* --- TOMBOL AKSI (EDIT/HAPUS) --- */
+.btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-edit, .btn-del {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.btn-edit {
+  background: #e8f0fe;
+  color: var(--bay-of-many);
+  border: 1px solid #b8daff;
+}
+.btn-edit:hover {
+  background-color: #d0e1fd;
+  transform: scale(1.05);
+}
+
+.btn-del {
+  background: #fff5f5;
+  color: #dc3545;
+  border: 1px solid #ffcdd2;
+}
+.btn-del:hover {
+  background-color: #ffebee;
+  transform: scale(1.05);
+}
+
+/* --- EMPTY & LOADING STATE --- */
+.loading-state, .empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--text-gray);
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.empty-state h3 {
+  color: var(--text-dark);
+  margin-bottom: 5px;
+}
+
+.btn-add-sm {
+  margin-top: 20px;
+  background: var(--bay-of-many);
+  color: var(--white);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.spinner {
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-top: 3px solid var(--bay-of-many);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .header-action {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .btn-add {
+    width: 100%;
+    justify-content: center;
+  }
+  /* Tabel bisa discroll horizontal */
+}

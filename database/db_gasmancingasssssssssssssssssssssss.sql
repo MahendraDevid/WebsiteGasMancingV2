@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 24 Nov 2025 pada 08.19
--- Versi server: 10.4.32-MariaDB
--- Versi PHP: 8.2.12
+-- Generation Time: Nov 24, 2025 at 11:33 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `detail_pemesanan_item`
+-- Table structure for table `detail_pemesanan_item`
 --
 
 CREATE TABLE `detail_pemesanan_item` (
@@ -37,7 +37,7 @@ CREATE TABLE `detail_pemesanan_item` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `detail_pemesanan_item`
+-- Dumping data for table `detail_pemesanan_item`
 --
 
 INSERT INTO `detail_pemesanan_item` (`id_detail`, `id_pesanan`, `id_item`, `kuantitas`, `harga_satuan_saat_pesan`, `subtotal`) VALUES
@@ -74,7 +74,7 @@ INSERT INTO `detail_pemesanan_item` (`id_detail`, `id_pesanan`, `id_item`, `kuan
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `ensiklopedia`
+-- Table structure for table `ensiklopedia`
 --
 
 CREATE TABLE `ensiklopedia` (
@@ -87,7 +87,7 @@ CREATE TABLE `ensiklopedia` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `ensiklopedia`
+-- Dumping data for table `ensiklopedia`
 --
 
 INSERT INTO `ensiklopedia` (`id_artikel`, `id_kategori`, `judul`, `description`, `image_url`, `tgl_terbit`) VALUES
@@ -108,7 +108,7 @@ INSERT INTO `ensiklopedia` (`id_artikel`, `id_kategori`, `judul`, `description`,
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `ensiklopedia_media`
+-- Table structure for table `ensiklopedia_media`
 --
 
 CREATE TABLE `ensiklopedia_media` (
@@ -120,68 +120,9 @@ CREATE TABLE `ensiklopedia_media` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `ensiklopedia_media`
+-- Dumping data for table `ensiklopedia_media`
 --
 
--- ==========================================================
--- 4. INSERT DUMMY DATA (Perbaikan Foreign Key pada Kategori Ensiklopedia)
--- ==========================================================
-
--- Data: pengguna
-INSERT INTO `pengguna` (`id_pengguna`, `nama_lengkap`, `email`, `password_hash`, `no_telepon`, `tgl_daftar`, `tipe_user`) VALUES
-(1, 'Madeu', 'test@gmail.com', '123', '3213', '2025-11-19 22:40:29', 'customer'),
-(2, 'Ronggoi', 'ronggo@gmail.com', '321', '3213', '2025-11-19 22:51:48', 'customer');
-
--- Data: fasilitas
-INSERT INTO `fasilitas` (`id_fasilitas`, `nama_fasilitas`) VALUES
-(2, 'Musholla'),
-(3, 'Parkiran'),
-(1, 'Toilet');
-
--- Data: tempat_pemancingan
-INSERT INTO `tempat_pemancingan` (`id_tempat`, `title`, `location`, `base_price`, `price_unit`, `image_url`, `description`, `full_description`, `open_hours`, `close_hours`, `total_reviews_count`, `average_rating`, `created_at`, `updated_at`, `id_mitra`) VALUES
-(1, 'Pantai Ancol', 'Ancol, Jakarta Utara\r\n', 50000.00, 'Hari', 'ancol.png\n', 'Tempat pemancingan laut yang populer dengan fasilitas lengkap dan suasana nyaman. Cocok untuk memancing harian.', 'Bayangkan sebuah spot memancing di laut lepas dengan latar belakang silhouette megah Jakarta skyline yang berdiri gagah di kejauhan...', '09:00:00', '21:00:00', 300, 4.2, '2025-11-19 14:49:45', '2025-11-19 15:09:50', 1);
-
--- Data: tempat_fasilitas
-INSERT INTO `tempat_fasilitas` (`id_tempat`, `id_fasilitas`) VALUES
-(1, 1),
-(1, 2),
-(1, 3);
-
--- Data: review
-INSERT INTO `review` (`id_review`, `id_tempat`, `id_pengguna`, `score`, `comment`, `review_date`) VALUES
-(1, 1, 1, 3, '3sasdasdasdasd', '2025-11-19 22:40:45'),
-(2, 1, 2, 5, 'asdsadsd', '2025-11-19 22:52:10');
-
--- Data: item_sewa
-INSERT INTO `item_sewa` (`id_item`, `nama_item`, `price`, `price_unit`, `image_url`, `tipe_item`, `id_tempat`) VALUES
-(1, 'Joran Pancing\r\n', 25000.00, 'Item', '/img/peralatan/joran.jpeg', 'peralatan', 1),
-(2, 'Reel Pancing\r\n', 20000.00, 'Item', '/img/peralatan/reel.jpeg', 'peralatan', 1);
-
--- Data: kategori_ensiklopedia (HARUS DULUAN DARI ENSIKLOPEDIA)
-INSERT INTO `kategori_ensiklopedia` (`id_kategori`, `nama_kategori`) VALUES
-(1, 'Jenis Ikan'),
-(2, 'Teknik Memancing'),
-(3, 'Umpan'),
-(4, 'Peralatan Pancing');
-
--- Data: ensiklopedia
-INSERT INTO `ensiklopedia` (`id_artikel`, `id_kategori`, `judul`, `description`, `image_url`, `tgl_terbit`) VALUES
-(1, 1, 'Ikan Gabus', 'Tips Memancing Ikan Gabus:\r\n    1. Gunakan umpan hidup seperti katak atau ikan kecil.\r\n    2. Pilih waktu pagi atau sore hari....', '/img/fish.png', '2025-11-19 15:45:43'),
-(2, 1, 'Ikan Mas', 'Ikan air tawar yang populer untuk memancing kolam. Sering menggunakan umpan pelet.', '/img/fishs.png', '2025-11-19 15:45:43'),
-(3, 1, 'Ikan Lele', 'Ikan air tawar yang aktif di malam hari. Cocok menggunakan umpan cacing atau usus ayam.', '/img/fishss.png', '2025-11-19 15:45:43'),
-(4, 1, 'Ikan Patin', 'Ikan tawar omnivora, pertarungan yang kuat. Umpan terbaik: pelet campuran.', '/img/fishsss.png', '2025-11-19 15:45:43'),
-(5, 1, 'Ikan Bawal', 'Ikan dengan gigitan kuat. Hati-hati saat melepaskan kail. Umpan terbaik: daging atau pelet amis.', '/img/fishssss.png', '2025-11-19 15:45:43'),
-(20, 2, 'Teknik Memancing', '🎣 Teknik Memancing Lengkap Untuk Semua Kondisi. 1. Teknik Casting. 2. Teknik Dasaran. 3. Teknik Fly Fishing...', '/img/produk1.png', '2025-11-19 15:45:43'),
-(30, 3, 'Umpan Terbaik', '🎣 Umpan Terbaik Untuk Berbagai Ikan. 1. Ikan Lele — Gunakan umpan cacing tanah. 2. Ikan Gabus — Katak hidup...', '/img/umpan.jpg', '2025-11-19 15:45:43'),
-(40, 4, 'Pancingan Terbaik', '🏆 Pancingan Terbaik untuk Berbagai Kondisi. 1. Joran Spinning. 2. Reel Baitcasting. 3. Senar PE...', '/img/pancingan.jpg', '2025-11-19 15:45:43'),
-(50, 1, 'Jenis Ikan', '🐠 Jenis-Jenis Ikan Populer di Indonesia. 1. Ikan Air Tawar. 2. Ikan Air Payau. 3. Ikan Laut...', '/img/jenisikan.jpg', '2025-11-19 15:45:43'),
-(60, NULL, 'Perawatan Reel', 'Panduan lengkap cara membersihkan dan melumasi reel pancing Anda agar selalu prima. Perawatan rutin meningkatkan umur reel.', '/img/pancingan.jpg', '2025-11-19 16:04:46'),
-(70, NULL, 'Spot Muara', 'Tips menemukan spot memancing terbaik di area muara sungai, tempat pertemuan air tawar dan laut. Ikan yang sering didapat: Kakap, Barramundi, dan Kerapu.', '/img/jenisikan.jpg', '2025-11-19 16:04:46'),
-(80, NULL, 'Joran Carbon', 'Keunggulan dan kekurangan menggunakan joran berbahan karbon fiber. Joran karbon ringan, sensitif, namun rentan patah jika salah perlakuan.', '/img/produk1.png', '2025-11-19 16:04:46'),
-(90, NULL, 'Tali Senar PE', 'Jenis-jenis senar PE (Polyethylene) dan cara memilih ukuran yang tepat sesuai target ikan. Senar PE memiliki kekuatan tarikan yang sangat tinggi.', '/img/umpan.jpg', '2025-11-19 16:04:46');
-
--- Data: ensiklopedia_media
 INSERT INTO `ensiklopedia_media` (`id_media`, `id_artikel`, `media_type`, `media_url`, `keterangan`) VALUES
 (1, 1, 'image', '/img/fishs.png', 'Gabus siap menyambar'),
 (2, 1, 'video', 'https://www.youtube.com/embed/KA2-caMdYlM?si=nUxTHNJbOO3qrBzt', 'Video cara casting gabus'),
@@ -211,7 +152,7 @@ INSERT INTO `ensiklopedia_media` (`id_media`, `id_artikel`, `media_type`, `media
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `fasilitas`
+-- Table structure for table `fasilitas`
 --
 
 CREATE TABLE `fasilitas` (
@@ -220,7 +161,7 @@ CREATE TABLE `fasilitas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `fasilitas`
+-- Dumping data for table `fasilitas`
 --
 
 INSERT INTO `fasilitas` (`id_fasilitas`, `nama_fasilitas`) VALUES
@@ -231,7 +172,7 @@ INSERT INTO `fasilitas` (`id_fasilitas`, `nama_fasilitas`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `item_sewa`
+-- Table structure for table `item_sewa`
 --
 
 CREATE TABLE `item_sewa` (
@@ -245,7 +186,7 @@ CREATE TABLE `item_sewa` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `item_sewa`
+-- Dumping data for table `item_sewa`
 --
 
 INSERT INTO `item_sewa` (`id_item`, `nama_item`, `price`, `price_unit`, `image_url`, `tipe_item`, `id_tempat`) VALUES
@@ -255,7 +196,7 @@ INSERT INTO `item_sewa` (`id_item`, `nama_item`, `price`, `price_unit`, `image_u
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `kategori_ensiklopedia`
+-- Table structure for table `kategori_ensiklopedia`
 --
 
 CREATE TABLE `kategori_ensiklopedia` (
@@ -264,7 +205,7 @@ CREATE TABLE `kategori_ensiklopedia` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `kategori_ensiklopedia`
+-- Dumping data for table `kategori_ensiklopedia`
 --
 
 INSERT INTO `kategori_ensiklopedia` (`id_kategori`, `nama_kategori`) VALUES
@@ -276,7 +217,7 @@ INSERT INTO `kategori_ensiklopedia` (`id_kategori`, `nama_kategori`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `mitra`
+-- Table structure for table `mitra`
 --
 
 CREATE TABLE `mitra` (
@@ -294,19 +235,20 @@ CREATE TABLE `mitra` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `mitra`
+-- Dumping data for table `mitra`
 --
 
 INSERT INTO `mitra` (`id_mitra`, `nama_lengkap`, `email`, `password_hash`, `no_telepon`, `alamat`, `tgl_daftar`, `nama_bank`, `no_rekening`, `atas_nama_rekening`, `foto_profil`) VALUES
 (1, 'asad', 'aku@gmail.com', '$2b$10$YboiEYjfTPz16sl0oTRqDO/tFjxI2XmWeQnCaa0luz5.OpEceXdxu', '12313', '12312', '2025-11-24 02:47:12', 'BCA', '123', 'asad', NULL),
 (3, '2131', 'angjay@gmail.com', '$2b$10$23x.DCUiOAsB3hxPj3J9.OtAdo8dHbayZ.65ggpVizxDK25ut7pUm', '3113', 'saasd', '2025-11-24 02:50:08', 'Mandiri', '12312', 'qwq', NULL),
 (4, 'Made', 'owalah@gmail.com', '$2b$10$GSLd.lyOZz464AkJbEeTn.SYMp1Hxqrq.kqFN8HaODyE3MfZPui9W', '123', 'sds', '2025-11-24 02:53:21', 'BCA', '213123', 'yeah', NULL),
-(5, 'SiapaHayo', 'siapaaja@gmail.com', '$2b$10$8u2fwqzb0hYQ5NWutkKTW.owtkYTTCyWx3M8ySYKn4PVDOMlZndQ.', '0892921321', 'angjay', '2025-11-24 03:00:06', 'BCA', '12234', 'qwe', NULL);
+(5, 'SiapaHayo', 'siapaaja@gmail.com', '$2b$10$8u2fwqzb0hYQ5NWutkKTW.owtkYTTCyWx3M8ySYKn4PVDOMlZndQ.', '0892921321', 'angjay', '2025-11-24 03:00:06', 'BCA', '12234', 'qwe', NULL),
+(6, '999', '999', '$2b$10$OG9apv6ie3ctCpDV5PPwu.ShjO46Gn0ea5ZsXa0vLs9ignXaORZMu', '999', '999', '2025-11-24 14:34:46', 'BCA', '999', '999', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pembayaran`
+-- Table structure for table `pembayaran`
 --
 
 CREATE TABLE `pembayaran` (
@@ -321,7 +263,7 @@ CREATE TABLE `pembayaran` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `pembayaran`
+-- Dumping data for table `pembayaran`
 --
 
 INSERT INTO `pembayaran` (`id_pembayaran`, `id_pesanan`, `kode_bayar`, `payment_method`, `jumlah_bayar`, `tgl_pembayaran`, `status_pembayaran`, `image_qris`) VALUES
@@ -335,7 +277,7 @@ INSERT INTO `pembayaran` (`id_pembayaran`, `id_pesanan`, `kode_bayar`, `payment_
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pemesanan`
+-- Table structure for table `pemesanan`
 --
 
 CREATE TABLE `pemesanan` (
@@ -352,7 +294,7 @@ CREATE TABLE `pemesanan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `pemesanan`
+-- Dumping data for table `pemesanan`
 --
 
 INSERT INTO `pemesanan` (`id_pesanan`, `id_pengguna`, `id_tempat`, `nomor_pesanan`, `tgl_pesan`, `tgl_mulai_sewa`, `durasi_sewa_jam`, `num_people`, `total_biaya`, `status_pesanan`) VALUES
@@ -427,7 +369,7 @@ INSERT INTO `pemesanan` (`id_pesanan`, `id_pengguna`, `id_tempat`, `nomor_pesana
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pengguna`
+-- Table structure for table `pengguna`
 --
 
 CREATE TABLE `pengguna` (
@@ -441,7 +383,7 @@ CREATE TABLE `pengguna` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `pengguna`
+-- Dumping data for table `pengguna`
 --
 
 INSERT INTO `pengguna` (`id_pengguna`, `nama_lengkap`, `email`, `password_hash`, `no_telepon`, `tgl_daftar`, `tipe_user`) VALUES
@@ -452,12 +394,13 @@ INSERT INTO `pengguna` (`id_pengguna`, `nama_lengkap`, `email`, `password_hash`,
 (5, 'adminwpo', 'admin@gmail.com', '$2a$12$L8.dD9.F/m.l.E/7.g/6.u.f.C/5.d.E/8.f.G/9.h.I', '123123', '2025-11-22 16:04:39', 'customer'),
 (6, 'gelomadejago', 'jago12345@example.com', '$2b$10$8BADRLGsuHOjRkEusrTM7uWqxaVOinCCMAKh06K/1ND0/tf.FM01m', '08123456789', '2025-11-23 00:42:49', 'customer'),
 (7, 'testlagi', 'coba@gmail.com', '$2b$10$S9AXgvJXnzgu15CAYtJUKOpr8ZcVkorkID4X.mqPkz3T/KyUMtgEO', '123123', '2025-11-23 13:29:33', 'customer'),
-(8, 'Gataucoba', 'aja@gmail.com', '$2b$10$siLZ.pVGDx4vKbt8LZYP2OqrW217KXFUXZ/ccvxt9IeETgFmED1l6', '1234', '2025-11-23 13:36:29', 'customer');
+(8, 'Gataucoba', 'aja@gmail.com', '$2b$10$siLZ.pVGDx4vKbt8LZYP2OqrW217KXFUXZ/ccvxt9IeETgFmED1l6', '1234', '2025-11-23 13:36:29', 'customer'),
+(10, '1', '1', '$2b$10$t4CRTLgAQ3Ee.p4NkOImI.AsSFuecb3uoMtWgBspwLHcgpgUAuJAy', '1', '2025-11-24 16:48:46', 'customer');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `review`
+-- Table structure for table `review`
 --
 
 CREATE TABLE `review` (
@@ -470,7 +413,7 @@ CREATE TABLE `review` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `review`
+-- Dumping data for table `review`
 --
 
 INSERT INTO `review` (`id_review`, `id_tempat`, `id_pengguna`, `score`, `comment`, `review_date`) VALUES
@@ -484,7 +427,7 @@ INSERT INTO `review` (`id_review`, `id_tempat`, `id_pengguna`, `score`, `comment
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tempat_fasilitas`
+-- Table structure for table `tempat_fasilitas`
 --
 
 CREATE TABLE `tempat_fasilitas` (
@@ -493,7 +436,7 @@ CREATE TABLE `tempat_fasilitas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tempat_fasilitas`
+-- Dumping data for table `tempat_fasilitas`
 --
 
 INSERT INTO `tempat_fasilitas` (`id_tempat`, `id_fasilitas`) VALUES
@@ -504,7 +447,7 @@ INSERT INTO `tempat_fasilitas` (`id_tempat`, `id_fasilitas`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tempat_pemancingan`
+-- Table structure for table `tempat_pemancingan`
 --
 
 CREATE TABLE `tempat_pemancingan` (
@@ -524,7 +467,7 @@ CREATE TABLE `tempat_pemancingan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tempat_pemancingan`
+-- Dumping data for table `tempat_pemancingan`
 --
 
 INSERT INTO `tempat_pemancingan` (`id_tempat`, `title`, `location`, `base_price`, `price_unit`, `image_url`, `description`, `full_description`, `total_reviews_count`, `average_rating`, `created_at`, `updated_at`, `id_mitra`) VALUES
@@ -535,7 +478,7 @@ INSERT INTO `tempat_pemancingan` (`id_tempat`, `title`, `location`, `base_price`
 --
 
 --
--- Indeks untuk tabel `detail_pemesanan_item`
+-- Indexes for table `detail_pemesanan_item`
 --
 ALTER TABLE `detail_pemesanan_item`
   ADD PRIMARY KEY (`id_detail`),
@@ -543,56 +486,56 @@ ALTER TABLE `detail_pemesanan_item`
   ADD KEY `id_item` (`id_item`);
 
 --
--- Indeks untuk tabel `ensiklopedia`
+-- Indexes for table `ensiklopedia`
 --
 ALTER TABLE `ensiklopedia`
   ADD PRIMARY KEY (`id_artikel`),
   ADD KEY `id_kategori` (`id_kategori`);
 
 --
--- Indeks untuk tabel `ensiklopedia_media`
+-- Indexes for table `ensiklopedia_media`
 --
 ALTER TABLE `ensiklopedia_media`
   ADD PRIMARY KEY (`id_media`),
   ADD KEY `id_artikel` (`id_artikel`);
 
 --
--- Indeks untuk tabel `fasilitas`
+-- Indexes for table `fasilitas`
 --
 ALTER TABLE `fasilitas`
   ADD PRIMARY KEY (`id_fasilitas`),
   ADD UNIQUE KEY `nama_fasilitas` (`nama_fasilitas`);
 
 --
--- Indeks untuk tabel `item_sewa`
+-- Indexes for table `item_sewa`
 --
 ALTER TABLE `item_sewa`
   ADD PRIMARY KEY (`id_item`),
   ADD KEY `id_tempat` (`id_tempat`);
 
 --
--- Indeks untuk tabel `kategori_ensiklopedia`
+-- Indexes for table `kategori_ensiklopedia`
 --
 ALTER TABLE `kategori_ensiklopedia`
   ADD PRIMARY KEY (`id_kategori`),
   ADD UNIQUE KEY `nama_kategori` (`nama_kategori`);
 
 --
--- Indeks untuk tabel `mitra`
+-- Indexes for table `mitra`
 --
 ALTER TABLE `mitra`
   ADD PRIMARY KEY (`id_mitra`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- Indeks untuk tabel `pembayaran`
+-- Indexes for table `pembayaran`
 --
 ALTER TABLE `pembayaran`
   ADD PRIMARY KEY (`id_pembayaran`),
   ADD UNIQUE KEY `id_pesanan` (`id_pesanan`);
 
 --
--- Indeks untuk tabel `pemesanan`
+-- Indexes for table `pemesanan`
 --
 ALTER TABLE `pemesanan`
   ADD PRIMARY KEY (`id_pesanan`),
@@ -601,14 +544,14 @@ ALTER TABLE `pemesanan`
   ADD KEY `id_tempat` (`id_tempat`);
 
 --
--- Indeks untuk tabel `pengguna`
+-- Indexes for table `pengguna`
 --
 ALTER TABLE `pengguna`
   ADD PRIMARY KEY (`id_pengguna`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- Indeks untuk tabel `review`
+-- Indexes for table `review`
 --
 ALTER TABLE `review`
   ADD PRIMARY KEY (`id_review`),
@@ -616,153 +559,153 @@ ALTER TABLE `review`
   ADD KEY `id_pengguna` (`id_pengguna`);
 
 --
--- Indeks untuk tabel `tempat_fasilitas`
+-- Indexes for table `tempat_fasilitas`
 --
 ALTER TABLE `tempat_fasilitas`
   ADD PRIMARY KEY (`id_tempat`,`id_fasilitas`),
   ADD KEY `id_fasilitas` (`id_fasilitas`);
 
 --
--- Indeks untuk tabel `tempat_pemancingan`
+-- Indexes for table `tempat_pemancingan`
 --
 ALTER TABLE `tempat_pemancingan`
   ADD PRIMARY KEY (`id_tempat`),
   ADD KEY `fk_tempat_mitra` (`id_mitra`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `detail_pemesanan_item`
+-- AUTO_INCREMENT for table `detail_pemesanan_item`
 --
 ALTER TABLE `detail_pemesanan_item`
   MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
--- AUTO_INCREMENT untuk tabel `ensiklopedia`
+-- AUTO_INCREMENT for table `ensiklopedia`
 --
 ALTER TABLE `ensiklopedia`
   MODIFY `id_artikel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
--- AUTO_INCREMENT untuk tabel `ensiklopedia_media`
+-- AUTO_INCREMENT for table `ensiklopedia_media`
 --
 ALTER TABLE `ensiklopedia_media`
   MODIFY `id_media` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
--- AUTO_INCREMENT untuk tabel `fasilitas`
+-- AUTO_INCREMENT for table `fasilitas`
 --
 ALTER TABLE `fasilitas`
   MODIFY `id_fasilitas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT untuk tabel `item_sewa`
+-- AUTO_INCREMENT for table `item_sewa`
 --
 ALTER TABLE `item_sewa`
   MODIFY `id_item` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT untuk tabel `kategori_ensiklopedia`
+-- AUTO_INCREMENT for table `kategori_ensiklopedia`
 --
 ALTER TABLE `kategori_ensiklopedia`
   MODIFY `id_kategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT untuk tabel `mitra`
+-- AUTO_INCREMENT for table `mitra`
 --
 ALTER TABLE `mitra`
-  MODIFY `id_mitra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_mitra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT untuk tabel `pembayaran`
+-- AUTO_INCREMENT for table `pembayaran`
 --
 ALTER TABLE `pembayaran`
   MODIFY `id_pembayaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT untuk tabel `pemesanan`
+-- AUTO_INCREMENT for table `pemesanan`
 --
 ALTER TABLE `pemesanan`
   MODIFY `id_pesanan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 
 --
--- AUTO_INCREMENT untuk tabel `pengguna`
+-- AUTO_INCREMENT for table `pengguna`
 --
 ALTER TABLE `pengguna`
-  MODIFY `id_pengguna` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_pengguna` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT untuk tabel `review`
+-- AUTO_INCREMENT for table `review`
 --
 ALTER TABLE `review`
   MODIFY `id_review` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT untuk tabel `tempat_pemancingan`
+-- AUTO_INCREMENT for table `tempat_pemancingan`
 --
 ALTER TABLE `tempat_pemancingan`
   MODIFY `id_tempat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+-- Constraints for dumped tables
 --
 
 --
--- Ketidakleluasaan untuk tabel `detail_pemesanan_item`
+-- Constraints for table `detail_pemesanan_item`
 --
 ALTER TABLE `detail_pemesanan_item`
   ADD CONSTRAINT `detail_pemesanan_item_ibfk_1` FOREIGN KEY (`id_pesanan`) REFERENCES `pemesanan` (`id_pesanan`),
   ADD CONSTRAINT `detail_pemesanan_item_ibfk_2` FOREIGN KEY (`id_item`) REFERENCES `item_sewa` (`id_item`);
 
 --
--- Ketidakleluasaan untuk tabel `ensiklopedia`
+-- Constraints for table `ensiklopedia`
 --
 ALTER TABLE `ensiklopedia`
   ADD CONSTRAINT `ensiklopedia_ibfk_1` FOREIGN KEY (`id_kategori`) REFERENCES `kategori_ensiklopedia` (`id_kategori`);
 
 --
--- Ketidakleluasaan untuk tabel `ensiklopedia_media`
+-- Constraints for table `ensiklopedia_media`
 --
 ALTER TABLE `ensiklopedia_media`
   ADD CONSTRAINT `ensiklopedia_media_ibfk_1` FOREIGN KEY (`id_artikel`) REFERENCES `ensiklopedia` (`id_artikel`);
 
 --
--- Ketidakleluasaan untuk tabel `item_sewa`
+-- Constraints for table `item_sewa`
 --
 ALTER TABLE `item_sewa`
   ADD CONSTRAINT `item_sewa_ibfk_1` FOREIGN KEY (`id_tempat`) REFERENCES `tempat_pemancingan` (`id_tempat`);
 
 --
--- Ketidakleluasaan untuk tabel `pembayaran`
+-- Constraints for table `pembayaran`
 --
 ALTER TABLE `pembayaran`
   ADD CONSTRAINT `pembayaran_ibfk_1` FOREIGN KEY (`id_pesanan`) REFERENCES `pemesanan` (`id_pesanan`);
 
 --
--- Ketidakleluasaan untuk tabel `pemesanan`
+-- Constraints for table `pemesanan`
 --
 ALTER TABLE `pemesanan`
   ADD CONSTRAINT `pemesanan_ibfk_1` FOREIGN KEY (`id_pengguna`) REFERENCES `pengguna` (`id_pengguna`),
   ADD CONSTRAINT `pemesanan_ibfk_2` FOREIGN KEY (`id_tempat`) REFERENCES `tempat_pemancingan` (`id_tempat`);
 
 --
--- Ketidakleluasaan untuk tabel `review`
+-- Constraints for table `review`
 --
 ALTER TABLE `review`
   ADD CONSTRAINT `review_ibfk_1` FOREIGN KEY (`id_tempat`) REFERENCES `tempat_pemancingan` (`id_tempat`),
   ADD CONSTRAINT `review_ibfk_2` FOREIGN KEY (`id_pengguna`) REFERENCES `pengguna` (`id_pengguna`);
 
 --
--- Ketidakleluasaan untuk tabel `tempat_fasilitas`
+-- Constraints for table `tempat_fasilitas`
 --
 ALTER TABLE `tempat_fasilitas`
   ADD CONSTRAINT `tempat_fasilitas_ibfk_1` FOREIGN KEY (`id_tempat`) REFERENCES `tempat_pemancingan` (`id_tempat`),
   ADD CONSTRAINT `tempat_fasilitas_ibfk_2` FOREIGN KEY (`id_fasilitas`) REFERENCES `fasilitas` (`id_fasilitas`);
 
 --
--- Ketidakleluasaan untuk tabel `tempat_pemancingan`
+-- Constraints for table `tempat_pemancingan`
 --
 ALTER TABLE `tempat_pemancingan`
   ADD CONSTRAINT `fk_tempat_mitra` FOREIGN KEY (`id_mitra`) REFERENCES `mitra` (`id_mitra`) ON DELETE CASCADE;

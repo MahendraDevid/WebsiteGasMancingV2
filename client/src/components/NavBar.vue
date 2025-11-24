@@ -1,24 +1,28 @@
 <script setup>
-import { ref, computed } from 'vue' // Tambahkan computed
-import { RouterLink, useRoute } from 'vue-router' // Tambahkan useRoute
+import { ref, computed } from 'vue'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
+// IMPORT STORE (PENTING!)
+import { useAuthStore } from '@/stores/authStore'
 
 const isMenuOpen = ref(false)
-const route = useRoute(); // Hook untuk mengambil info route saat ini
+const route = useRoute();
+const router = useRouter();
+const authStore = useAuthStore(); // Inisialisasi Store
 
-// Props dari App.vue
-defineProps({
-  isLoggedIn: {
-    type: Boolean,
-    default: false
-  }
-})
+// HAPUS PROPS ISLOGGEDIN (KITA PAKAI STORE AGAR REAKTIF)
+// defineProps({ isLoggedIn: { type: Boolean, default: false } })
 
 const emit = defineEmits(['openModal', 'toggleProfile', 'logout']);
 
-// LOGIC BARU: Cek apakah sedang di halaman Mitra
-// Asumsinya path halaman mitra diawali dengan "/mitra"
-const isMitraPage = computed(() => {
-  return route.path.startsWith('/mitra');
+// Logic Menu Pintar (Pakai Store)
+// Tampilkan menu Mitra jika: (Login sebagai Mitra) ATAU (Sedang di halaman Mitra)
+const showMitraMenu = computed(() => {
+  return authStore.isMitra || route.path.startsWith('/mitra');
+});
+
+// Link Logo Dinamis
+const logoLink = computed(() => {
+  return showMitraMenu.value ? '/mitra' : '/';
 });
 
 const handleAuthClick = (type) => {
@@ -30,13 +34,18 @@ const handleAuthClick = (type) => {
 const handleProfileClick = () => {
   console.log("[Navbar] Event: toggleProfile");
   isMenuOpen.value = false;
-  emit('toggleProfile'); // Memberi tahu App.vue untuk toggle dropdown
+  emit('toggleProfile');
 };
 
 const handleLogoutClick = () => {
   isMenuOpen.value = false;
   console.log("[Navbar] Event: logout");
-  emit('logout');
+
+  authStore.logout(); // Panggil logout dari store
+  emit('logout'); // Tetap emit untuk handle UI lain jika ada
+
+  router.push('/'); // Redirect ke home
+  // window.location.reload(); // Opsional, store biasanya sudah reaktif
 }
 
 const handleProfileClickMobile = () => {
@@ -60,70 +69,66 @@ const handleProfileClickMobile = () => {
       </button>
 
       <nav class="menu-desktop">
+          <template v-if="showMitraMenu">
+              <router-link to="/mitra" class="menu-item">Beranda Mitra</router-link>
+              <router-link v-if="authStore.isMitra" to="/mitra/properti" class="menu-item">Properti Saya</router-link>
+          </template>
 
-        <template v-if="!isMitraPage">
-          <router-link to="/" class="menu-item">Beranda</router-link>
-          <router-link to="/pesanan" class="menu-item">Pesanan Saya</router-link>
-          <router-link to="/ensiklopedia" class="menu-item">Ensiklopedia</router-link>
-        </template>
+          <template v-else>
+              <router-link to="/" class="menu-item">Beranda</router-link>
+              <router-link to="/pesanan" class="menu-item">Pesanan Saya</router-link>
+              <router-link to="/ensiklopedia" class="menu-item">Ensiklopedia</router-link>
+          </template>
 
-        <template v-else>
-           <router-link to="/mitra" class="menu-item">Beranda Mitra</router-link>
-          <router-link to="#" class="menu-item">Properti Saya</router-link>
-        </template>
-
-        <router-link to="/index" class="menu-item">Indeks Halaman</router-link>
-
+          <router-link to="/index" class="menu-item">Indeks Halaman</router-link>
       </nav>
 
       <div class="auth-buttons">
-        <template v-if="!isLoggedIn">
-          <button class="btn-masuk" @click="handleAuthClick('login')">Masuk</button>
-          <button class="btn-daftar" @click="handleAuthClick('register')">Daftar</button>
-        </template>
+          <template v-if="!authStore.isAuthenticated">
+              <button class="btn-masuk" @click="handleAuthClick('login')">Masuk</button>
+              <button class="btn-daftar" @click="handleAuthClick('register')">Daftar</button>
+          </template>
 
-        <template v-else>
-          <button class="user-profile-button" @click="handleProfileClick">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-            </svg>
-          </button>
-        </template>
+          <template v-else>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                  <span v-if="authStore.isMitra" class="mitra-badge">Mitra</span>
+
+                  <button class="user-profile-button" @click="handleProfileClick">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                      </svg>
+                  </button>
+              </div>
+          </template>
       </div>
     </div>
   </header>
 
   <nav :class="['menu-mobile', { active: isMenuOpen }]">
-    <button class="menu-close" @click="isMenuOpen = false">&times;</button>
+      <button class="menu-close" @click="isMenuOpen = false">&times;</button>
 
-    <router-link to="/" class="menu-item" @click="isMenuOpen = false">Beranda</router-link>
-    <router-link to="/pesanan" class="menu-item" @click="isMenuOpen = false">
-      Pesanan Saya
-    </router-link>
-    <router-link to="/ensiklopedia" class="menu-item" @click="isMenuOpen = false">Ensiklopedia</router-link>
-    <template v-if="!isMitraPage">
-      <router-link to="/" class="menu-item" @click="isMenuOpen = false">Beranda</router-link>
-      <router-link to="/pesanan" class="menu-item" @click="isMenuOpen = false">Pesanan Saya</router-link>
-      <router-link to="/ensiklopedia" class="menu-item" @click="isMenuOpen = false">Ensiklopedia</router-link>
-    </template>
+      <template v-if="showMitraMenu">
+          <router-link to="/mitra" class="menu-item" @click="isMenuOpen = false">Beranda Mitra</router-link>
+          <router-link v-if="authStore.isMitra" to="/mitra/properti" class="menu-item" @click="isMenuOpen = false">Properti Saya</router-link>
+      </template>
 
-    <template v-else>
-      <router-link to="/mitra" class="menu-item" @click="isMenuOpen = false">Beranda Mitra</router-link>
-      <a href="#" class="menu-item" @click="isMenuOpen = false">Properti Saya</a>
-    </template>
+      <template v-else>
+          <router-link to="/" class="menu-item" @click="isMenuOpen = false">Beranda</router-link>
+          <router-link to="/pesanan" class="menu-item" @click="isMenuOpen = false">Pesanan Saya</router-link>
+          <router-link to="/ensiklopedia" class="menu-item" @click="isMenuOpen = false">Ensiklopedia</router-link>
+      </template>
 
-    <router-link to="/index" class="menu-item" @click="isMenuOpen = false">Indeks Halaman</router-link>
+      <router-link to="/index" class="menu-item" @click="isMenuOpen = false">Indeks Halaman</router-link>
 
-    <div v-if="!isLoggedIn" class="menu-auth">
-      <button class="btn-masuk" @click="handleAuthClick('login')">Masuk</button>
-      <button class="btn-daftar" @click="handleAuthClick('register')">Daftar</button>
-    </div>
+      <div v-if="!authStore.isAuthenticated" class="menu-auth">
+          <button class="btn-masuk" @click="handleAuthClick('login')">Masuk</button>
+          <button class="btn-daftar" @click="handleAuthClick('register')">Daftar</button>
+      </div>
 
-    <div v-else class="menu-auth">
-      <a href="#" class="menu-item" @click="handleProfileClickMobile">Profil Saya</a>
-      <a href="#" class="menu-item logout" @click="handleLogoutClick">Keluar</a>
-    </div>
+      <div v-else class="menu-auth">
+          <a href="#" class="menu-item" @click="handleProfileClickMobile">Profil Saya</a>
+          <a href="#" class="menu-item logout" @click="handleLogoutClick">Keluar</a>
+      </div>
   </nav>
 </template>
 
@@ -413,5 +418,14 @@ const handleProfileClickMobile = () => {
   .navbar-container {
     max-width: 1920px;
   }
+}
+
+.mitra-badge {
+  background-color: #FFD700;
+  color: #0D2F64;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 20px;
 }
 </style>

@@ -2,32 +2,32 @@
 const db = require("../config/database");
 
 class PesananModel {
-  // ======================================
+  // ======================================================
   // 1. GET ALL PESANAN BY USER ID
-  // ======================================
+  // ======================================================
   static async findAllByUserId(userId) {
     try {
-      // 1) Ambil semua pesanan user
       const [orders] = await db.query(
         `SELECT 
-        p.id_pesanan,
-        p.id_tempat,
-        p.tgl_pesan,
-        p.status_pesanan,
-        p.total_biaya,
-        p.num_people,
-        p.tgl_mulai_sewa,
-        p.durasi_sewa_jam,
-        p.nomor_pesanan,
-        t.title,
-        t.location,
-        t.image_url,
-        t.average_rating,
-        t.total_reviews_count
-      FROM pemesanan p
-      JOIN tempat_pemancingan t ON p.id_tempat = t.id_tempat
-      WHERE p.id_pengguna = ?
-      ORDER BY p.tgl_pesan DESC`,
+          p.id_pesanan,
+          p.id_tempat,
+          p.tgl_pesan,
+          p.status_pesanan,
+          p.total_biaya,
+          p.num_people,
+          p.tgl_mulai_sewa,
+          p.durasi_sewa_jam,
+          p.nomor_pesanan,
+          
+          t.title,
+          t.location,
+          t.image_url,
+          t.average_rating,
+          t.total_reviews_count
+        FROM pemesanan p
+        JOIN tempat_pemancingan t ON p.id_tempat = t.id_tempat
+        WHERE p.id_pengguna = ?
+        ORDER BY p.tgl_pesan DESC`,
         [userId]
       );
 
@@ -35,34 +35,27 @@ class PesananModel {
 
       const orderIds = orders.map((o) => o.id_pesanan);
 
-      // 2) Ambil semua item
+      // Ambil item per pesanan
       const [allItems] = await db.query(
         `SELECT 
-        d.id_pesanan,
-        d.kuantitas AS quantity,
-        i.nama_item AS name,
-        d.harga_satuan_saat_pesan AS price,
-        d.subtotal
-      FROM detail_pemesanan_item d
-      JOIN item_sewa i ON d.id_item = i.id_item
-      WHERE d.id_pesanan IN (?)`,
+          d.id_pesanan,
+          d.kuantitas AS quantity,
+          i.nama_item AS name,
+          d.harga_satuan_saat_pesan AS price
+        FROM detail_pemesanan_item d
+        JOIN item_sewa i ON d.id_item = i.id_item
+        WHERE d.id_pesanan IN (?)`,
         [orderIds]
       );
 
-      // 3) Kelompokkan item per pesanan
       const itemsByOrder = {};
       allItems.forEach((item) => {
         if (!itemsByOrder[item.id_pesanan]) {
           itemsByOrder[item.id_pesanan] = [];
         }
-        itemsByOrder[item.id_pesanan].push({
-          name: item.name,
-          quantity: item.quantity,
-          price: item.price,
-        });
+        itemsByOrder[item.id_pesanan].push(item);
       });
 
-      // 4) Susun output akhir
       return orders.map((order) => ({
         id: order.id_pesanan,
         id_pesanan: order.id_pesanan,
@@ -73,7 +66,6 @@ class PesananModel {
         place_rating: order.average_rating || 0,
         place_review_count: order.total_reviews_count || 0,
         tanggal_mulai: order.tgl_mulai_sewa,
-        tanggal_selesai: null,
         durasi_jam: order.durasi_sewa_jam,
         jumlah_orang: order.num_people,
         status: order.status_pesanan,
@@ -86,173 +78,106 @@ class PesananModel {
     }
   }
 
+  // ======================================================
+  // 2. GET PESANAN BY ID (BARU)
+  // ======================================================
   static async findById(id) {
     try {
-      // PERHATIKAN: Pastikan nama tabelnya sesuai database kamu 
-      // (apakah 'pemesanan' atau 'id_pesanan'?)
-      // Di kode create sebelumnya kamu pakai 'id_pesanan', jadi saya pakai itu disini.
-      
-      const query = `
-        SELECT 
-          p.id_pesanan,
-          p.nomor_pesanan,
-          p.total_biaya,
-          p.status_pesanan,
-          p.tgl_pesan,
-          p.tgl_mulai_sewa,
-          p.durasi_sewa_jam,
-          p.num_people,
-          t.title AS place_name, 
-          t.location,
-          t.image_url
-        FROM id_pesanan p
-        JOIN tempat_pemancingan t ON p.id_tempat = t.id_tempat
-        WHERE p.id_pesanan = ?
-      `;
+      const [orderRows] = await db.query(
+        `SELECT
+        p.id_pesanan,
+        p.nomor_pesanan,
+        p.total_biaya,
+        p.status_pesanan,
+        pb.kode_bayar,        
+        pb.payment_method AS metode_pembayaran,
+        p.tgl_pesan,
+        p.tgl_mulai_sewa,
+        p.durasi_sewa_jam,
+        p.num_people,
+        t.title AS place_name,
+        t.location,
+        t.image_url
+      FROM pemesanan p
+      INNER JOIN tempat_pemancingan t ON p.id_tempat = t.id_tempat
+      INNER JOIN pembayaran pb ON p.id_pesanan = pb.id_pesanan
+      WHERE p.id_pesanan = ?
+      LIMIT 1`,
+        [id]
+      );
 
-      const [rows] = await db.query(query, [id]);
+      if (orderRows.length === 0) return null;
 
-      // Jika data ditemukan, kembalikan object pertama. Jika tidak, null.
-      return rows.length > 0 ? rows[0] : null;
+      const order = orderRows[0];
 
+      // ambil item pemesanan
+      const [itemRows] = await db.query(
+        `SELECT 
+         i.nama_item AS name,
+         d.kuantitas AS quantity,
+         d.harga_satuan_saat_pesan AS price,
+         d.subtotal
+       FROM detail_pemesanan_item d
+       JOIN item_sewa i ON d.id_item = i.id_item
+       WHERE d.id_pesanan = ?`,
+        [id]
+      );
+
+      return { ...order, items: itemRows };
     } catch (error) {
       console.error("Error in findById:", error);
       throw error;
     }
   }
 
-  // ======================================
-  // 2. CANCEL PESANAN
-  // ======================================
+  // ======================================================
+  // 3. CANCEL PESANAN
+  // ======================================================
   static async cancelOrder(orderId, userId) {
     try {
-      // 1. Cek pesanan dan status
       const [rows] = await db.query(
-        "SELECT status_pesanan FROM id_pesanan WHERE id_pesanan = ? AND id_pengguna = ?",
+        "SELECT status_pesanan FROM pemesanan WHERE id_pesanan = ? AND id_pengguna = ?",
         [orderId, userId]
       );
 
       if (rows.length === 0) {
         return {
           success: false,
-          message: "Pesanan tidak ditemukan atau Anda tidak memiliki izin.",
+          message: "Pesanan tidak ditemukan atau bukan milik Anda.",
         };
       }
 
       const currentStatus = rows[0].status_pesanan;
 
-      // Validasi Status
       if (currentStatus !== "Menunggu Pembayaran") {
         return {
           success: false,
-          message: `Pesanan dengan status ${currentStatus} tidak dapat dibatalkan.`,
+          message: `Pesanan berstatus ${currentStatus} tidak dapat dibatalkan.`,
         };
       }
 
-      // 2. Update status menjadi "Dibatalkan"
       await db.query(
-        "UPDATE id_pesanan SET status_pesanan = 'Dibatalkan' WHERE id_pesanan = ?",
+        "UPDATE pemesanan SET status_pesanan = 'Dibatalkan' WHERE id_pesanan = ?",
         [orderId]
       );
 
-      // 3. Ambil data pesanan yang dibatalkan
       const [updatedOrder] = await db.query(
         `SELECT 
           p.id_pesanan, 
-          p.status_pesanan, 
-          p.total_biaya, 
-          t.title 
-        FROM id_pesanan p
+          p.nomor_pesanan,
+          p.status_pesanan,
+          p.total_biaya,
+          t.title
+        FROM pemesanan p
         JOIN tempat_pemancingan t ON p.id_tempat = t.id_tempat
         WHERE p.id_pesanan = ?`,
         [orderId]
       );
 
-      return {
-        success: true,
-        order: updatedOrder[0],
-      };
+      return { success: true, order: updatedOrder[0] };
     } catch (error) {
       console.error("Error in cancelOrder:", error);
       throw error;
-    }
-  }
-
-  // ======================================
-  // 3. CREATE PESANAN
-  // ======================================
-  static async create(pesananData, items) {
-    const connection = await db.getConnection();
-
-    try {
-      await connection.beginTransaction();
-
-      const {
-        id_pengguna,
-        id_tempat,
-        tgl_mulai_sewa,
-        durasi_sewa_jam,
-        num_people,
-        total_biaya,
-      } = pesananData;
-
-      // Generate nomor pesanan
-      const nomorPesanan = "B-" + Date.now();
-
-      // 1. Insert ke tabel id_pesanan
-      const [result] = await connection.query(
-        `INSERT INTO id_pesanan (
-          id_pengguna, 
-          id_tempat, 
-          nomor_pesanan,
-          tgl_pesan, 
-          status_pesanan, 
-          tgl_mulai_sewa, 
-          durasi_sewa_jam, 
-          num_people, 
-          total_biaya
-        ) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?, ?)`,
-        [
-          id_pengguna,
-          id_tempat,
-          nomorPesanan,
-          "Menunggu Pembayaran",
-          tgl_mulai_sewa,
-          durasi_sewa_jam,
-          num_people,
-          total_biaya,
-        ]
-      );
-
-      const pesananId = result.insertId;
-
-      // 2. Insert Item Pesanan ke id_detail
-      if (items && items.length > 0) {
-        for (const item of items) {
-          const subtotal = item.quantity * item.price_at_order;
-          await connection.query(
-            `INSERT INTO detail_pemesanan_item 
-            (id_pesanan, id_item, kuantitas, harga_satuan_saat_pesan, subtotal) 
-            VALUES (?, ?, ?, ?, ?)`,
-            [
-              pesananId,
-              item.id_item,
-              item.quantity,
-              item.price_at_order,
-              subtotal,
-            ]
-          );
-        }
-      }
-
-      await connection.commit();
-      return pesananId;
-    } catch (error) {
-      await connection.rollback();
-      console.error("Error in create:", error);
-      throw error;
-    } finally {
-      connection.release();
     }
   }
 }

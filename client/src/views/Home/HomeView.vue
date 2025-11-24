@@ -2,6 +2,7 @@
 import { ref, onMounted, nextTick } from 'vue' // <--- 1. TAMBAHKAN nextTick
 import { useRouter } from 'vue-router'
 import api from '@/services/api'
+// Tambahkan import API Anda
 
 const router = useRouter()
 
@@ -14,7 +15,7 @@ const searchKeyword = ref('')
 
 // --- 🔗 KONFIGURASI URL GAMBAR ---
 // Ganti port sesuai backend kamu (3000)
-const API_URL = 'http://localhost:3000/uploads/'; 
+const API_URL = 'http://localhost:3000/uploads/';
 
 // Fungsi Helper untuk menampilkan gambar dari Backend
 const getImageUrl = (filename) => {
@@ -51,12 +52,12 @@ const loadTipsList = async () => {
     const response = await api.getAllEnsiklopedia()
     // Sesuaikan pengecekan response dengan format backend kamu
     const data = response.data.data || response.data; // Handle variasi format response
-    
+
     if (Array.isArray(data)) {
       tipsList.value = data.slice(0, 5)
 
       // Tunggu Vue selesai render kartu ke layar, baru jalankan carousel logic
-      await nextTick() 
+      await nextTick()
       initializeCarousel()
     }
   } catch (error) {
@@ -70,7 +71,7 @@ const loadTipsList = async () => {
 const goToSearch = () => {
   const keyword = searchKeyword.value.trim()
   router.push({
-    name: 'search', 
+    name: 'search',
     query: { location: keyword || 'Semua Lokasi' },
   })
 }
@@ -206,17 +207,17 @@ onMounted(() => {
 
         <div v-else class="cards-grid">
           <div class="card" v-for="place in popularPlaces" :key="place.id_tempat">
-            
-            <img 
-                :src="getImageUrl(place.image_url)" 
-                :alt="place.title" 
-                class="card-image" 
+
+            <img
+                :src="getImageUrl(place.image_url)"
+                :alt="place.title"
+                class="card-image"
             />
+            <span class="card-price-overlay">
+              Rp.{{ Number(place.base_price || 0).toLocaleString('id-ID') }}/{{ place.price_unit || 'Hari' }}
+            </span>
 
             <div class="card-content">
-              <span class="card-price-overlay">
-                Rp. {{ place.base_price?.toLocaleString('id-ID') || 0 }}/{{ place.price_unit || 'Hari' }}
-              </span>
               <h3 class="card-title">{{ place.title }}</h3>
               <div class="card-location">
                 <span>{{ place.location }}</span>
@@ -227,7 +228,7 @@ onMounted(() => {
                 <span class="rating-count">({{ place.total_reviews_count || 0 }} Ulasan)</span>
               </div>
               <p class="card-description">{{ place.description ? place.description.substring(0, 100) + '...' : '' }}</p>
-              
+
               <div class="card-facilities">
                 <template v-for="(facility, index) in place.fasilitas" :key="index">
                   <span class="facility" v-if="index < 2">

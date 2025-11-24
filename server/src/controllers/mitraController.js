@@ -249,3 +249,56 @@ exports.deleteMitra = async (req, res) => {
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 };
+
+// controllers/mitraController.js (update fungsi-fungsi ini, ganti yang sebelumnya)
+
+// 5. Get Property Bookings by Mitra ID
+exports.getPropertyBookings = async (req, res) => {
+  try {
+    const { mitraId } = req.params;
+    const bookings = await MitraModel.getPropertyBookings(mitraId); // Panggil model
+
+    res.json({
+      success: true,
+      data: bookings
+    });
+  } catch (error) {
+    console.error("Error getPropertyBookings:", error);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
+};
+
+// 6. Update Property Booking Status
+exports.updatePropertyBookingStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    const isUpdated = await MitraModel.updatePropertyBookingStatus(id, status); // Panggil model
+
+    if (!isUpdated) {
+      return res.status(404).json({ success: false, message: "Pesanan tidak ditemukan." });
+    }
+
+    res.json({ success: true, message: "Status pesanan berhasil diperbarui." });
+  } catch (error) {
+    console.error("Error updatePropertyBookingStatus:", error);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
+};
+
+// 7. Delete Property Booking
+exports.deletePropertyBooking = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const isDeleted = await MitraModel.deletePropertyBooking(id); // Panggil model
+
+    if (!isDeleted) {
+      return res.status(404).json({ success: false, message: "Pesanan tidak ditemukan." });
+    }
+
+    res.json({ success: true, message: "Pesanan berhasil dihapus." });
+  } catch (error) {
+    console.error("Error deletePropertyBooking:", error);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
+};

@@ -98,13 +98,47 @@ async function submitRegistration() {
   if (!formData.agreedToTerms) return alert("Anda harus menyetujui Syarat & Ketentuan.");
 
   try {
-    const payload = {
-      ...formData,
-      password_hash: formData.password
-    };
+    // === UBAH BAGIAN INI MENJADI FORMDATA ===
+    const submissionData = new FormData();
 
-    // Panggil action dari Store yang sudah diperbaiki
-    const result = await authStore.registerMitra(payload);
+    // 1. Append Data Diri (Teks)
+    submissionData.append('nama_lengkap', formData.nama_lengkap);
+    submissionData.append('email', formData.email);
+    submissionData.append('no_telepon', formData.no_telepon);
+    submissionData.append('password_hash', formData.password);
+    submissionData.append('nama_bank', formData.nama_bank);
+    submissionData.append('no_rekening', formData.no_rekening);
+    submissionData.append('atas_nama_rekening', formData.atas_nama_rekening);
+    submissionData.append('alamat', formData.alamat);
+
+    // 2. Append Data Properti (Teks)
+    submissionData.append('namaProperti', formData.namaProperti);
+    submissionData.append('alamatProperti', formData.alamatProperti);
+    submissionData.append('hargaSewa', formData.hargaSewa);
+    submissionData.append('satuanSewa', formData.satuanSewa);
+    submissionData.append('jamBuka', formData.jamBuka);
+    submissionData.append('jamTutup', formData.jamTutup);
+    submissionData.append('deskripsi', formData.deskripsi);
+    
+    // 3. Append GAMBAR UTAMA (Binary)
+    // Pastikan formData.fotoProperti berisi FILE object (bukan string URL)
+    if (formData.fotoProperti) {
+        submissionData.append('fotoProperti', formData.fotoProperti);
+    }
+
+    // 4. Handle Array & Nested Data (Fasilitas & Items)
+    // FormData tidak bisa kirim array langsung, harus di-stringify dulu
+    submissionData.append('fasilitas', JSON.stringify(formData.fasilitas));
+    
+    // CATATAN: Upload gambar didalam array items (looping) sangat kompleks.
+    // Untuk tahap ini, kita kirim data teks itemnya saja dulu.
+    // Gambar item sebaiknya dihandle di fitur "Edit Tempat" nanti.
+    submissionData.append('items', JSON.stringify(formData.items)); 
+
+    // === PANGGIL STORE DENGAN FORMDATA ===
+    // Pastikan di api.js tidak memaksa 'Content-Type': 'application/json' 
+    // Axios biasanya otomatis mendeteksi FormData dan ganti header jadi 'multipart/form-data'
+    const result = await authStore.registerMitra(submissionData);
 
     if (result.success) {
        console.log("Sukses:", result.message);

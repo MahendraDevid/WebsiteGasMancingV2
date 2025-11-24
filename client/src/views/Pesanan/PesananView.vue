@@ -8,6 +8,20 @@ import './PesananView.style.css';
 const router = useRouter();
 const authStore = useAuthStore();
 
+// --- 🔗 KONFIGURASI URL GAMBAR (Backend) ---
+const API_URL = 'http://localhost:3000/uploads/'; 
+
+// Fungsi Helper untuk menampilkan gambar
+const getImageUrl = (filename) => {
+  if (!filename || filename === 'default_place.jpg') {
+    return 'https://placehold.co/600x400/CCCCCC/FFFFFF?text=No+Image'; 
+  }
+  // Cek apakah filename sudah mengandung http
+  if (filename.startsWith('http')) return filename;
+  
+  return `${API_URL}${filename}`;
+}
+
 // State
 const allOrders = ref([]);
 const isLoading = ref(true);
@@ -45,7 +59,6 @@ async function fetchOrders() {
   isLoading.value = true;
   errorMessage.value = null;
 
-  // Cek apakah user sudah login
   if (!authStore.isAuthenticated) {
     isLoading.value = false;
     errorMessage.value = 'Anda harus login untuk melihat daftar pesanan Anda.';
@@ -55,7 +68,6 @@ async function fetchOrders() {
   try {
     const response = await api.getAllPesananByUserId();
 
-    // Mapping status
     const mapStatus = (status) => {
       if (!status) return 'menunggu';
       const statusLower = status.toLowerCase();
@@ -70,11 +82,14 @@ async function fetchOrders() {
       return 'menunggu';
     };
 
-    // Map response data ke format yang dibutuhkan view
     allOrders.value = response.data.data.map(order => ({
       id: order.id_pesanan,
       nomorPesanan: order.nomor_pesanan || '-',
-      image: order.place_image || 'https://placehold.co/600x400/CCCCCC/FFFFFF?text=No+Image',
+      
+      // PERBAIKAN DI SINI: Gunakan getImageUrl
+      // Pastikan backend mengirim field 'place_image'
+      image: getImageUrl(order.place_image), 
+      
       title: order.place_name || 'Tempat Pemancingan',
       location: order.place_location || 'Lokasi Tidak Diketahui',
       rating: Number(order.place_rating) || 0,
@@ -104,12 +119,10 @@ async function fetchOrders() {
   }
 }
 
-// Mounted
 onMounted(() => {
   fetchOrders();
 });
 
-// Navigasi
 function goToDetailPesanan(orderId) {
   router.push({ name: 'detailpesanan', params: { orderId } });
 }
@@ -118,7 +131,6 @@ function goToUlasan(orderId) {
   router.push({ name: 'formulasan', params: { orderId } });
 }
 
-// Pembatalan pesanan
 function openCancelModal(order) {
   if (order.statusClass === 'menunggu') {
     orderToCancel.value = order;
@@ -165,13 +177,11 @@ function goToLogin() {
   <main class="pesanan-page-wrapper">
     <h1 class="pesanan-title">Pesanan Saya</h1>
 
-    <!-- Loading State -->
     <div v-if="isLoading" class="loading-message">
       <div class="spinner"></div>
       Memuat pesanan...
     </div>
 
-    <!-- Error/Not Logged In State -->
     <div v-else-if="errorMessage" class="error-message">
       {{ errorMessage }}
       <div v-if="!authStore.isAuthenticated" class="mt-4">
@@ -181,7 +191,6 @@ function goToLogin() {
       </div>
     </div>
 
-    <!-- Cancel Confirmation Modal -->
     <div v-if="showCancelModal" class="custom-modal-backdrop">
       <div class="custom-modal">
         <h3 class="modal-title">Konfirmasi Pembatalan</h3>
@@ -193,7 +202,6 @@ function goToLogin() {
       </div>
     </div>
 
-    <!-- Success/Failure Message -->
     <div v-if="cancelMessage" :class="['message-box', cancelMessage.includes('gagal') ? 'error' : 'success']">
       {{ cancelMessage }}
       <button class="close-btn" @click="cancelMessage = ''">✕</button>
@@ -203,7 +211,6 @@ function goToLogin() {
     <div v-if="!isLoading && authStore.isAuthenticated" class="tab-content">
       <section class="order-list">
 
-        <!-- No Orders Message -->
         <div v-if="allOrders.length === 0" class="no-orders-message">
           <p>Anda belum memiliki pesanan aktif.</p>
           <button class="button-detail" @click="router.push('/search')">
@@ -211,21 +218,22 @@ function goToLogin() {
           </button>
         </div>
 
-        <!-- Order Cards -->
         <div v-else class="order-card" v-for="order in allOrders" :key="order.id">
 
           <div class="card-image-section">
-            <img :src="order.image" :alt="order.title" loading="lazy"
-              @error="$event.target.src = 'https://placehold.co/600x400/CCCCCC/FFFFFF?text=No+Image'">
+            <img 
+                :src="order.image" 
+                :alt="order.title" 
+                loading="lazy"
+                @error="$event.target.src = 'https://placehold.co/600x400/CCCCCC/FFFFFF?text=No+Image'"
+            >
           </div>
 
           <div class="card-content-section">
-            <!-- Status Badge -->
             <div :class="['card-status-badge', order.statusClass]">
               {{ order.status }}
             </div>
 
-            <!-- Nomor Pesanan -->
             <p class="order-number">No. Pesanan: <strong>{{ order.nomorPesanan }}</strong></p>
 
             <h3 class="card-title">{{ order.title }}</h3>
@@ -240,7 +248,6 @@ function goToLogin() {
               <span>{{ order.location }}</span>
             </div>
 
-            <!-- Info Grid -->
             <div class="card-info-grid">
               <div class="info-item">
                 <svg class="info-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
@@ -274,12 +281,10 @@ function goToLogin() {
               </div>
             </div>
 
-            <!-- Total -->
             <div class="total-price">
               <span>Total: Rp {{ order.totalBiaya.toLocaleString('id-ID') }}</span>
             </div>
 
-            <!-- Buttons -->
             <div class="card-buttons">
               <div class="buttons-row">
                 <button class="button-detail" @click="goToDetailPesanan(order.id)">

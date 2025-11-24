@@ -2,6 +2,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const path = require("path"); // <--- 1. WAJIB TAMBAH INI
 
 const app = express();
 
@@ -10,6 +11,20 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// ==================================================
+// 2. KONFIGURASI FOLDER GAMBAR (PENTING!)
+// ==================================================
+// Karena file ini ada di root (sejajar dengan folder uploads),
+// kita arahkan langsung ke 'uploads'
+const uploadsDir = path.join(__dirname, 'uploads');
+
+console.log("✅ SYSTEM LOG: Folder Uploads dibuka di ->", uploadsDir);
+
+app.use('/uploads', express.static(uploadsDir));
+// ==================================================
+
+
+// Import Routes
 const authRoutes = require("./src/routes/auth");
 const placeRoutes = require("./src/routes/placeRoutes");
 const ensiklopediaRoutes = require("./src/routes/ensiklopediaRoutes");

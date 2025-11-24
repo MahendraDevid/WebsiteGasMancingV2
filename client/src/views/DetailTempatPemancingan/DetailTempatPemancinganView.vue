@@ -7,12 +7,12 @@
     <div v-else-if="place" class="detail-content">
       <div class="image-header">
         <div class="image-frame">
-          <img
-            :src="place.image_url"
-            :alt="place.title"
-            class="place-image"
-            @error="handleImageError"
-          />
+            <img
+              :src="getImageUrl(place.image_url)"
+              :alt="place.title"
+              loading="lazy"
+              @error="$event.target.src = '/img/kolam.png'"
+            />
         </div>
         <div class="rating-badge">
           <span>⭐ {{ place.average_rating }} ({{ place.total_reviews_count }})</span>
@@ -27,7 +27,7 @@
           </div>
 
           <div class="header-booking-box">
-            <p class="booking-price-header">Rp. {{ place.base_price }} / {{ place.price_unit }}</p>
+            <p class="booking-price-header">Rp. {{ place.base_price?.toLocaleString('id-ID') }} / {{ place.price_unit }}</p>
             <button class="booking-button" @click.stop="goToBooking">Booking Sekarang</button>
           </div>
         </div>
@@ -54,7 +54,7 @@
             <div v-for="(item, index) in place.item_sewa" :key="index" class="equipment-card">
               <div class="item-icon">
                 <img
-                  :src="item.image_url"
+                  :src="getImageUrl(item.image_url)" 
                   :alt="item.nama_item"
                   class="equipment-image"
                   @error="handleImageError"
@@ -97,7 +97,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import api from '@/services/api' // Pastikan path ini benar
+import api from '@/services/api' 
 
 const route = useRoute()
 const router = useRouter()
@@ -105,25 +105,30 @@ const router = useRouter()
 const place = ref(null)
 const loading = ref(true)
 
-/**
- * FUNGSI NAVIGASI KE BOOKING (DENGAN SAFEGUARD & DEBUGGING)
- * Menggunakan nama rute 'Booking' dan parameter ':id'.
- */
+// --- 🔗 KONFIGURASI URL GAMBAR (Backend) ---
+const API_URL = 'http://localhost:3000/uploads/'
+
+// Fungsi Helper untuk menampilkan gambar
+const getImageUrl = (filename) => {
+  if (!filename || filename === 'default_place.jpg') {
+    return '/img/kolam.png'
+  }
+  if (filename.startsWith('http')) return filename
+
+  return `${API_URL}${filename}`
+}
+
 const goToBooking = () => {
-    // ... log panggilan
-    
-    // GANTI 'id' DENGAN KUNCI PROPERTI YANG BENAR (misal: id_tempat)
-    const placeId = place.value?.id || place.value?.id_tempat; // Contoh: Gunakan Optional Chaining
+    const placeId = place.value?.id || place.value?.id_tempat; 
 
     if (!placeId) {
-        console.error('NAVIGASI GAGAL! ID tidak ditemukan pada properti id atau id_tempat.');
+        console.error('NAVIGASI GAGAL! ID tidak ditemukan.');
         return; 
     }
 
-    // Gunakan ID yang telah divalidasi
     router.push({
       name: 'Booking', 
-      params: { id: placeId }, // Gunakan placeId yang baru
+      params: { id: placeId }, 
       state: { placeData: place.value }
     })
 }
@@ -133,19 +138,16 @@ const loadPlaceData = async () => {
     loading.value = true
     const placeId = route.params.id
 
-    // Pastikan ID rute ada sebelum memanggil API
     if (!placeId) {
       console.error('ID tempat tidak ditemukan di rute!')
       place.value = null
       return
     }
 
-    // Call API to get place details
     const response = await api.getPlaceById(placeId)
 
     if (response.data.success) {
       place.value = response.data.data
-      console.log('Data Tempat berhasil dimuat. ID:', place.value.id)
     } else {
       place.value = null
       console.error('Failed to load place data:', response.data.message)
@@ -159,7 +161,7 @@ const loadPlaceData = async () => {
 }
 
 const handleImageError = (event) => {
-  event.target.src = '/img/placeholder.png' // Fallback image
+  event.target.src = '/img/placeholder.png' 
 }
 
 onMounted(() => {

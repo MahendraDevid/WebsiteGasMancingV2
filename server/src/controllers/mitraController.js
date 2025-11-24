@@ -174,6 +174,7 @@ exports.login = async (req, res) => {
           id_mitra: mitra.id_mitra,
           nama_lengkap: mitra.nama_lengkap,
           email: mitra.email,
+          no_telepon: mitra.no_telepon,
           role: "mitra",
           tipe_user: "mitra",
         },

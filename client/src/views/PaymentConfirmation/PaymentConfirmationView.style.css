@@ -118,65 +118,60 @@
     padding: 20px 10px; 
     flex: 1 1 50%; 
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-items: center;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); 
     border: 1px solid #EDF2F7;
 }
 
 .info-item {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-rows: auto auto;
-    grid-template-areas: "icon label" "icon detail";
+    display: flex;
+    flex-direction: column;
     align-items: center; 
-    gap: 0 12px;
+    text-align: center;
+    gap: 0;
     padding: 0 5px;
     padding-right: 20px;
 }
 
 /* KODE UNTUK MERAPIKAN IKON DAN TULISAN */
 .icon-wrapper {
-    grid-area: icon;
     height: auto; 
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 0; 
+    margin-bottom: 5px; 
 }
 
 .detail-img {
-    width: 36px;
-    height: 36px;
+    width: 28px;
+    height: 28px;
     object-fit: contain;
 }
 .detail-img-large {
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     object-fit: contain;
 }
 
 .info-label {
-    grid-area: label;
-    align-self: end;
-    text-align: left;
+    text-align: center;
     font-family: "SF Pro-Semibold", Helvetica;
-    font-size: 14px; 
+    font-size: 12px;
     color: #4A5568; 
     font-weight: 600;
     margin-top: 0px; 
-    line-height: 1.2; 
+    line-height: 1.2;
+    white-space: nowrap; 
 }
 
 .info-detail {
-    grid-area: detail;
-    align-self: start;
-    text-align: left;
+    text-align: center;
     font-family: "SF Pro Display-Regular", Helvetica;
-    font-size: 16px; 
+    font-size: 15px; 
     color: #2d3748; 
-    margin-top: 2px; 
-    font-weight: 400;
+    margin-top: 0; 
+    font-weight: 500;
     line-height: 1.2; 
     max-width: 150px;
     word-break: break-word; 
@@ -262,4 +257,49 @@
 .no-item {
     color: #6b7280;
     font-style: italic;
+}
+
+/* Style untuk tampilan QRIS */
+.qris-section {
+    /* Mengganti display:flex horizontal bawaan payment-code-section */
+    display: flex;
+    flex-direction: column; /* Tata letak vertikal */
+    margin-bottom: 10px;
+    padding: 5px 0;
+    border-bottom: 1px solid #CBD5E0;
+}
+
+.qris-label {
+    /* Mirip dengan code-label untuk konsistensi, tapi tanpa margin-right */
+    font-family: "SF Pro Display-Medium", Helvetica;
+    font-size: 14px;
+    color: #4A5568;
+    font-weight: 500;
+    margin-bottom: 10px; /* Tambahkan sedikit jarak ke gambar QR di bawahnya */
+    text-align: left; /* Pastikan label di kiri */
+}
+
+.qris-content-center {
+    display: flex;
+    flex-direction: column; /* Konten di tengah secara vertikal */
+    align-items: center; /* Memusatkan elemen anak (QR dan teks info) secara horizontal */
+    width: 100%; /* Memastikan ini mengambil lebar penuh untuk pemusatan */
+    padding: 10px 0;
+}
+
+.qris-image {
+    /* Modifikasi qris-image yang sudah ada */
+    width: 200px;
+    height: auto;
+    margin: 0 0 10px 0; /* Hapus margin auto, atur margin bawah */
+    display: block;
+}
+
+.qris-info {
+    /* Style untuk teks di bawah QR */
+    font-family: "SF Pro Display-Regular", Helvetica;
+    font-size: 14px;
+    color: #4A5568;
+    text-align: center; /* Teks info di tengah */
+    margin: 0;
 }

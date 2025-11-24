@@ -19,7 +19,7 @@ exports.create = async (req, res) => {
         if (exists) {
             // Jika sudah ada, jangan buat baru, tapi update method/qris yang baru
             const kode_bayar = "PAY-" + Date.now() + "-" + id_pesanan; // Generate kode baru
-            const image_qris = "img/qris_dummy.jpg";
+            const image_qris = "img/QRISRangga.jpg";
 
             await PaymentModel.updateMethod(id_pesanan, payment_method, image_qris, kode_bayar);
 
@@ -38,7 +38,7 @@ exports.create = async (req, res) => {
         // 3. Simulasi Generate Kode Bayar & QRIS (Karena belum ada Gateway asli)
         // Nanti bagian ini diganti respon dari Midtrans/Xendit
         const kode_bayar = "PAY-" + Date.now() + "-" + id_pesanan;
-        const image_qris = "/img/qris_dummy.jpg"; // Default dummy
+        const image_qris = "/img/QRISRangga.jpg"; // Default dummy
 
         const paymentData = {
             id_pesanan,

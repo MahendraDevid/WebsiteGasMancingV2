@@ -16,6 +16,8 @@ const route = useRoute()
 const orderId = route.query.orderId
 const kodeBayar = ref(route.query.paymentCode || '8881081234567890');
 const totalHarga = ref(route.query.total || 'Rp 0')
+const paymentMethod = ref(route.query.paymentMethod || 'va')
+const qrisImage = ref(route.query.qrisImage || '')
 
 // Variable Reactive untuk data Pesanan
 const dataBooking = ref(null) // Untuk menyimpan seluruh object data
@@ -97,7 +99,7 @@ function handleCopy() {
       <section class="confirmation-details-wrapper">
         <h2 class="section-subtitle">Detail Pesanan</h2>
         
-        <div class="payment-code-section">
+        <div class="payment-code-section" v-if="paymentMethod !== 'qris'">
           <span class="code-label">Kode Bayar :</span>
           <span class="code-value">{{ kodeBayar }}</span>
           <button @click="handleCopy" class="copy-button" title="Salin Kode">
@@ -105,6 +107,22 @@ function handleCopy() {
                 <path d="M16 1H4C2.9 1 2 1.9 2 3v14h2V3h12V1zm3 4H8C6.9 5 6 5.9 6 7v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
             </svg>
           </button>
+        </div>
+
+        <div class="qris-section" v-else>
+          <span class="qris-label">QRIS Code :</span>
+
+          <div class="qris-content-center">
+            <img
+            :src="`${qrisImage}`"
+            alt="QRIS Code"
+            class="qris-image"
+            />
+
+            <p class="qris-info">
+              Scan QR code di atas untuk menyelesaikan pembayaran
+            </p>
+          </div>
         </div>
 
         <div class="rental-info-container">

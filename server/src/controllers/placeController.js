@@ -26,19 +26,21 @@ exports.getAllPlaces = async (req, res) => {
 // 2. SEARCH PLACES
 exports.searchPlaces = async (req, res) => {
   try {
-    const { location, date, facilities } = req.query;
+    const { location, price, facilities } = req.query;
+
+    console.log("Search Params:", { location, price, facilities }); // Debugging
     
     // Jika tidak ada parameter search, kembalikan error atau kosong
-    if (!location && !date && !facilities) {
+    if (!location && !price && !facilities) {
        // Opsional: Bisa return getAllPlaces() jika mau fallback
        return res.status(400).json({ success: false, error: "Parameter pencarian kosong" });
     }
 
-    const places = await placeModel.search(location, date, facilities);
-    res.json({ success: true, data: places });
+    const places = await placeModel.search(location, price, facilities);
+    res.status(200).json({ success: true, count: places.length, data: places });
   } catch (error) {
     console.error("Error searchPlaces:", error);
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, message: "Terjadi Kesalahan", error: error.message });
   }
 };
 

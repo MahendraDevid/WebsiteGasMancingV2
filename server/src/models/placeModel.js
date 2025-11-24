@@ -196,44 +196,51 @@ class PlaceModel {
   // ======================================
   // 4. SEARCH PLACES
   // ======================================
-  static async search(location, date, facilities) {
-    let query = `
-            SELECT DISTINCT p.*
-            FROM tempat_pemancingan p
-        `;
-
+static async search(location, price, facilities) {
+    let query = `SELECT DISTINCT p.* FROM tempat_pemancingan p`;
     let conditions = [];
     let params = [];
 
-    // Filter lokasi / keyword
+    // 1. Lokasi
     if (location && location !== "Semua Lokasi") {
       const searchTerm = `%${location}%`;
-      conditions.push(`
-                (p.title LIKE ? 
-                OR p.location LIKE ? 
-                OR p.description LIKE ? 
-                OR p.full_description LIKE ?)`);
-      params.push(searchTerm, searchTerm, searchTerm, searchTerm);
+      conditions.push(`(p.title LIKE ? OR p.location LIKE ? OR p.description LIKE ?)`);
+      params.push(searchTerm, searchTerm, searchTerm);
     }
 
-    // Filter fasilitas (Search string)
+    // 2. Harga (DIPERBAIKI)
+    if (price) {
+      const targetPrice = parseInt(price);
+      
+      // Pastikan angka valid dan bukan 0 atau NaN
+      if (!isNaN(targetPrice) && targetPrice > 0) {
+          const minPrice = targetPrice - 10000;
+          const maxPrice = targetPrice + 10000;
+          
+          // Debugging: Cek apakah masuk sini
+          // console.log(`Searching price between ${minPrice} and ${maxPrice}`);
+
+          conditions.push(`p.base_price BETWEEN ? AND ?`);
+          params.push(minPrice, maxPrice);
+      }
+    }
+
+    // 3. Fasilitas
     if (facilities) {
-      query += `
-                JOIN tempat_fasilitas tf ON p.id_tempat = tf.id_tempat
-                JOIN fasilitas f ON tf.id_fasilitas = f.id_fasilitas
-            `;
+      query += ` JOIN tempat_fasilitas tf ON p.id_tempat = tf.id_tempat 
+                 JOIN fasilitas f ON tf.id_fasilitas = f.id_fasilitas `;
       conditions.push(`f.nama_fasilitas LIKE ?`);
       params.push(`%${facilities}%`);
     }
 
-    // Build WHERE
+    // Gabung WHERE
     if (conditions.length > 0) {
       query += " WHERE " + conditions.join(" AND ");
     }
 
-    // Sort
     query += " ORDER BY p.average_rating DESC";
 
+    // ... execute query ...
     const [places] = await db.query(query, params);
     if (places.length === 0) return [];
 

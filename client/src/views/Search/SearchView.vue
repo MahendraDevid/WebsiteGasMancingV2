@@ -24,7 +24,7 @@ const getImageUrl = (filename) => {
 
 // --- SEARCH BAR STATE ---
 const searchKeyword = ref(route.query.location || '')
-const searchDate = ref(route.query.date || '')
+const searchPrice = ref(route.query.price || '')
 const searchFacilities = ref(route.query.facilities || '')
 
 const searchResults = ref([])
@@ -38,7 +38,7 @@ const handleSearch = () => {
   router.push({
     query: {
       location: searchKeyword.value.trim() || undefined,
-      date: searchDate.value.trim() || undefined,
+      price: searchPrice.value.trim() || undefined,
       facilities: searchFacilities.value.trim() || undefined,
     },
   })
@@ -72,7 +72,7 @@ watch(
   () => route.query,
   (query) => {
     searchKeyword.value = query.location || ''
-    searchDate.value = query.date || ''
+    searchPrice.value = query.price || ''
     searchFacilities.value = query.facilities || ''
     fetchResults(query)
   },
@@ -126,19 +126,18 @@ const handleBooking = (id) => {
         </div>
 
         <div class="search-field-custom">
-          <img src="/img/calendar.png" class="search-icon" alt="Tanggal" />
+          <img src="/img/calendar.png" class="search-icon" alt="Harga" />
           <input
             class="search-input-custom"
-            :type="searchDate ? 'date' : 'text'"
-            placeholder="Tanggal Mancing"
-            v-model="searchDate"
-            @focus="$event.target.type = 'date'"
-            @blur="$event.target.type = 'text'"
+            type="text"
+            v-model="searchPrice"
+            placeholder="Cari Harga (Rp.)"
+            @keyup.enter="handleSearch"
           />
         </div>
 
         <div class="search-field-custom">
-          <img src="/img/fasilitas.png" class="search-icon" alt="Fasilitas" />
+          <img src="/img/IconMoney.png" class="search-icon" alt="Fasilitas" />
           <input
             type="text"
             class="search-input-custom"

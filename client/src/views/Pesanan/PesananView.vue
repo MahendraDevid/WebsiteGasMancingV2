@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import api from '@/services/api';
 import { useAuthStore } from '@/stores/authStore';
@@ -15,6 +15,15 @@ const errorMessage = ref(null);
 const cancelMessage = ref('');
 const showCancelModal = ref(false);
 const orderToCancel = ref(null);
+
+// Auto-hide message after 5 seconds
+watch(cancelMessage, (newVal) => {
+  if (newVal) {
+    setTimeout(() => {
+      cancelMessage.value = '';
+    }, 5000); // Hide after 5 seconds
+  }
+});
 
 // Format tanggal
 const formatDate = (dateString) => {
@@ -176,7 +185,7 @@ function goToLogin() {
     <div v-if="showCancelModal" class="custom-modal-backdrop">
       <div class="custom-modal">
         <h3 class="modal-title">Konfirmasi Pembatalan</h3>
-        <p>Apakah Anda yakin ingin membatalkan pesanan <strong>{{ orderToCancel?.nomorPesanan }}</strong>?</p>
+        <p>Apakah Anda yakin ingin membatalkan pesanan <br /><strong>{{ orderToCancel?.nomorPesanan }}</strong>?</p>
         <div class="modal-actions">
           <button class="button-detail" @click="confirmCancel">Ya, Batalkan</button>
           <button class="button-cancel red-style" @click="closeCancelModal">Tidak, Kembali</button>
@@ -191,7 +200,7 @@ function goToLogin() {
     </div>
 
     <!-- Order List Content -->
-    <div v-else-if="!isLoading && authStore.isAuthenticated" class="tab-content">
+    <div v-if="!isLoading && authStore.isAuthenticated" class="tab-content">
       <section class="order-list">
 
         <!-- No Orders Message -->
@@ -220,15 +229,6 @@ function goToLogin() {
             <p class="order-number">No. Pesanan: <strong>{{ order.nomorPesanan }}</strong></p>
 
             <h3 class="card-title">{{ order.title }}</h3>
-
-            <!-- Rating -->
-            <div class="card-rating">
-              <div class="rating-box">
-                <span class="star">⭐</span>
-                <span class="rating-value">{{ Number(order.rating).toFixed(1) }}</span>
-                <span class="review-count">({{ order.reviewCount }})</span>
-              </div>
-            </div>
 
             <!-- Location -->
             <div class="card-location">
@@ -272,20 +272,11 @@ function goToLogin() {
                 </svg>
                 <span>{{ order.numPeople }} Orang</span>
               </div>
-
-              <div class="info-item equipment">
-                <svg class="info-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
-                  fill="none" stroke="currentColor" stroke-width="2">
-                  <path
-                    d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-                </svg>
-                <span>{{ order.rentedEquipment }}</span>
-              </div>
             </div>
 
             <!-- Total -->
             <div class="total-price">
-              <strong>Total: Rp {{ order.totalBiaya.toLocaleString('id-ID') }}</strong>
+              <span>Total: Rp {{ order.totalBiaya.toLocaleString('id-ID') }}</span>
             </div>
 
             <!-- Buttons -->
@@ -312,346 +303,4 @@ function goToLogin() {
   </main>
 </template>
 
-<style scoped>
-.pesanan-page-wrapper {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: 'Inter', -apple-system, sans-serif;
-}
-
-.pesanan-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #0d47a1;
-  margin-bottom: 30px;
-  text-align: center;
-}
-
-.order-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.order-card {
-  display: flex;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.order-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.card-image-section {
-  width: 250px;
-  min-width: 250px;
-  overflow: hidden;
-}
-
-.card-image-section img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.card-content-section {
-  flex: 1;
-  padding: 20px;
-  position: relative;
-}
-
-.card-status-badge {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: white;
-  text-transform: uppercase;
-}
-
-.card-status-badge.lunas {
-  background-color: #4caf50;
-}
-
-.card-status-badge.menunggu {
-  background-color: #ff9800;
-}
-
-.card-status-badge.dibatalkan {
-  background-color: #f44336;
-}
-
-.order-number {
-  font-size: 0.85rem;
-  color: #666;
-  margin-bottom: 8px;
-}
-
-.card-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0 0 10px 0;
-  color: #212121;
-  padding-right: 120px;
-}
-
-.card-rating {
-  margin-bottom: 10px;
-}
-
-.rating-box {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.star {
-  font-size: 16px;
-}
-
-.rating-value {
-  font-weight: 600;
-  color: #424242;
-}
-
-.review-count {
-  color: #757575;
-  font-size: 0.9rem;
-}
-
-.card-location {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: #616161;
-  margin-bottom: 15px;
-  font-size: 0.9rem;
-}
-
-.location-icon-card {
-  color: #1976d2;
-}
-
-.card-info-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 15px;
-}
-
-.info-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.85rem;
-  color: #424242;
-}
-
-.info-item.equipment {
-  grid-column: span 3;
-}
-
-.info-icon {
-  color: #1976d2;
-  flex-shrink: 0;
-}
-
-.total-price {
-  font-size: 1.1rem;
-  color: #1976d2;
-  margin-bottom: 15px;
-}
-
-.card-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.buttons-row {
-  display: flex;
-  gap: 10px;
-}
-
-.card-buttons button {
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 0.9rem;
-}
-
-.button-detail {
-  flex: 1;
-  background-color: #1976d2;
-  color: white;
-}
-
-.button-detail:hover {
-  background-color: #1565c0;
-}
-
-.button-cancel {
-  background-color: #e0e0e0;
-  color: #333;
-}
-
-.button-cancel.red-style {
-  background-color: #ef5350;
-  color: white;
-}
-
-.button-cancel.red-style:hover:not(:disabled) {
-  background-color: #d32f2f;
-}
-
-.button-cancel:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.button-review {
-  background-color: #66bb6a;
-  color: white;
-}
-
-.button-review:hover {
-  background-color: #43a047;
-}
-
-/* Loading & Messages */
-.loading-message,
-.no-orders-message,
-.error-message {
-  text-align: center;
-  padding: 60px 20px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.spinner {
-  border: 4px solid rgba(25, 118, 210, 0.1);
-  border-top: 4px solid #1976d2;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 15px;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Modal */
-.custom-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.custom-modal {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-}
-
-.modal-title {
-  color: #1976d2;
-  margin: 0 0 15px 0;
-  font-size: 1.5rem;
-}
-
-.modal-actions {
-  margin-top: 25px;
-  display: flex;
-  gap: 10px;
-}
-
-.message-box {
-  padding: 15px 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.message-box.success {
-  background: #e8f5e9;
-  color: #2e7d32;
-  border: 1px solid #a5d6a7;
-}
-
-.message-box.error {
-  background: #ffebee;
-  color: #c62828;
-  border: 1px solid #ef9a9a;
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  color: inherit;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0 5px;
-}
-
-.mt-4 {
-  margin-top: 20px;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .pesanan-title {
-    font-size: 2rem;
-  }
-
-  .order-card {
-    flex-direction: column;
-  }
-
-  .card-image-section {
-    width: 100%;
-    height: 200px;
-  }
-
-  .card-title {
-    padding-right: 100px;
-  }
-
-  .card-info-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .info-item.equipment {
-    grid-column: span 2;
-  }
-
-  .buttons-row {
-    flex-direction: column;
-  }
-}
-</style>
+<style src="./PesananView.style.css" scoped></style>

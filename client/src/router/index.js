@@ -110,8 +110,6 @@ const router = createRouter({
       props: true,
       meta: { requiresAuth: true },
     },
-
-    // Mitra Routes
     {
       path: '/mitra',
       name: 'mitra-landing',

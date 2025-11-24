@@ -3,7 +3,6 @@ import { ref, onMounted } from 'vue' // Tambah onMounted
 import { useRoute } from 'vue-router'
 import api from '@/services/api' // Pastikan import API ada
 
-import Navbar from '@/components/NavBar.vue'
 import PaymentBox from '@/components/PaymentBox.vue'
 import FooterPayment from '@/components/FooterPayment.vue'
 import './PaymentConfirmationView.style.css'

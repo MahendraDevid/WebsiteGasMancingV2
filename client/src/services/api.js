@@ -224,30 +224,34 @@ getProfile() {
   deleteMitra(id) {
     return apiClient.delete(`/mitra/${id}`)
   },
-  // // ============ Pesanan API (BARU) ============
-  // /**
-  //  * Mengambil semua pesanan pengguna yang sedang login.
-  //  * Endpoint: GET /api/pesanan/my-orders
-  //  */
-  // getAllPesananByUserId() {
-  //   // ID pengguna harusnya diambil dari token di interceptor, jadi endpoint ini
-  //   // tidak memerlukan ID sebagai argumen.
-  //   return apiClient.get('/pesanan/my-orders')
-  // },
+  // ============ Pesanan API (BARU) ============
+  /**
+   * Mengambil semua pesanan pengguna yang sedang login.
+   * Endpoint: GET /api/pesanan/my-orders
+   */
+  getAllPesananByUserId() {
+    // ID pengguna harusnya diambil dari token di interceptor, jadi endpoint ini
+    // tidak memerlukan ID sebagai argumen.
+    return apiClient.get('/pesanan/my-orders')
+  },
 
-  // /**
-  //  * Membatalkan pesanan.
-  //  * Endpoint: POST /api/pesanan/cancel/:id
-  //  */
-  // cancelPesanan(id) {
-  //   return apiClient.post(`/pesanan/cancel/${id}`)
-  // },
+  getPesananById(id) {
+    return apiClient.get(`/pesanan/${id}`)
+  },
 
-  // /**
-  //  * Membuat pesanan baru (biasanya dipanggil dari halaman Booking/Payment)
-  //  * Endpoint: POST /api/pesanan/create
-  //  */
-  // createPesanan(data) {
-  //   return apiClient.post('/pesanan/create', data)
-  // },
+  /**
+   * Membatalkan pesanan.
+   * Endpoint: POST /api/pesanan/cancel/:id
+   */
+  cancelPesanan(id) {
+    return apiClient.post(`/pesanan/cancel/${id}`)
+  },
+
+  /**
+   * Membuat pesanan baru (biasanya dipanggil dari halaman Booking/Payment)
+   * Endpoint: POST /api/pesanan/create
+   */
+  createPesanan(data) {
+    return apiClient.post('/pesanan/create', data)
+  },
 }

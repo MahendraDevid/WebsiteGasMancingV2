@@ -1,5 +1,8 @@
 <template>
   <div id="app-wrapper">
+    <div class="nav-filler">
+      <!-- To make space for fixed navbar -->
+    </div>
 
     <!-- NAVBAR -->
     <Navbar :is-logged-in="isLoggedIn" @open-modal="openModal" @logout="handleLogout"
@@ -120,6 +123,9 @@ const handleAuthSuccess = () => {
 
 .main-content {
   flex-grow: 1;
-  padding-top: 75px;
+}
+.nav-filler {
+  background-color: var(--bay-of-many);
+  height: 75px;
 }
 </style>

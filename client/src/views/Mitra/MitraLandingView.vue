@@ -1,27 +1,44 @@
 <script setup>
 import { useRouter } from 'vue-router';
-import { ref, onMounted } from 'vue';
+import { onMounted, computed } from 'vue';
+import { useAuthStore } from '@/stores/authStore'; // 1. Import Store
 import './MitraLanding.style.css';
 
 const router = useRouter();
-const currentUser = ref(null);
+const authStore = useAuthStore();
+
+// 2. Gunakan Data dari Store (Lebih Aman & Reaktif)
+const currentUser = computed(() => authStore.user);
+const isMitra = computed(() => authStore.isMitra);
+const isAuthenticated = computed(() => authStore.isAuthenticated);
 
 onMounted(() => {
-  const userString = localStorage.getItem('user');
-  if (userString) {
-    currentUser.value = JSON.parse(userString);
-  }
+  authStore.loadUserFromStorage();
 });
 
 function handleDaftarClick() {
-  if (currentUser.value && currentUser.value.tipe_user === 'mitra') {
+  // KONDISI A: Jika sudah login sebagai Mitra -> Masuk Dashboard
+  if (isMitra.value) {
       router.push({ name: 'mitra-property' });
       return;
   }
-  if (currentUser.value && currentUser.value.tipe_user !== 'mitra') {
-    alert("Anda sedang login sebagai Customer. Mohon logout terlebih dahulu.");
+
+  // KONDISI B: Jika login sebagai Customer -> Tawarkan Ganti Akun
+  if (isAuthenticated.value && !isMitra.value) {
+    const confirmSwitch = confirm(
+        `Halo ${currentUser.value?.nama_lengkap || 'Pelanggan'}.\n` +
+        "Anda sedang login sebagai Pelanggan.\n\n" +
+        "Ingin KELUAR sekarang untuk mendaftar/masuk sebagai Mitra?"
+    );
+
+    if (confirmSwitch) {
+        authStore.logout(); // Logout Customer
+        window.location.reload(); // Reload halaman agar tombol "Masuk" di Navbar muncul lagi
+    }
     return;
   }
+
+  // KONDISI C: Belum Login -> Lanjut ke Form Pendaftaran
   router.push({ name: 'mitra-register' });
 }
 </script>
@@ -52,11 +69,11 @@ function handleDaftarClick() {
        </div>
 
        <button class="mitra-cta-button" @click="handleDaftarClick">
-         Mulai Daftarkan Properti
+         {{ isMitra ? 'Buka Dashboard Mitra' : 'Mulai Daftarkan Properti' }}
        </button>
 
-       <div v-if="currentUser && currentUser.tipe_user !== 'mitra'" class="alert-box">
-          <p>Halo <b>{{ currentUser.nama_lengkap }}</b>. Logout dulu untuk akses Mitra.</p>
+       <div v-if="isAuthenticated && !isMitra" class="alert-box" @click="handleDaftarClick" style="cursor: pointer;">
+          <p>Halo <b>{{ currentUser?.nama_lengkap }}</b>. Bukan akun Mitra? <u>Klik di sini untuk Ganti Akun</u>.</p>
        </div>
 
     </div>

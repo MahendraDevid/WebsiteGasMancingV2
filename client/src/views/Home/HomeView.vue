@@ -50,15 +50,18 @@ const loadTipsList = async () => {
   loadingTips.value = true
   try {
     const response = await api.getAllEnsiklopedia()
-    // Sesuaikan pengecekan response dengan format backend kamu
-    const data = response.data.data || response.data; // Handle variasi format response
+    const data = response.data.data || response.data;
 
     if (Array.isArray(data)) {
       tipsList.value = data.slice(0, 5)
 
-      // Tunggu Vue selesai render kartu ke layar, baru jalankan carousel logic
+      // ✅ PENTING: Tunggu Vue selesai render BARU scroll ke tengah
       await nextTick()
-      initializeCarousel()
+
+      // ✅ Tambahkan delay kecil untuk memastikan layout selesai
+      setTimeout(() => {
+        initializeCarousel()
+      }, 100)
     }
   } catch (error) {
     console.error('Error saat memuat tips:', error)

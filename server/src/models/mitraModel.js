@@ -17,7 +17,7 @@ class MitraModel {
         const values = [
             data.nama_lengkap,
             data.email,
-            data.password_hash, 
+            data.password_hash,
             data.no_telepon,
             data.alamat,
             data.nama_bank,
@@ -83,6 +83,50 @@ class MitraModel {
         const query = `DELETE FROM mitra WHERE id_mitra = ?`;
         const [result] = await db.query(query, [id]);
         return result.affectedRows > 0;
+    }
+
+    // models/mitraModel.js (tambahkan di akhir file, setelah static async delete(id) { ... })
+
+    /**
+     * Mengambil pesanan berdasarkan ID mitra (JOIN dengan tempat_pemancingan dan pengguna)
+     */
+    static async getPropertyBookings(mitraId) {
+        const query = `
+        SELECT 
+            p.id_pesanan,
+            tp.title AS nama_tempat,
+            pg.nama_lengkap AS nama_pemesan,
+            pg.no_telepon AS kontak_pemesan,
+            p.tgl_pesan,
+            p.total_biaya,
+            p.status_pesanan,
+            tp.image_url AS place_image
+        FROM pemesanan p
+        JOIN tempat_pemancingan tp ON p.id_tempat = tp.id_tempat
+        JOIN pengguna pg ON p.id_pengguna = pg.id_pengguna
+        WHERE tp.id_mitra = ?
+        ORDER BY p.tgl_pesan DESC
+    `;
+        const [rows] = await db.query(query, [mitraId]);
+        return rows; // Mengembalikan array hasil query
+    }
+
+    /**
+     * Mengupdate status pesanan berdasarkan ID pesanan
+     */
+    static async updatePropertyBookingStatus(id, status) {
+        const query = `UPDATE pemesanan SET status_pesanan = ? WHERE id_pesanan = ?`;
+        const [result] = await db.query(query, [status, id]);
+        return result.affectedRows > 0; // Mengembalikan true jika berhasil
+    }
+
+    /**
+     * Menghapus pesanan berdasarkan ID pesanan
+     */
+    static async deletePropertyBooking(id) {
+        const query = `DELETE FROM pemesanan WHERE id_pesanan = ?`;
+        const [result] = await db.query(query, [id]);
+        return result.affectedRows > 0; // Mengembalikan true jika berhasil
     }
 }
 

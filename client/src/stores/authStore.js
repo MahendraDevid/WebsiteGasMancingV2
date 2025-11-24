@@ -16,12 +16,16 @@ export const useAuthStore = defineStore('auth', () => {
   // ==========================================
   const isAuthenticated = computed(() => !!token.value)
   const currentUser = computed(() => user.value)
-  
+
   // Cek Admin
   const isAdmin = computed(() => user.value?.tipe_user === 'admin')
-  
-  // Cek Mitra (Asumsi backend mengirim field 'role' atau 'tipe_user' = 'mitra')
-  const isMitra = computed(() => user.value?.tipe_user === 'mitra' || user.value?.role === 'mitra')
+
+  // Cek Mitra (Update: Pastikan cek id_mitra juga untuk validasi tambahan)
+  const isMitra = computed(() => {
+    return (
+      user.value?.tipe_user === 'mitra' || user.value?.role === 'mitra' || !!user.value?.id_mitra
+    )
+  })
 
   // ==========================================
   // ACTIONS: USER BIASA
@@ -38,7 +42,7 @@ export const useAuthStore = defineStore('auth', () => {
         const userRes = response.data.data.user || response.data.data.mitra
 
         if (userRes && !userRes.tipe_user) {
-          userRes.tipe_user = 'mitra'
+          userRes.tipe_user = 'mitra' // Fallback jika backend tidak kirim
         }
 
         // Set State
@@ -89,9 +93,9 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   // ==========================================
-  // ACTIONS: MITRA (BARU)
+  // ACTIONS: MITRA (UPDATE: Pastikan id_mitra tersimpan dengan benar)
   // ==========================================
-  
+
   // 1. Register Mitra
   const registerMitra = async (mitraData) => {
     try {
@@ -101,9 +105,14 @@ export const useAuthStore = defineStore('auth', () => {
       const response = await api.createMitra(mitraData)
 
       if (response.data.success) {
-        // === UPDATE BAGIAN INI UNTUK MENYAMBUNGKAN AUTH ===
+        // === UPDATE: Pastikan token dan user (termasuk id_mitra) tersimpan ===
         const tokenRes = response.data.data.token
         const userRes = response.data.data.mitra
+
+        // Tambah tipe_user jika belum ada
+        if (userRes && !userRes.tipe_user) {
+          userRes.tipe_user = 'mitra'
+        }
 
         // Simpan ke State Pinia
         token.value = tokenRes
@@ -132,7 +141,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  // 2. Login Mitra
+  // 2. Login Mitra (UPDATE: Pastikan id_mitra tersimpan dan validasi)
   const loginMitra = async (credentials) => {
     try {
       loading.value = true
@@ -143,11 +152,17 @@ export const useAuthStore = defineStore('auth', () => {
 
       if (response.data.success) {
         const tokenRes = response.data.data.token
-        const userRes = response.data.data.mitra // Biasanya backend return object 'mitra' bukan 'user'
+        const userRes = response.data.data.mitra // Backend kirim object 'mitra' dengan id_mitra
 
-        // Kita tambahkan flag tipe_user manual jika backend tidak mengirimnya
-        if (userRes && !userRes.tipe_user) {
-            userRes.tipe_user = 'mitra'; 
+        // Tambah tipe_user jika belum ada, dan pastikan id_mitra ada
+        if (userRes) {
+          if (!userRes.tipe_user) {
+            userRes.tipe_user = 'mitra'
+          }
+          // Validasi: Jika tidak ada id_mitra, log warning (opsional)
+          if (!userRes.id_mitra) {
+            console.warn('Warning: id_mitra tidak ditemukan di response login mitra')
+          }
         }
 
         token.value = tokenRes
@@ -177,9 +192,10 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
     // Opsional: Redirect ke halaman home
-    // window.location.href = '/' 
+    // window.location.href = '/'
   }
 
+  // UPDATE: Tambah validasi saat load dari localStorage untuk memastikan id_mitra tersimpan
   const loadUserFromStorage = () => {
     const storedToken = localStorage.getItem('token')
     const storedUser = localStorage.getItem('user')
@@ -187,8 +203,16 @@ export const useAuthStore = defineStore('auth', () => {
     if (storedToken) token.value = storedToken
 
     try {
-      if (storedUser && storedUser !== 'undefined') {
-        user.value = JSON.parse(storedUser)
+      if (storedUser && storedUser !== '') {
+        const parsedUser = JSON.parse(storedUser)
+        user.value = parsedUser
+
+        // Validasi tambahan: Jika user adalah mitra tapi id_mitra hilang, log warning
+        if (isMitra.value && !parsedUser.id_mitra) {
+          console.warn(
+            'Warning: id_mitra hilang saat load dari localStorage. Mungkin perlu login ulang.',
+          )
+        }
       }
     } catch (e) {
       console.warn('User JSON invalid, clearing localStorage')
@@ -198,17 +222,17 @@ export const useAuthStore = defineStore('auth', () => {
 
   const fetchProfile = async () => {
     try {
-      // Logic untuk mengambil profile. 
+      // Logic untuk mengambil profile.
       // Jika endpoint user dan mitra beda, kita bisa cek tipe user dulu
       if (isMitra.value) {
-         // const response = await api.getMitraProfile() // Jika ada endpoint khusus
-         // user.value = response.data.data
+        // const response = await api.getMitraProfile() // Jika ada endpoint khusus
+        // user.value = response.data.data
       } else {
-         const response = await api.getProfile()
-         if (response.data.success) {
-            user.value = response.data.data
-            localStorage.setItem('user', JSON.stringify(response.data.data))
-         }
+        const response = await api.getProfile()
+        if (response.data.success) {
+          user.value = response.data.data
+          localStorage.setItem('user', JSON.stringify(response.data.data))
+        }
       }
     } catch (err) {
       console.error('Failed to fetch profile:', err)
@@ -219,7 +243,7 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       loading.value = true
       error.value = null
-      
+
       // Bisa ditambahkan logika if(isMitra) jika endpoint update beda
       const response = await api.updateProfile(profileData)
 
@@ -229,7 +253,7 @@ export const useAuthStore = defineStore('auth', () => {
           ...profileData,
         }
 
-        delete updatedUser.password 
+        delete updatedUser.password
         delete updatedUser.password_hash
 
         user.value = updatedUser

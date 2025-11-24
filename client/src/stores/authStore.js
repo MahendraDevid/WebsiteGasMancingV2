@@ -35,7 +35,11 @@ export const useAuthStore = defineStore('auth', () => {
 
       if (response.data.success) {
         const tokenRes = response.data.data.token
-        const userRes = response.data.data.user
+        const userRes = response.data.data.user || response.data.data.mitra
+
+        if (userRes && !userRes.tipe_user) {
+          userRes.tipe_user = 'mitra'
+        }
 
         // Set State
         token.value = tokenRes

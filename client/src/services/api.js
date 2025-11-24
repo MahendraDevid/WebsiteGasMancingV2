@@ -3,14 +3,13 @@ import axios from 'axios'
 const apiClient = axios.create({
   baseURL: 'http://localhost:3000/api',
   headers: {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json', // Default global adalah JSON
   },
 })
 
+// Request Interceptor (Auth Token)
 apiClient.interceptors.request.use(
   (config) => {
-    // NOTE: Implementasi ini menggunakan localStorage, pastikan Anda menggunakan
-    // sistem otentikasi yang sama di aplikasi Anda (e.g. Firebase Auth)
     const token = localStorage.getItem('token')
     if (token) config.headers.Authorization = `Bearer ${token}`
     return config
@@ -18,17 +17,15 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error),
 )
 
-// Response interceptor for handling errors
+// Response Interceptor (Error Handling)
 apiClient.interceptors.response.use(
   (response) => {
     return response
   },
   (error) => {
     if (error.response) {
-      // Server responded with error
       console.error('API Error:', error.response.data)
     } else if (error.request) {
-      // Request made but no response
       console.error('Network Error:', error.request)
     } else {
       console.error('Error:', error.message)
@@ -39,179 +36,129 @@ apiClient.interceptors.response.use(
 
 export default {
   // ============ Places API ============
-
-  // Get all places
   getAllPlaces() {
     return apiClient.get('/places')
-  }, // Get place by ID
-
+  },
   getPlaceById(id) {
     return apiClient.get(`/places/${id}`)
-  }, // Search places by keyword
-
+  },
   getEquipmentListByPlace(placeId) {
-    // Asumsi endpoint di backend adalah /item_sewa/place/{id_tempat}
     return apiClient.get(`/item_sewa/place/${placeId}`)
   },
-
   searchPlaces(params) {
-    // ✅ Terima objek params
     return apiClient.get('/places/search', { params: params })
-  }, // Create new place (admin only)
-
+  },
   createPlace(data) {
     return apiClient.post('/places', data)
   },
 
   // ============ Ensiklopedia API ============
-
-  /**
-   * Mengambil semua artikel Ensiklopedia.
-   * Endpoint: GET /api/ensiklopedia
-   */
   getAllEnsiklopedia() {
     return apiClient.get('/ensiklopedia')
   },
-
-  /**
-   * Mengambil detail satu artikel Ensiklopedia.
-   * Endpoint: GET /api/ensiklopedia/:id
-   */
   getEnsiklopediaById(id) {
     return apiClient.get(`/ensiklopedia/${id}`)
   },
 
-  // ============ Booking API (Sudah ada, tapi kita fokus ke Pesanan) ============
+  // ============ Booking API ============
   getAllBookings() {
     return apiClient.get('/booking')
   },
   getBookingById(id) {
     return apiClient.get(`/booking/${id}`)
-  }, // ============ Booking API ============
-  // Create new booking
-
+  },
   createBooking(data) {
     return apiClient.post('/booking/create', data)
   },
-
-  // Get booking by ID
   getUserBookings(userId) {
     return apiClient.get(`/booking/user/${userId}`)
   },
-
-  // Update booking status
   updateBookingStatus(id, status) {
     return apiClient.put(`/booking/${id}/status`, { status })
-  }, // Delete booking
-
+  },
   deleteBooking(id) {
     return apiClient.delete(`/booking/${id}`)
   },
 
   // ============ Review API ============
-
-  /* Ambil review berdasarkan ID Tempat, Endpoint: GET /api/review/place/:placeId*/
   getReviewByPlace(placeId) {
     return apiClient.get(`/review/place/${placeId}`)
   },
-
-  /*Ambil history review user, Endpoint: GET /api/review/user/:userId*/
   getReviewByUser(userId) {
     return apiClient.get(`/review/user/${userId}`)
   },
-
-  /*Buat review baru, Data: { id_tempat, id_pengguna, score, comment }, Endpoint: POST /api/review*/
   createReview(data) {
     return apiClient.post('/review', data)
   },
-
-  /*Hapus review, Endpoint: DELETE /api/review/:id, Note: Kita kirim placeId di body agar backend bisa update rating tempat*/
   deleteReview(id, placeId = null) {
     return apiClient.delete(`/review/${id}`, {
-      data: { placeId }, // Axios delete butuh properti 'data' untuk kirim body
+      data: { placeId },
     })
   },
 
   // ============ Payment API ============
-  // 1. Create Payment
   createPayment(data) {
-    // Backend Route: router.post('/payment/create', ...)
     return apiClient.post('/payment', data)
   },
-
-  // 2. Get Payment by Booking ID
   getPaymentByBookingId(bookingId) {
-    // Backend Route: router.get('/payment/booking/:bookingId', ...)
     return apiClient.get(`/payment/booking/${bookingId}`)
   },
-
-  // 3. Update Payment Status (Admin/Manual)
   updatePaymentStatus(idPesanan, status) {
-    // Backend Route: router.put('/payment/update-status/:id_pesanan', ...)
-    // Perhatikan method PUT dan URL update-status
     return apiClient.put(`/payment/${idPesanan}/status`, {
       status_pembayaran: status
     })
   },
-
-  // 4. Simulasi Webhook
   simulatePaymentWebhook(data) {
-    // Backend Route: router.post('/payment/webhook-simulation', ...)
     return apiClient.post('/payment/webhook/simulate', data)
   },
-
-  // ============ Payment Confirmation API ============
   getPaymentConfirmation(nomorPesanan) {
-    // Backend Route: router.get('/paymentConfirmation/:nomorPesanan', ...)
     return apiClient.get(`/paymentConfirmation/${nomorPesanan}`)
   },
 
   // ============ Users API ============
-  // Get all users
-
   getAllUsers() {
     return apiClient.get('/users')
-  }, // Get user by ID
-
+  },
   getUserById(id) {
     return apiClient.get(`/users/${id}`)
-  }, // Create new user
-
+  },
   createUser(data) {
     return apiClient.post('/users', data)
-  }, // Update user
-
+  },
   updateUser(id, data) {
     return apiClient.put(`/users/${id}`, data)
-  }, // Delete user
-
+  },
   deleteUser(id) {
     return apiClient.delete(`/users/${id}`)
   },
 
   // ============ Auth API ============
-register(data) {
-  return apiClient.post('/auth/register', data)
-},
-
-login(data) {
-  return apiClient.post('/auth/login', data)
-},
-
-getProfile() {
-  return apiClient.get('/auth/me')
-},
-
-// ============ Mitra API ============
-  createMitra(data) {
-    return apiClient.post('/mitra/register', data)
+  register(data) {
+    return apiClient.post('/auth/register', data)
+  },
+  login(data) {
+    return apiClient.post('/auth/login', data)
+  },
+  getProfile() {
+    return apiClient.get('/auth/me')
   },
 
-  // --- TAMBAHKAN INI (Wajib untuk Login Mitra) ---
+  // ============ Mitra API (BAGIAN UTAMA YANG DIUBAH) ============
+
+  createMitra(data) {
+    // PENTING: Kita override header menjadi 'multipart/form-data'
+    // agar backend bisa menerima File Gambar + Data Teks.
+    return apiClient.post('/mitra/register', data, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+  },
+
   loginMitra(data) {
+    // Login tetap pakai JSON biasa, tidak perlu override header
     return apiClient.post('/mitra/login', data)
   },
-  // -----------------------------------------------
 
   getMitraById(id) {
     return apiClient.get(`/mitra/${id}`)
@@ -263,19 +210,14 @@ getProfile() {
   //   return apiClient.get('/pesanan/my-orders')
   // },
 
-  // /**
-  //  * Membatalkan pesanan.
-  //  * Endpoint: POST /api/pesanan/cancel/:id
-  //  */
-  // cancelPesanan(id) {
-  //   return apiClient.post(`/pesanan/cancel/${id}`)
-  // },
-
-  // /**
-  //  * Membuat pesanan baru (biasanya dipanggil dari halaman Booking/Payment)
-  //  * Endpoint: POST /api/pesanan/create
-  //  */
-  // createPesanan(data) {
-  //   return apiClient.post('/pesanan/create', data)
-  // },
+  // ============ Pesanan API ============
+  getAllPesananByUserId() {
+    return apiClient.get('/pesanan/my-orders')
+  },
+  cancelPesanan(id) {
+    return apiClient.post(`/pesanan/cancel/${id}`)
+  },
+  createPesanan(data) {
+    return apiClient.post('/pesanan/create', data)
+  },
 }

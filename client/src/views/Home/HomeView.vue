@@ -1,9 +1,8 @@
 <script setup>
 import { ref, onMounted, nextTick } from 'vue' // <--- 1. TAMBAHKAN nextTick
 import { useRouter } from 'vue-router'
-import { nextTick } from 'vue'
-// Tambahkan import API Anda
 import api from '@/services/api'
+// Tambahkan import API Anda
 
 const router = useRouter()
 

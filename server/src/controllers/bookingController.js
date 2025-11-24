@@ -38,7 +38,7 @@ exports.getById = async (req, res) => {
 };
 
 // =======================================================
-// GET BOOKINGS BY USER ID
+// GET BOOKINGS BY USER ID (Menggunakan Parameter)
 // =======================================================
 exports.getByUserId = async (req, res) => {
   try {
@@ -56,16 +56,26 @@ exports.getByUserId = async (req, res) => {
 // CREATE NEW BOOKING
 // =======================================================
 exports.create = async (req, res) => {
-  // Pisahkan detail_items dari payload utama
-  const { detail_items, ...bookingData } = req.body;
+  // Pastikan middleware 'authenticateToken' sudah dipanggil sebelumnya
+  const authenticatedUserId = req.userId; // ID pengguna dari token JWT (middleware/auth.js)
 
-  // Gunakan transaksi untuk memastikan semua tersimpan atau tidak sama sekali
-  // (Penting, tapi kita lewati kode transaksi di sini untuk fokus pada logika insert)
+  if (!authenticatedUserId) {
+    // Seharusnya tidak terjadi jika middleware dipasang, tapi untuk safety
+    return res
+      .status(403)
+      .json({
+        success: false,
+        message: "Akses ditolak: User ID tidak ditemukan dari token.",
+      });
+  } // Pisahkan detail_items dari payload utama // Hapus id_pengguna dari payload body untuk mencegah manipulasi
+
+  const { detail_items, id_pengguna: bodyUserId, ...bookingData } = req.body; // 1. Tambahkan/Replace id_pengguna dengan ID dari token yang terautentikasi
+
+  bookingData.id_pengguna = authenticatedUserId;
 
   try {
-    // Validasi data required (Perluas validasi untuk durasi_sewa_jam dan num_people)
+    // Validasi data required (Sekarang id_pengguna pasti ada)
     if (
-      !bookingData.id_pengguna ||
       !bookingData.id_tempat ||
       !bookingData.nomor_pesanan ||
       !bookingData.tgl_mulai_sewa ||
@@ -77,18 +87,15 @@ exports.create = async (req, res) => {
         success: false,
         message: "Data pemesanan tidak lengkap (Field wajib tidak terisi)",
       });
-    }
+    } // 2. SIMPAN PESANAN UTAMA & DAPATKAN ID
 
-    // 1. SIMPAN PESANAN UTAMA & DAPATKAN ID
-    const insertId = await BookingModel.create(bookingData);
+    const insertId = await BookingModel.create(bookingData); // 3. SIMPAN DETAIL ITEM JIKA ADA
 
-    // 2. SIMPAN DETAIL ITEM JIKA ADA
     if (detail_items && detail_items.length > 0) {
       const itemPromises = detail_items.map(async (item) => {
         // --- Cek di sini: Apakah item memiliki properti yang benar? ---
         if (!item.id_item || !item.qty || item.price === undefined) {
           console.error("Payload detail item tidak lengkap:", item);
-          // Anda bisa melempar error di sini jika perlu
           return;
         }
 
@@ -98,28 +105,40 @@ exports.create = async (req, res) => {
           kuantitas: item.qty,
           harga_satuan_saat_pesan: item.price,
           subtotal: item.qty * item.price, // Hitung subtotal
-        };
+        }; // Panggil model untuk menyimpan ke DB
 
-        // Panggil model untuk menyimpan ke DB
         await BookingModel.createDetailItem(itemDetailPayload);
-      });
+      }); // Tunggu semua proses penyimpanan detail selesai
 
-      // Tunggu semua proses penyimpanan detail selesai
       await Promise.all(itemPromises);
       console.log(`Berhasil menyimpan ${detail_items.length} item detail.`);
     } else {
       console.log("Tidak ada item detail untuk disimpan.");
-    }
+    } // 4. KIRIM RESPON SUKSES
 
-    // 3. KIRIM RESPON SUKSES
     res.status(201).json({
       success: true,
       message: "Pemesanan berhasil dibuat dan item detail disimpan",
-      data: { id_pesanan: insertId },
+      data: { id_pesanan: insertId, id_pengguna: authenticatedUserId }, // Kirim ID pengguna yang benar
     });
   } catch (error) {
-    console.error("Error in Booking Controller (create):", error);
-    res.status(500).json({ success: false, error: "Internal Server Error" });
+    console.error("Error in Booking Controller (create):", error); // Jika Foreign Key gagal lagi, kemungkinan id_tempat atau id_item yang salah
+    if (error.code === "ER_NO_REFERENCED_ROW_2") {
+      res.status(409).json({
+        success: false,
+        error: "Foreign Key Constraint Failed",
+        message:
+          "ID Pengguna, ID Tempat, atau ID Item tidak ditemukan di database.",
+      });
+    } else {
+      res
+        .status(500)
+        .json({
+          success: false,
+          error: "Internal Server Error",
+          details: error.message,
+        });
+    }
   }
 };
 
@@ -129,9 +148,8 @@ exports.create = async (req, res) => {
 exports.updateStatus = async (req, res) => {
   try {
     const id = req.params.id;
-    const { status } = req.body;
+    const { status } = req.body; // Validasi status
 
-    // Validasi status
     const validStatuses = [
       "Menunggu Pembayaran",
       "Lunas",

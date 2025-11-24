@@ -278,7 +278,7 @@ function finishRegistration() {
               <div class="sum-item"><strong>Nama:</strong> {{ formData.nama_lengkap }}</div>
               <div class="sum-item"><strong>Email:</strong> {{ formData.email }}</div>
               <div class="sum-item"><strong>Kontak:</strong> {{ formData.no_telepon }}</div>
-              <div class="sum-item"><strong>Password:</strong> {{ formData.password }}</div>
+              <div class="sum-item"><strong>Password:</strong> {{ formData }}</div>
               <div class="sum-item full"><strong>Bank:</strong> {{ formData.nama_bank }} - {{ formData.no_rekening }}</div>
             </div>
           </div>

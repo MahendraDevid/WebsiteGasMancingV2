@@ -98,7 +98,6 @@ onMounted(() => {
             </td>
             <td>
                 <strong class="place-title">{{ p.title }}</strong>
-                <div class="place-hours">🕒 {{ p.jam_buka }} - {{ p.jam_tutup }}</div>
             </td>
             <td>
                 <div class="place-location">{{ p.location }}</div>

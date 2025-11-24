@@ -176,3 +176,5 @@ function handleCopy() {
     nextRoute="/pesanan"
   />
 </template>
+
+<style src="./PaymentConfirmationView.style.css"></style>

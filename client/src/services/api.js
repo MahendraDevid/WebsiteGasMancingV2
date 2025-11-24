@@ -51,6 +51,13 @@ export default {
   createPlace(data) {
     return apiClient.post('/places', data)
   },
+  updatePlace(id, data) {
+    // Endpoint: PUT /api/places/:id
+    return apiClient.put(`/places/${id}`, data);
+  },
+  deletePlace(id) {
+    return apiClient.delete(`/places/${id}`);
+  },
 
   // ============ Ensiklopedia API ============
   getAllEnsiklopedia() {

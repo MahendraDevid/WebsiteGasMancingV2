@@ -127,7 +127,7 @@ const handleBooking = (id) => {
         </div>
 
         <div class="search-field-custom">
-          <img src="/img/calendar.png" class="search-icon" alt="Harga" />
+          <img src="/img/IconMoney.png" class="search-icon" alt="Harga" />
           <input
             class="search-input-custom"
             type="text"
@@ -138,7 +138,7 @@ const handleBooking = (id) => {
         </div>
 
         <div class="search-field-custom">
-          <img src="/img/IconMoney.png" class="search-icon" alt="Fasilitas" />
+          <img src="/img/fasilitas.png" class="search-icon" alt="Fasilitas" />
           <input
             type="text"
             class="search-input-custom"

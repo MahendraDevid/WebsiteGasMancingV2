@@ -290,6 +290,79 @@ static async search(location, price, facilities) {
       reviews: mappedReviews[place.id_tempat] || [],
     }));
   }
+
+  static async update(id, data) {
+    // Siapkan penampung untuk query
+    const fields = [];
+    const values = [];
+
+    // Cek satu per satu field, jika ada di data, tambahkan ke query
+    if (data.title) {
+      fields.push("title = ?");
+      values.push(data.title);
+    }
+    if (data.location) {
+      fields.push("location = ?");
+      values.push(data.location);
+    }
+    if (data.base_price) {
+      fields.push("base_price = ?");
+      values.push(data.base_price);
+    }
+    if (data.price_unit) {
+      fields.push("price_unit = ?");
+      values.push(data.price_unit);
+    }
+    if (data.description) {
+      fields.push("description = ?");
+      values.push(data.description);
+    }
+    if (data.full_description) {
+      fields.push("full_description = ?");
+      values.push(data.full_description);
+    }
+    // (Opsional) Jika ingin update image_url lewat edit
+    if (data.image_url) {
+      fields.push("image_url = ?");
+      values.push(data.image_url);
+    }
+
+    // Jika tidak ada data yang dikirim untuk diupdate
+    if (fields.length === 0) return false;
+
+    // Tambahkan ID ke values untuk WHERE clause
+    values.push(id);
+
+    const query = `UPDATE tempat_pemancingan SET ${fields.join(", ")} WHERE id_tempat = ?`;
+
+    const [result] = await db.query(query, values);
+    
+    // Mengembalikan true jika ada baris yang berubah
+    return result.affectedRows > 0;
+  }
+
+  static async delete(id) {
+    // 1. Hapus dulu Fasilitas yang nyangkut
+    await db.query("DELETE FROM tempat_fasilitas WHERE id_tempat = ?", [id]);
+
+    // 2. Hapus dulu Item Sewa yang nyangkut
+    await db.query("DELETE FROM item_sewa WHERE id_tempat = ?", [id]);
+
+    // 3. Hapus Review yang nyangkut (Opsional, jika ada tabel review)
+    await db.query("DELETE FROM review WHERE id_tempat = ?", [id]);
+
+    // 4. Hapus Pemesanan/Booking (HATI-HATI: Ini akan menghapus history order)
+    // Jika Anda ingin menyimpan history, jangan hapus tempat ini, tapi pakai sistem "Soft Delete" (status=inactive)
+    // Tapi untuk sekarang agar error hilang, kita hapus saja:
+    // await db.query("DELETE FROM pemesanan WHERE id_tempat = ?", [id]); 
+    // (Uncomment baris di atas jika error masih muncul karena ada booking)
+
+    // 5. BARU Hapus Tempat Utamanya
+    const query = `DELETE FROM tempat_pemancingan WHERE id_tempat = ?`;
+    const [result] = await db.query(query, [id]);
+    
+    return result.affectedRows > 0;
+  }
 }
 
 module.exports = PlaceModel;

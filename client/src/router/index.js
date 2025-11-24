@@ -128,7 +128,7 @@ const router = createRouter({
     // CRUD TEMPAT (Kelola Daftar Kolam)
     {
       path: '/mitra/properti-list',
-      name: 'mitra-place-list',  
+      name: 'mitra-place-list',
       component: Properti,
       meta: { requiresMitra: true }
     },

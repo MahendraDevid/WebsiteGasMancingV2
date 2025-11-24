@@ -1,5 +1,7 @@
 /* --- Desktop/Base Styles --- */
-
+body {
+    background-color: var(--bay-of-many);
+}
 /* Style Hero Section */
 .hero-section {
     position: relative;

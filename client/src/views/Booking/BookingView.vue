@@ -1,3 +1,207 @@
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '../../stores/authStore'
+import api from '@/services/api'
+import FooterPayment from '../../components/FooterPayment.vue'
+
+const route = useRoute()
+const router = useRouter()
+const authStore = useAuthStore()
+
+// --- KONFIGURASI URL GAMBAR (Backend) ---
+const API_URL = 'http://localhost:3000/uploads/'
+
+// Helper Gambar
+const getImageUrl = (filename) => {
+  if (!filename || filename === 'default_place.jpg') return '/img/kolam.png' // Default Place
+  if (filename === '/img/placeholder-icon.png') return '/img/placeholder-icon.png' // Default Icon
+
+  if (filename.startsWith('http') || filename.startsWith('/img')) return filename
+
+  return `${API_URL}${filename}`
+}
+
+const spotInfo = ref(null)
+const loading = ref(true)
+const bookingDate = ref('')
+const duration = ref(1)
+const numPeople = ref(1)
+const equipment = ref({})
+const equipmentList = ref([])
+const isSubmitting = ref(false)
+
+// Modal Error State
+const showErrorModal = ref(false)
+const errorMessage = ref('')
+const openErrorModal = (message) => { errorMessage.value = message; showErrorModal.value = true }
+const closeErrorModal = () => { showErrorModal.value = false; errorMessage.value = '' }
+
+const loadSpotData = async () => {
+  loading.value = true;
+  const placeId = route.params.id;
+
+  if (!placeId) {
+    console.error('ID tempat tidak ditemukan.');
+    loading.value = false; return;
+  }
+
+  try {
+    let data = null;
+    const passedPlaceData = history.state.placeData;
+
+    if (passedPlaceData && (passedPlaceData.id == placeId || passedPlaceData.id_tempat == placeId)) {
+      data = passedPlaceData;
+    } else {
+      const response = await api.getPlaceById(placeId);
+      if (response.data.success) data = response.data.data;
+    }
+
+    if (data) {
+      spotInfo.value = {
+        id: data.id || data.id_tempat,
+        title: data.title,
+        location: data.location,
+        image: data.image_url, // Simpan nama file asli dari DB
+        basePrice: data.basePrice || data.base_price,
+      };
+
+      await loadEquipmentList(spotInfo.value.id);
+      initializeEquipmentState();
+    } else {
+      spotInfo.value = null;
+    }
+  } catch (error) {
+    console.error('Error loading spot:', error);
+    spotInfo.value = null;
+  } finally {
+    loading.value = false;
+  }
+};
+
+const loadEquipmentList = async (placeId) => {
+  try {
+    const response = await api.getEquipmentListByPlace(placeId);
+    if (response.data.success) {
+      equipmentList.value = response.data.data.map(item => ({
+        id_item: item.id_item,
+        name: item.nama_item,
+        price: parseFloat(item.price),
+        icon: item.image_url || '/img/placeholder-icon.png', // Nama file atau default
+      }));
+    }
+  } catch (error) {
+    console.error('Error loading equipment:', error);
+    equipmentList.value = [];
+  }
+};
+
+const initializeEquipmentState = () => {
+  const initialState = {}
+  equipmentList.value.forEach((item) => {
+    initialState[item.id_item] = 0
+  })
+  equipment.value = initialState
+}
+
+const handleCheckoutClick = async () => {
+  if (!bookingDate.value) { openErrorModal('Mohon isi Tanggal pemesanan.'); return }
+  if (!duration.value || duration.value < 1) { openErrorModal('Durasi minimal 1 jam.'); return }
+  if (!numPeople.value || numPeople.value < 1) { openErrorModal('Jumlah orang minimal 1.'); return }
+
+  const currentUser = authStore.currentUser;
+  const loggedInUserId = currentUser ? currentUser.id_pengguna : null;
+
+  if (!loggedInUserId) {
+    openErrorModal('Anda harus **login** terlebih dahulu.');
+    router.push({ name: 'login', query: { redirect: route.fullPath } });
+    return;
+  }
+
+  const placeId = spotInfo.value.id
+  const generateOrderNumber = () => 'B-' + Date.now().toString().slice(-6) + Math.floor(Math.random() * 900 + 100)
+
+  const bookingPayload = {
+    id_pengguna: loggedInUserId,
+    id_tempat: placeId,
+    nomor_pesanan: generateOrderNumber(),
+    tgl_mulai_sewa: bookingDate.value,
+    durasi_sewa_jam: duration.value,
+    num_people: numPeople.value,
+    total_biaya: totalPrice.value,
+    detail_items: JSON.parse(selectedEquipmentParams.value),
+  }
+
+  try {
+    isSubmitting.value = true
+    const response = await api.createBooking(bookingPayload)
+
+    if (response.data.success) {
+      router.push({
+        name: 'payment',
+        query: {
+          orderId: response.data.data.id_pesanan,
+          total: totalPriceFormatted.value,
+          equipment: selectedEquipmentParams.value
+        },
+      })
+    } else {
+      openErrorModal(`Gagal membuat pemesanan: ${response.data.message}`)
+    }
+  } catch (error) {
+    console.error('Error submit booking:', error)
+    openErrorModal('Terjadi kesalahan saat memproses pemesanan.')
+  } finally {
+    isSubmitting.value = false
+  }
+}
+
+onMounted(() => {
+  loadSpotData()
+})
+
+const equipmentPrice = computed(() => {
+  let total = 0
+  if (!equipment.value) return 0
+  for (const item of equipmentList.value) {
+    const qty = equipment.value[item.id_item] || 0
+    total += item.price * qty
+  }
+  return total
+})
+
+const totalPrice = computed(() => {
+  if (!spotInfo.value) return 0
+  const safeDuration = Math.max(1, duration.value || 1)
+  const safeNumPeople = Math.max(1, numPeople.value || 1)
+  const ticketTotal = spotInfo.value.basePrice * safeDuration * safeNumPeople
+  return ticketTotal + equipmentPrice.value
+})
+
+const formatCurrency = (value) => {
+  if (typeof value !== 'number') return 'Rp 0'
+  return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value)
+}
+
+const totalPriceFormatted = computed(() => formatCurrency(totalPrice.value))
+
+function increaseQty(id) { if (equipment.value[id] !== undefined) equipment.value[id]++ }
+function decreaseQty(id) { if (equipment.value[id] > 0) equipment.value[id]-- }
+
+const selectedEquipmentParams = computed(() => {
+  if (!equipment.value) return JSON.stringify([])
+  const selected = equipmentList.value
+    .filter((item) => equipment.value[item.id_item] > 0)
+    .map((item) => ({
+      id_item: item.id_item,
+      name: item.name,
+      qty: equipment.value[item.id_item],
+      price: item.price,
+    }))
+  return JSON.stringify(selected)
+})
+</script>
+
 <template>
   <main class="booking-page-wrapper">
     
@@ -106,210 +310,5 @@
     </template>
   </main>
 </template>
-
-<script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import api from '@/services/api'
-import './BookingView.style.css'
-import FooterPayment from '../../components/FooterPayment.vue'
-import { useAuthStore } from '../../stores/authStore'
-
-const route = useRoute()
-const router = useRouter()
-const authStore = useAuthStore()
-
-// --- 🔗 KONFIGURASI URL GAMBAR (Backend) ---
-const API_URL = 'http://localhost:3000/uploads/'
-
-// Helper Gambar
-const getImageUrl = (filename) => {
-  if (!filename || filename === 'default_place.jpg') return '/img/kolam.png' // Default Place
-  if (filename === '/img/placeholder-icon.png') return '/img/placeholder-icon.png' // Default Icon
-  
-  if (filename.startsWith('http') || filename.startsWith('/img')) return filename 
-
-  return `${API_URL}${filename}`
-}
-
-const spotInfo = ref(null)
-const loading = ref(true)
-const bookingDate = ref('')
-const duration = ref(1)
-const numPeople = ref(1)
-const equipment = ref({})
-const equipmentList = ref([]) 
-const isSubmitting = ref(false)
-
-// Modal Error State
-const showErrorModal = ref(false)
-const errorMessage = ref('')
-const openErrorModal = (message) => { errorMessage.value = message; showErrorModal.value = true }
-const closeErrorModal = () => { showErrorModal.value = false; errorMessage.value = '' }
-
-const loadSpotData = async () => {
-    loading.value = true;
-    const placeId = route.params.id;
-
-    if (!placeId) {
-        console.error('ID tempat tidak ditemukan.');
-        loading.value = false; return;
-    }
-
-    try {
-        let data = null;
-        const passedPlaceData = history.state.placeData;
-
-        if (passedPlaceData && (passedPlaceData.id == placeId || passedPlaceData.id_tempat == placeId)) {
-            data = passedPlaceData;
-        } else {
-            const response = await api.getPlaceById(placeId);
-            if (response.data.success) data = response.data.data;
-        }
-
-        if (data) {
-            spotInfo.value = {
-                id: data.id || data.id_tempat,
-                title: data.title,
-                location: data.location,
-                image: data.image_url, // Simpan nama file asli dari DB
-                basePrice: data.basePrice || data.base_price,
-            };
-
-            await loadEquipmentList(spotInfo.value.id);
-            initializeEquipmentState();
-        } else {
-            spotInfo.value = null;
-        }
-    } catch (error) {
-        console.error('Error loading spot:', error);
-        spotInfo.value = null;
-    } finally {
-        loading.value = false;
-    }
-};
-
-const loadEquipmentList = async (placeId) => {
-    try {
-        const response = await api.getEquipmentListByPlace(placeId);
-        if (response.data.success) {
-            equipmentList.value = response.data.data.map(item => ({
-                id_item: item.id_item,
-                name: item.nama_item,
-                price: parseFloat(item.price), 
-                icon: item.image_url || '/img/placeholder-icon.png', // Nama file atau default
-            }));
-        }
-    } catch (error) {
-        console.error('Error loading equipment:', error);
-        equipmentList.value = [];
-    }
-};
-
-const initializeEquipmentState = () => {
-  const initialState = {}
-  equipmentList.value.forEach((item) => {
-    initialState[item.id_item] = 0 
-  })
-  equipment.value = initialState
-}
-
-const handleCheckoutClick = async () => {
-  if (!bookingDate.value) { openErrorModal('Mohon isi Tanggal pemesanan.'); return }
-  if (!duration.value || duration.value < 1) { openErrorModal('Durasi minimal 1 jam.'); return }
-  if (!numPeople.value || numPeople.value < 1) { openErrorModal('Jumlah orang minimal 1.'); return }
-  
-  const currentUser = authStore.currentUser;
-  const loggedInUserId = currentUser ? currentUser.id_pengguna : null;
-
-  if(!loggedInUserId) {
-    openErrorModal('Anda harus **login** terlebih dahulu.');
-    router.push({ name: 'login', query: { redirect: route.fullPath } });
-    return;
-  }
-
-  const placeId = spotInfo.value.id
-  const generateOrderNumber = () => 'B-' + Date.now().toString().slice(-6) + Math.floor(Math.random() * 900 + 100)
-
-  const bookingPayload = {
-    id_pengguna: loggedInUserId,
-    id_tempat: placeId,
-    nomor_pesanan: generateOrderNumber(),
-    tgl_mulai_sewa: bookingDate.value,
-    durasi_sewa_jam: duration.value,
-    num_people: numPeople.value,
-    total_biaya: totalPrice.value,
-    detail_items: JSON.parse(selectedEquipmentParams.value),
-  }
-
-  try {
-    isSubmitting.value = true
-    const response = await api.createBooking(bookingPayload)
-
-    if (response.data.success) {
-      router.push({
-        name: 'payment', 
-        query: { 
-          orderId: response.data.data.id_pesanan,
-          total: totalPriceFormatted.value,
-          equipment: selectedEquipmentParams.value
-         },
-      })
-    } else {
-      openErrorModal(`Gagal membuat pemesanan: ${response.data.message}`)
-    }
-  } catch (error) {
-    console.error('Error submit booking:', error)
-    openErrorModal('Terjadi kesalahan saat memproses pemesanan.')
-  } finally {
-    isSubmitting.value = false
-  }
-}
-
-onMounted(() => {
-  loadSpotData()
-})
-
-const equipmentPrice = computed(() => {
-  let total = 0
-  if (!equipment.value) return 0
-  for (const item of equipmentList.value) {
-    const qty = equipment.value[item.id_item] || 0
-    total += item.price * qty
-  }
-  return total
-})
-
-const totalPrice = computed(() => {
-  if (!spotInfo.value) return 0
-  const safeDuration = Math.max(1, duration.value || 1)
-  const safeNumPeople = Math.max(1, numPeople.value || 1)
-  const ticketTotal = spotInfo.value.basePrice * safeDuration * safeNumPeople
-  return ticketTotal + equipmentPrice.value
-})
-
-const formatCurrency = (value) => {
-  if (typeof value !== 'number') return 'Rp 0'
-  return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value)
-}
-
-const totalPriceFormatted = computed(() => formatCurrency(totalPrice.value))
-
-function increaseQty(id) { if (equipment.value[id] !== undefined) equipment.value[id]++ }
-function decreaseQty(id) { if (equipment.value[id] > 0) equipment.value[id]-- }
-
-const selectedEquipmentParams = computed(() => {
-  if (!equipment.value) return JSON.stringify([])
-  const selected = equipmentList.value
-    .filter((item) => equipment.value[item.id_item] > 0)
-    .map((item) => ({
-      id_item: item.id_item,
-      name: item.name,
-      qty: equipment.value[item.id_item],
-      price: item.price,
-    }))
-  return JSON.stringify(selected)
-})
-</script>
 
 <style scoped src="./BookingView.style.css"></style>

@@ -1,9 +1,7 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-
-// 1. IMPORT AUTH STORE (Ini yang tadi kurang)
-import { useAuthStore } from '@/stores/authStore'; // <--- TAMBAHKAN INI
+import { useAuthStore } from '@/stores/authStore';
 
 const router = useRouter();
 const currentStep = ref(1);

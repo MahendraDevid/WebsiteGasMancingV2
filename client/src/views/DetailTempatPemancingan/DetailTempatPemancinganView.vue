@@ -1,3 +1,78 @@
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import api from '@/services/api'
+
+const route = useRoute()
+const router = useRouter()
+
+const place = ref(null)
+const loading = ref(true)
+
+// --- 🔗 KONFIGURASI URL GAMBAR (Backend) ---
+const API_URL = 'http://localhost:3000/uploads/'
+
+// Fungsi Helper untuk menampilkan gambar
+const getImageUrl = (filename) => {
+  if (!filename || filename === 'default_place.jpg') {
+    return '/img/kolam.png'
+  }
+  if (filename.startsWith('http')) return filename
+
+  return `${API_URL}${filename}`
+}
+
+const goToBooking = () => {
+  const placeId = place.value?.id || place.value?.id_tempat;
+
+  if (!placeId) {
+    console.error('NAVIGASI GAGAL! ID tidak ditemukan.');
+    return;
+  }
+
+  router.push({
+    name: 'Booking',
+    params: { id: placeId },
+    state: { placeData: place.value }
+  })
+}
+
+const loadPlaceData = async () => {
+  try {
+    loading.value = true
+    const placeId = route.params.id
+
+    if (!placeId) {
+      console.error('ID tempat tidak ditemukan di rute!')
+      place.value = null
+      return
+    }
+
+    const response = await api.getPlaceById(placeId)
+
+    if (response.data.success) {
+      place.value = response.data.data
+    } else {
+      place.value = null
+      console.error('Failed to load place data:', response.data.message)
+    }
+  } catch (error) {
+    console.error('Error loading place:', error)
+    place.value = null
+  } finally {
+    loading.value = false
+  }
+}
+
+const handleImageError = (event) => {
+  event.target.src = '/img/placeholder.png'
+}
+
+onMounted(() => {
+  loadPlaceData()
+})
+</script>
+
 <template>
   <div class="place-detail-page">
     <div v-if="loading" class="loading-state">
@@ -93,80 +168,5 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import api from '@/services/api' 
-
-const route = useRoute()
-const router = useRouter()
-
-const place = ref(null)
-const loading = ref(true)
-
-// --- 🔗 KONFIGURASI URL GAMBAR (Backend) ---
-const API_URL = 'http://localhost:3000/uploads/'
-
-// Fungsi Helper untuk menampilkan gambar
-const getImageUrl = (filename) => {
-  if (!filename || filename === 'default_place.jpg') {
-    return '/img/kolam.png'
-  }
-  if (filename.startsWith('http')) return filename
-
-  return `${API_URL}${filename}`
-}
-
-const goToBooking = () => {
-    const placeId = place.value?.id || place.value?.id_tempat; 
-
-    if (!placeId) {
-        console.error('NAVIGASI GAGAL! ID tidak ditemukan.');
-        return; 
-    }
-
-    router.push({
-      name: 'Booking', 
-      params: { id: placeId }, 
-      state: { placeData: place.value }
-    })
-}
-
-const loadPlaceData = async () => {
-  try {
-    loading.value = true
-    const placeId = route.params.id
-
-    if (!placeId) {
-      console.error('ID tempat tidak ditemukan di rute!')
-      place.value = null
-      return
-    }
-
-    const response = await api.getPlaceById(placeId)
-
-    if (response.data.success) {
-      place.value = response.data.data
-    } else {
-      place.value = null
-      console.error('Failed to load place data:', response.data.message)
-    }
-  } catch (error) {
-    console.error('Error loading place:', error)
-    place.value = null
-  } finally {
-    loading.value = false
-  }
-}
-
-const handleImageError = (event) => {
-  event.target.src = '/img/placeholder.png' 
-}
-
-onMounted(() => {
-  loadPlaceData()
-})
-</script>
 
 <style scoped src="./DetailTempatPemancinganView.style.css"></style>

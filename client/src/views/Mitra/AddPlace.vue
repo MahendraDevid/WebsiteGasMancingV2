@@ -23,14 +23,14 @@ const user = JSON.parse(localStorage.getItem('user') || '{}');
 
 const handleFile = (e) => {
   const file = e.target.files[0];
-  if(file) {
+  if (file) {
     formData.fotoProperti = file;
     formData.fotoPreview = URL.createObjectURL(file);
   }
 };
 
 const submitForm = async () => {
-  if(!formData.namaProperti || !formData.hargaSewa) return alert("Nama dan Harga wajib diisi");
+  if (!formData.namaProperti || !formData.hargaSewa) return alert("Nama dan Harga wajib diisi");
 
 
 
@@ -39,12 +39,9 @@ const submitForm = async () => {
   console.log("ID Mitra yang akan dikirim:", user.id_mitra);
 
   if (!user.id_mitra) {
-      alert("Error: ID Mitra tidak ditemukan. Silakan logout dan login ulang.");
-      return;
+    alert("Error: ID Mitra tidak ditemukan. Silakan logout dan login ulang.");
+    return;
   }
-
-
-
 
   isLoading.value = true;
   try {
@@ -80,9 +77,9 @@ const submitForm = async () => {
         <div class="form-group">
           <label>Foto Utama</label>
           <div class="upload-box">
-             <input type="file" @change="handleFile" accept="image/*">
-             <div v-if="!formData.fotoPreview" class="placeholder">📸 Upload Foto</div>
-             <img v-else :src="formData.fotoPreview" class="preview">
+            <input type="file" @change="handleFile" accept="image/*">
+            <div v-if="!formData.fotoPreview" class="placeholder">📸 Upload Foto</div>
+            <img v-else :src="formData.fotoPreview" class="preview">
           </div>
         </div>
 
@@ -97,21 +94,24 @@ const submitForm = async () => {
         </div>
 
         <div class="row">
-           <div class="col">
-             <label>Harga (Rp)</label>
-             <input v-model="formData.hargaSewa" type="number" required>
-           </div>
-           <div class="col">
-             <label>Satuan</label>
-             <select v-model="formData.satuanSewa">
-               <option>Jam</option><option>Hari</option><option>Kg</option><option>Tiket</option>
-             </select>
-           </div>
+          <div class="col">
+            <label>Harga (Rp)</label>
+            <input v-model="formData.hargaSewa" type="number" required>
+          </div>
+          <div class="col">
+            <label>Satuan</label>
+            <select v-model="formData.satuanSewa">
+              <option>Jam</option>
+              <option>Hari</option>
+              <option>Kg</option>
+              <option>Tiket</option>
+            </select>
+          </div>
         </div>
 
         <div class="row">
-           <div class="col"><label>Buka</label><input v-model="formData.jamBuka" type="time"></div>
-           <div class="col"><label>Tutup</label><input v-model="formData.jamTutup" type="time"></div>
+          <div class="col"><label>Buka</label><input v-model="formData.jamBuka" type="time"></div>
+          <div class="col"><label>Tutup</label><input v-model="formData.jamTutup" type="time"></div>
         </div>
 
         <div class="actions">

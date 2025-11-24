@@ -3,7 +3,7 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import DataEnsiklopedia from '@/components/CardEnsiklopedia.vue'
 import DetailEnsiklopedia from '@/components/DetailEnsiklopedia.vue'
-import api from '@/services/api' // Pastikan path ini benar!
+import api from '@/services/api'
 
 // --- State Utama ---
 const searchQuery = ref('')
@@ -100,7 +100,6 @@ onMounted(() => {
   }, { immediate: true }) // Jalankan segera saat data dimuat
 })
 </script>
-
 
 <template>
   <div class="ensiklopedia-view">

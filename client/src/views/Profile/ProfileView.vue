@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useAuthStore } from '../../stores/authStore';
 import api from '@/services/api';
 import './ProfileView.style.css'; // Pastikan CSS bawaan Anda tetap ada
@@ -79,13 +79,19 @@ const showModal = ref(false);
 const modalType = ref('success'); // 'success' atau 'error'
 const modalMessage = ref('');
 
-const currentUserId = authStore.currentUser?.id_pengguna;
+const currentUserId = computed(() => {
+  if (authStore.isMitra) {
+    return authStore.currentUser?.id_mitra;
+  } else {
+    return authStore.currentUser?.id_pengguna;
+  }
+});
 
 const loadUserData = () => {
     if (authStore.currentUser) {
         email.value = authStore.currentUser.email || '';
-        username.value = authStore.currentUser.nama_lengkap || '';
-        phone.value = authStore.currentUser.no_telepon || '';
+        username.value = authStore.currentUser.nama_lengkap || authStore.currentUser.nama_mitra || authStore.currentUser.nama || '';
+        phone.value = authStore.currentUser.no_telepon || authStore.currentUser.no_hp || '';
     } else {
         triggerModal('error', 'Anda harus login untuk mengedit profil.');
     }
@@ -119,7 +125,7 @@ const closeModal = () => {
 const handleSubmit = async () => {
     if (isSubmitting.value) return;
 
-    if (!currentUserId) {
+    if (!currentUserId.value) {
         triggerModal('error', 'Sesi habis. Mohon login kembali.');
         return;
     }
@@ -136,12 +142,21 @@ const handleSubmit = async () => {
     }
 
     try {
-        const response = await api.updateUser(currentUserId, updateData);
+        let response;
+
+        if (authStore.isMitra) {
+          console.log("Mengupdate data Mitra dengan ID:", currentUserId.value);
+          response = await api.updateMitra(currentUserId.value, updateData);
+        } else{
+          console.log("Mengupdate data User dengan ID:", currentUserId.value);
+          response = await api.updateUser(currentUserId.value, updateData);
+        }
 
         if (response.data.success) {
             authStore.updateProfile({
-                nama_lengkap: updateData.nama_lengkap,
-                no_telepon: updateData.no_telepon,
+                nama_lengkap: username.value,
+                nama_mitra: username.value,
+                no_telepon: phone.value,
             });
             
             password.value = '';

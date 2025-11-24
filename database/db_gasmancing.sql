@@ -177,7 +177,7 @@ INSERT INTO `fasilitas` (`id_fasilitas`, `nama_fasilitas`) VALUES
 
 -- Data: tempat_pemancingan
 INSERT INTO `tempat_pemancingan` (`id_tempat`, `title`, `location`, `base_price`, `price_unit`, `image_url`, `description`, `full_description`, `open_hours`, `close_hours`, `total_reviews_count`, `average_rating`, `created_at`, `updated_at`, `id_mitra`) VALUES
-(1, 'Pantai Ancol', 'Ancol, Jakarta Utara\r\n', 50000.00, 'Hari', '/img/ancol.png\r\n', 'Tempat pemancingan laut yang populer dengan fasilitas lengkap dan suasana nyaman. Cocok untuk memancing harian.', 'Bayangkan sebuah spot memancing di laut lepas dengan latar belakang silhouette megah Jakarta skyline yang berdiri gagah di kejauhan...', '09:00:00', '21:00:00', 300, 4.2, '2025-11-19 14:49:45', '2025-11-19 15:09:50', 1);
+(1, 'Pantai Ancol', 'Ancol, Jakarta Utara\r\n', 50000.00, 'Hari', 'ancol.png\n', 'Tempat pemancingan laut yang populer dengan fasilitas lengkap dan suasana nyaman. Cocok untuk memancing harian.', 'Bayangkan sebuah spot memancing di laut lepas dengan latar belakang silhouette megah Jakarta skyline yang berdiri gagah di kejauhan...', '09:00:00', '21:00:00', 300, 4.2, '2025-11-19 14:49:45', '2025-11-19 15:09:50', 1);
 
 -- Data: tempat_fasilitas
 INSERT INTO `tempat_fasilitas` (`id_tempat`, `id_fasilitas`) VALUES

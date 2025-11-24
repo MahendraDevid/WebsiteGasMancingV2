@@ -44,4 +44,4 @@
   </div>
 </template>
 
-<style scoped src="./IndexView.css"></style>
+<style scoped src="./IndexView.style.css"></style>

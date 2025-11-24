@@ -80,4 +80,4 @@ function handleDaftarClick() {
   </main>
 </template>
 
-<style scoped src="./MitraLandingView.style.css"></style>
+<style scoped src="./MitraLanding.style.css"></style>

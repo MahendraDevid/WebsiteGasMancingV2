@@ -2,6 +2,7 @@
 import { reactive, ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import api from '@/services/api';
+import './EditPlace.style.css'; // Import CSS Terpisah
 
 const router = useRouter();
 const route = useRoute(); // Ambil ID dari URL
@@ -103,17 +104,4 @@ onMounted(() => loadData());
   </div>
 </template>
 
-<style scoped>
-/* Gunakan Style yang SAMA dengan AddPlace.vue */
-.form-page-wrapper { padding: 40px 20px; display: flex; justify-content: center; background: #f4f7fe; min-height: 90vh; }
-.form-card { background: white; padding: 30px; border-radius: 12px; width: 100%; max-width: 600px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-.form-title { color: #0D2F64; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-.form-group { margin-bottom: 15px; }
-label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; color: #333; }
-input, textarea, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-.row { display: flex; gap: 15px; margin-bottom: 15px; }
-.col { flex: 1; }
-.actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-.btn-save { background: #0D2F64; color: white; padding: 10px 25px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
-.btn-cancel { background: #fff; border: 1px solid #ddd; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
-</style>
+

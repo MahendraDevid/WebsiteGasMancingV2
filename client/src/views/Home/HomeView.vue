@@ -80,6 +80,15 @@ function goToDetail(id) {
   })
 }
 
+const goToEnsiklopedia = (id) => {
+  // Mengarah ke halaman ensiklopedia dengan membawa Query Parameter ID
+  // Hasil URL nanti: /ensiklopedia?id=1
+  router.push({
+    name: 'ensiklopedia',
+    query: { id: id }
+  });
+}
+
 // --- Logika Carousel (Tidak Ada Perubahan Signifikan) ---
 const carouselContainer = ref(null)
 const isAtStart = ref(true)
@@ -265,10 +274,12 @@ onMounted(() => {
             <div class="carousel-card" v-for="tip in tipsList" :key="tip.id_artikel">
               <div class="carousel-card-header">
                 <img src="/img/book.png" alt="Tips Icon" class="card-icon" />
-                <h3>{{ tip.title }}</h3>
+                <h3>{{ tip.judul }}</h3>
               </div>
               <p>{{ tip.description ? tip.description.substring(0, 150) + '...' : '' }}</p>
-              <a :href="`/ensiklopedia?id=${tip.id_artikel}`" class="read-more">Baca Selengkapnya &rarr;</a>
+              <a href="#" @click.prevent="goToEnsiklopedia(tip.id_artikel)" class="read-more">
+                Baca Selengkapnya &rarr;
+              </a>
             </div>
           </div>
 

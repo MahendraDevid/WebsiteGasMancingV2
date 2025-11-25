@@ -375,8 +375,9 @@ body {
 
 .carousel {
     display: flex;
-    gap: 20px;
-    margin-right: 5%;
+    gap: 30px;
+    max-width: 100;
+    align-items: center;
     overflow-x: scroll;
     scroll-snap-type: x mandatory;
     padding: 40px 350px;

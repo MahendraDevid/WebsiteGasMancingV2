@@ -1,3 +1,27 @@
+<script setup>
+import { RouterLink, useRouter } from 'vue-router'
+
+// Dapatkan instance router
+const router = useRouter()
+
+defineProps({
+  isVisible: {
+    type: Boolean,
+    default: false
+  }
+})
+
+const emit = defineEmits(['close', 'logout'])
+
+// Fungsi untuk menangani event logout, menutup dropdown, dan redirect
+const handleLogoutAndRedirect = () => {
+  emit('logout')
+  emit('close')
+
+  router.push('/')
+}
+</script>
+
 <template>
   <div v-if="isVisible" class="dropdown-overlay" @click.self="$emit('close')">
 
@@ -11,26 +35,14 @@
           <span>Edit Profil</span>
         </router-link>
 
-        <li class="dropdown-item logout" @click="$emit('logout')">
+        <!-- Panggil fungsi yang akan menutup dropdown dan redirect -->
+        <li class="dropdown-item logout" @click="handleLogoutAndRedirect">
           <span>Keluar</span>
         </li>
       </ul>
     </div>
   </div>
 </template>
-
-<script setup>
-import { RouterLink } from 'vue-router'
-
-defineProps({
-  isVisible: {
-    type: Boolean,
-    default: false
-  }
-})
-
-defineEmits(['close', 'logout'])
-</script>
 
 <style scoped>
 .dropdown-overlay {

@@ -74,7 +74,6 @@ const handleProfileClickMobile = () => {
               <router-link to="/ensiklopedia" class="menu-item">Ensiklopedia</router-link>
           </template>
 
-          <router-link to="/index" class="menu-item">Indeks Halaman</router-link>
       </nav>
 
       <div class="auth-buttons">

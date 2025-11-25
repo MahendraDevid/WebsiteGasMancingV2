@@ -13,7 +13,6 @@
   padding: 100px 20px 40px 20px;
   font-family: "Poppins", sans-serif;
   min-height: 90vh;
-  background-color: var(--bg-blue);
 }
 
 .header-section {
@@ -270,6 +269,14 @@
   box-shadow: 0 0 5px rgba(13, 47, 100, 0.3);
 }
 
+.pesanan-wrapper h1 {
+  text-align: left;
+  font-weight: 750;
+  color: var(--bay-of-many);
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
 @media (max-width: 768px) {
   .search-input {
     max-width: 100%;
@@ -323,7 +330,7 @@
 
 .table-container {
   background-color: var(--white);
-  border-radius: 12px;
+  border-radius: 2px;
   box-shadow: 0 30px 15px rgba(0, 0, 0, 0.03);
   overflow-x: auto;
   margin-top: 20px;
@@ -442,7 +449,12 @@
   margin: auto;
   padding: 30px 30px 30px 30px;
   font-family: "Poppins", sans-serif;
-  background-color: #ffffff;
+  background-color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+.pesanan-wrapper table {
+  border: 2px solid #ddd;
 }
 
 @media (max-width: 768px) {

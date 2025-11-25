@@ -9,8 +9,11 @@ const popularPlaces = ref([])
 const tipsList = ref([])
 const loadingPlaces = ref(true)
 const loadingTips = ref(true)
+
+// ✅ State search sama dengan SearchView
 const searchKeyword = ref('')
-const searchPrice = ref('') // Input Harga
+const searchPrice = ref('')
+const searchFacilities = ref('')
 
 // konfigurasi URL gambar dari backend
 const API_URL = 'http://localhost:3000/uploads/';
@@ -58,12 +61,14 @@ const loadTipsList = async () => {
   }
 }
 
+// ✅ Handler search sama dengan SearchView
 const goToSearch = () => {
   router.push({
     name: 'search',
     query: {
       location: searchKeyword.value.trim() || undefined,
-      price: searchPrice.value || undefined,
+      price: searchPrice.value.trim() || undefined,
+      facilities: searchFacilities.value.trim() || undefined,
     },
   })
 }
@@ -75,15 +80,13 @@ function goToDetail(id) {
 }
 
 const goToEnsiklopedia = (id) => {
-  // Mengarah ke halaman ensiklopedia dengan membawa Query Parameter ID
-  // Hasil URL nanti: /ensiklopedia?id=1
   router.push({
     name: 'ensiklopedia',
     query: { id: id }
   });
 }
 
-// --- Logika Carousel (Tidak Ada Perubahan Signifikan)pt ---
+// --- Logika Carousel ---
 const carouselContainer = ref(null)
 const isAtStart = ref(false)
 const isAtEnd = ref(false)
@@ -95,26 +98,21 @@ const initializeCarousel = () => {
   const cards = container.querySelectorAll('.carousel-card')
 
   if (cards.length > 0) {
-    // 1. Ambil kartu yang ada di urutan tengah
     const middleIndex = Math.floor((cards.length - 1) / 2)
     const targetCard = cards[middleIndex]
 
-    // 2. Hitung posisi scroll agar kartu tersebut pas di tengah layar
-    // Rumus: (Posisi Kiri Kartu) - (Setengah Lebar Layar) + (Setengah Lebar Kartu)
     const cardLeft = targetCard.offsetLeft
     const cardWidth = targetCard.offsetWidth
     const containerWidth = container.clientWidth
 
     const scrollPos = cardLeft - containerWidth / 2 + cardWidth / 2
 
-    // 3. Scroll ke posisi tersebut secara instan
     container.scrollTo({
       left: scrollPos,
       behavior: 'auto',
     })
   }
 
-  // Update visual (besar/kecil)
   updateCarouselState()
 }
 
@@ -122,7 +120,6 @@ const scrollCarousel = (direction) => {
   if (!carouselContainer.value) return
   const container = carouselContainer.value
   const card = container.querySelector('.carousel-card')
-  // Jika card belum ada, default 300
   const cardWidth = card ? card.clientWidth : 300
   const gap = 20
   const scrollAmount = (cardWidth + gap) * direction
@@ -139,16 +136,13 @@ const applyCardSizes = () => {
   const cards = container.querySelectorAll('.carousel-card')
 
   cards.forEach((card) => {
-    // Titik tengah kartu
     const cardCenter = card.offsetLeft + card.clientWidth / 2
-    // Titik tengah layar viewport
     const viewportCenter = scrollLeft + containerWidth / 2
 
     const distance = Math.abs(cardCenter - viewportCenter)
 
     card.classList.remove('small', 'medium', 'large')
 
-    // Semakin dekat ke 0 (tengah), semakin besar
     if (distance < containerWidth * 0.15) {
       card.classList.add('large')
     } else if (distance < containerWidth * 0.3) {
@@ -162,7 +156,6 @@ const applyCardSizes = () => {
 const checkArrowState = () => {
   if (!carouselContainer.value) return
   const container = carouselContainer.value
-  // Toleransi 10px
   isAtStart.value = container.scrollLeft <= 10
   isAtEnd.value = container.scrollWidth - container.scrollLeft <= container.clientWidth + 10
 }
@@ -188,22 +181,46 @@ onMounted(() => {
           <h1 class="hero-title-text">Temukan Spot Pemancingan Terbaik di Indonesia</h1>
         </div>
 
+        <!-- ✅ SEARCH SECTION - SAMA DENGAN SEARCHVIEW -->
         <section class="search-section">
           <div class="search-container-custom">
+            <!-- Field 1: Lokasi -->
             <div class="search-field-custom">
               <img src="/img/loc.png" alt="Lokasi" class="search-icon" />
-              <input type="text" v-model="searchKeyword" class="search-input-custom"
-                placeholder="Mau mancing dimana?" />
+              <input 
+                type="text" 
+                v-model="searchKeyword" 
+                class="search-input-custom"
+                placeholder="Mau mancing dimana?" 
+                @keyup.enter="goToSearch"
+              />
             </div>
+
+            <!-- Field 2: Harga (sama dengan SearchView) -->
             <div class="search-field-custom">
-              <img src="/img/calendar.png" alt="Tanggal" class="search-icon" />
-              <input type="text" class="search-input-custom" placeholder="Tanggal Mancing" onfocus="(this.type='date')"
-                onblur="(this.type='text')" />
+              <img src="/img/IconMoney.png" alt="Harga" class="search-icon" />
+              <input
+                type="text"
+                v-model="searchPrice"
+                class="search-input-custom"
+                placeholder="Cari Harga (Rp.)"
+                @keyup.enter="goToSearch"
+              />
             </div>
+
+            <!-- Field 3: Fasilitas -->
             <div class="search-field-custom">
               <img src="/img/fasilitas.png" alt="Fasilitas" class="search-icon" />
-              <input type="text" class="search-input-custom" placeholder="Fasilitas" />
+              <input
+                type="text"
+                v-model="searchFacilities"
+                class="search-input-custom"
+                placeholder="Fasilitas"
+                @keyup.enter="goToSearch"
+              />
             </div>
+
+            <!-- Button Search -->
             <button class="search-button-custom" @click="goToSearch">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" width="28" height="28">

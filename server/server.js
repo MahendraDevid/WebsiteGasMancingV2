@@ -2,7 +2,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const path = require("path"); // <--- 1. WAJIB TAMBAH INI
+const path = require("path"); 
 
 const app = express();
 
@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 // kita arahkan langsung ke 'uploads'
 const uploadsDir = path.join(__dirname, 'uploads');
 
-console.log("✅ SYSTEM LOG: Folder Uploads dibuka di ->", uploadsDir);
+console.log("SYSTEM LOG: Folder Uploads dibuka di ->", uploadsDir);
 
 app.use('/uploads', express.static(uploadsDir));
 // ==================================================

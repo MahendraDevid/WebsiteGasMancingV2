@@ -10,32 +10,29 @@ const tipsList = ref([])
 const loadingPlaces = ref(true)
 const loadingTips = ref(true)
 const searchKeyword = ref('')
+const searchPrice = ref('') // Input Harga
 
 // konfigurasi URL gambar dari backend
 const API_URL = 'http://localhost:3000/uploads/';
 
-// Fungsi Helper untuk menampilkan gambar dari Backend
 const getImageUrl = (filename) => {
   if (!filename || filename === 'default_place.jpg') {
-    return '/img/kolam.png'; // Gambar default di folder public frontend jika kosong
+    return '/img/kolam.png'
   }
-  // Gabungkan URL Server + Nama File
-  return `${API_URL}${filename}`;
+  if (filename.startsWith('http')) return filename
+  return `${API_URL}${filename}`
 }
 
 const loadPopularPlaces = async () => {
   loadingPlaces.value = true
   try {
     const response = await api.getAllPlaces()
-    if (response.data.success && Array.isArray(response.data.data)) {
-      // Ambil 3 tempat saja
-      popularPlaces.value = response.data.data.slice(0, 3)
-    } else if (Array.isArray(response.data)) {
-      // Jaga-jaga jika struktur response langsung array
-      popularPlaces.value = response.data.slice(0, 3)
+    const data = response.data.data || response.data
+    if (Array.isArray(data)) {
+      popularPlaces.value = data.slice(0, 3)
     }
   } catch (error) {
-    console.error('Error saat memuat tempat:', error)
+    console.error('Error load places:', error)
   } finally {
     loadingPlaces.value = false
   }
@@ -55,29 +52,26 @@ const loadTipsList = async () => {
       }, 100)
     }
   } catch (error) {
-    console.error('Error saat memuat tips:', error)
+    console.error('Error load tips:', error)
   } finally {
     loadingTips.value = false
   }
 }
 
 const goToSearch = () => {
-  const keyword = searchKeyword.value.trim()
   router.push({
     name: 'search',
-    query: { location: keyword || 'Semua Lokasi' },
+    query: {
+      location: searchKeyword.value.trim() || undefined,
+      price: searchPrice.value || undefined,
+    },
   })
 }
 
-const goToMitra = () => {
-  router.push({ name: 'mitra-landing' }) // Pastikan route ini ada
-}
+const goToMitra = () => router.push({ name: 'mitra-landing' })
 
 function goToDetail(id) {
-  router.push({
-    name: 'DetailTempatPemancing',
-    params: { id },
-  })
+  router.push({ name: 'DetailTempatPemancing', params: { id } })
 }
 
 const goToEnsiklopedia = (id) => {
@@ -89,33 +83,47 @@ const goToEnsiklopedia = (id) => {
   });
 }
 
-// --- Logika Carousel (Tidak Ada Perubahan Signifikan) ---
+// --- Logika Carousel (Tidak Ada Perubahan Signifikan)pt ---
 const carouselContainer = ref(null)
-const isAtStart = ref(true)
+const isAtStart = ref(false)
 const isAtEnd = ref(false)
 
 const initializeCarousel = () => {
-  if (carouselContainer.value) {
-    const container = carouselContainer.value
-    const cards = container.querySelectorAll('.carousel-card')
+  if (!carouselContainer.value) return
+
+  const container = carouselContainer.value
+  const cards = container.querySelectorAll('.carousel-card')
+
+  if (cards.length > 0) {
+    // 1. Ambil kartu yang ada di urutan tengah
     const middleIndex = Math.floor((cards.length - 1) / 2)
     const targetCard = cards[middleIndex]
 
-    if (targetCard) {
-      const cardCenter = targetCard.offsetLeft + targetCard.clientWidth / 2
-      const containerCenter = container.clientWidth / 2
-      const initialScrollLeft = cardCenter - containerCenter
-      container.scrollTo({ left: initialScrollLeft, behavior: 'auto' })
-    }
-    updateCarouselState()
+    // 2. Hitung posisi scroll agar kartu tersebut pas di tengah layar
+    // Rumus: (Posisi Kiri Kartu) - (Setengah Lebar Layar) + (Setengah Lebar Kartu)
+    const cardLeft = targetCard.offsetLeft
+    const cardWidth = targetCard.offsetWidth
+    const containerWidth = container.clientWidth
+
+    const scrollPos = cardLeft - containerWidth / 2 + cardWidth / 2
+
+    // 3. Scroll ke posisi tersebut secara instan
+    container.scrollTo({
+      left: scrollPos,
+      behavior: 'auto',
+    })
   }
+
+  // Update visual (besar/kecil)
+  updateCarouselState()
 }
 
 const scrollCarousel = (direction) => {
   if (!carouselContainer.value) return
   const container = carouselContainer.value
   const card = container.querySelector('.carousel-card')
-  const cardWidth = card ? card.clientWidth : 320
+  // Jika card belum ada, default 300
+  const cardWidth = card ? card.clientWidth : 300
   const gap = 20
   const scrollAmount = (cardWidth + gap) * direction
 
@@ -131,16 +139,22 @@ const applyCardSizes = () => {
   const cards = container.querySelectorAll('.carousel-card')
 
   cards.forEach((card) => {
+    // Titik tengah kartu
     const cardCenter = card.offsetLeft + card.clientWidth / 2
+    // Titik tengah layar viewport
     const viewportCenter = scrollLeft + containerWidth / 2
+
     const distance = Math.abs(cardCenter - viewportCenter)
 
-    if (distance < containerWidth * 0.1) {
-      card.classList.remove('small', 'medium'); card.classList.add('large')
-    } else if (distance < containerWidth * 0.25) {
-      card.classList.remove('small', 'large'); card.classList.add('medium')
+    card.classList.remove('small', 'medium', 'large')
+
+    // Semakin dekat ke 0 (tengah), semakin besar
+    if (distance < containerWidth * 0.15) {
+      card.classList.add('large')
+    } else if (distance < containerWidth * 0.3) {
+      card.classList.add('medium')
     } else {
-      card.classList.remove('medium', 'large'); card.classList.add('small')
+      card.classList.add('small')
     }
   })
 }
@@ -148,8 +162,9 @@ const applyCardSizes = () => {
 const checkArrowState = () => {
   if (!carouselContainer.value) return
   const container = carouselContainer.value
+  // Toleransi 10px
   isAtStart.value = container.scrollLeft <= 10
-  isAtEnd.value = (container.scrollWidth - container.scrollLeft) <= container.clientWidth + 10
+  isAtEnd.value = container.scrollWidth - container.scrollLeft <= container.clientWidth + 10
 }
 
 const updateCarouselState = () => {
@@ -172,6 +187,7 @@ onMounted(() => {
         <div class="hero-content">
           <h1 class="hero-title-text">Temukan Spot Pemancingan Terbaik di Indonesia</h1>
         </div>
+
         <section class="search-section">
           <div class="search-container-custom">
             <div class="search-field-custom">
@@ -213,12 +229,12 @@ onMounted(() => {
 
         <div v-else class="cards-grid">
           <div class="card" v-for="place in popularPlaces" :key="place.id_tempat">
-
             <img :src="getImageUrl(place.image_url)" :alt="place.title" class="card-image" />
             <span class="card-price-overlay">
-              Rp {{ Number(place.base_price || 0).toLocaleString('id-ID') }} / {{ place.price_unit || 'Hari' }}
+              Rp. {{ Number(place.base_price || 0).toLocaleString('id-ID') }}/{{
+                place.price_unit || 'Hari'
+              }}
             </span>
-
             <div class="card-content">
               <h3 class="card-title">{{ place.title }}</h3>
               <div class="card-location">
@@ -230,22 +246,17 @@ onMounted(() => {
                   }}</span>
                 <span class="rating-count">({{ place.total_reviews_count || 0 }} Ulasan)</span>
               </div>
-              <p class="card-description">{{ place.description ? place.description.substring(0, 100) + '...' : '' }}</p>
-
+              <p class="card-description">
+                {{ place.description ? place.description.substring(0, 100) + '...' : '' }}
+              </p>
               <div class="card-facilities">
                 <template v-for="(facility, index) in place.fasilitas" :key="index">
-                  <span class="facility" v-if="index < 2">
-                    {{ facility }}
-                  </span>
+                  <span class="facility" v-if="index < 2">{{ facility }}</span>
                 </template>
-                <span class="facility-more" v-if="place.fasilitas && place.fasilitas.length > 2">
-                  +{{ place.fasilitas.length - 2 }}
-                </span>
-                <span v-else-if="!place.fasilitas || place.fasilitas.length === 0" class="facility-none">
-                  Fasilitas standar
-                </span>
+                <span class="facility-more" v-if="place.fasilitas && place.fasilitas.length > 2"
+                  >+{{ place.fasilitas.length - 2 }}</span
+                >
               </div>
-
               <button class="card-button" @click="goToDetail(place.id_tempat)">Lihat Detail</button>
             </div>
           </div>
@@ -294,7 +305,7 @@ onMounted(() => {
 
       <section class="mitra-section">
         <div class="mitra-banner-wrapper">
-          <img src="/img/mitra_ad.jpg" alt="Gabung Mitra Gas Mancing" class="mitra-image" />
+          <img src="/img/mitra_ad.jpg" alt="Gabung Mitra" class="mitra-image" />
           <div class="mitra-text-overlay">
             <h2>Daftarkan Properti Anda!</h2>
             <p>Bergabunglah menjadi mitra kami dan tingkatkan pendapatan bisnis Anda sekarang.</p>

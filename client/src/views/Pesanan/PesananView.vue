@@ -14,12 +14,11 @@ const API_URL = 'http://localhost:3000/uploads/';
 // Fungsi Helper untuk menampilkan gambar
 const getImageUrl = (filename) => {
   if (!filename || filename === 'default_place.jpg') {
-    return 'https://placehold.co/600x400/CCCCCC/FFFFFF?text=No+Image';
+    return '/img/kolam.png'
   }
-  // Cek apakah filename sudah mengandung http
-  if (filename.startsWith('http')) return filename;
+  if (filename.startsWith('http')) return filename
 
-  return `${API_URL}${filename}`;
+  return `${API_URL}${filename}`
 }
 
 // State

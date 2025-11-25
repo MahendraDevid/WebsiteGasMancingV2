@@ -131,15 +131,25 @@ const handleBooking = (id) => {
         </div>
 
         <div class="search-field-custom">
-          <img src="/img/calendar.png" class="search-icon" alt="Harga" />
-          <input class="search-input-custom" type="text" v-model="searchPrice" placeholder="Cari Harga (Rp.)"
-            @keyup.enter="handleSearch" />
+          <img src="/img/IconMoney.png" class="search-icon" alt="Harga" />
+          <input
+            class="search-input-custom"
+            type="text"
+            v-model="searchPrice"
+            placeholder="Cari Harga (Rp.)"
+            @keyup.enter="handleSearch"
+          />
         </div>
 
         <div class="search-field-custom">
-          <img src="/img/IconMoney.png" class="search-icon" alt="Fasilitas" />
-          <input type="text" class="search-input-custom" v-model="searchFacilities" placeholder="Fasilitas"
-            @keyup.enter="handleSearch" />
+          <img src="/img/fasilitas.png" class="search-icon" alt="Fasilitas" />
+          <input
+            type="text"
+            class="search-input-custom"
+            v-model="searchFacilities"
+            placeholder="Fasilitas"
+            @keyup.enter="handleSearch"
+          />
         </div>
 
         <button class="search-button-custom" @click="handleSearch">

@@ -4,9 +4,16 @@ import { useRouter, useRoute } from 'vue-router';
 import api from '@/services/api';
 
 const router = useRouter();
-const route = useRoute(); // Ambil ID dari URL
+const route = useRoute(); 
 const isLoading = ref(false);
 const isFetching = ref(true);
+
+// Helper Image URL
+const API_URL = 'http://localhost:3000/uploads/';
+const getImageUrl = (filename) => {
+  if (!filename || filename === 'default_place.jpg') return '/img/kolam.png';
+  return `${API_URL}${filename}`;
+}
 
 const formData = reactive({
   namaProperti: '',
@@ -16,29 +23,32 @@ const formData = reactive({
   satuanSewa: '',
   jamBuka: '',
   jamTutup: '',
-  fotoPreview: null // Untuk menampung URL gambar lama
+  fotoPreview: null
 });
 
 // Load Data Lama
 const loadData = async () => {
   try {
     const id = route.params.id;
-    const res = await api.getPlaceById(id); // Pastikan api.js punya fungsi ini atau gunakan get generic
-    const data = res.data.data || res.data; // Sesuaikan respon
+    const res = await api.getPlaceById(id);
+    const data = res.data.data || res.data;
 
-    // Isi Form
     formData.namaProperti = data.title;
-    formData.deskripsi = data.description;
+    formData.deskripsi = data.full_description || data.description;
     formData.alamatProperti = data.location;
     formData.hargaSewa = data.base_price;
     formData.satuanSewa = data.price_unit;
-    formData.jamBuka = data.jam_buka;
-    formData.jamTutup = data.jam_tutup;
-    formData.fotoPreview = data.image_url;
+    
+    // Reset jam karena di DB string gabungan
+    formData.jamBuka = ''; 
+    formData.jamTutup = '';
+
+    formData.fotoPreview = getImageUrl(data.image_url);
 
   } catch (e) {
+    console.error(e);
     alert("Gagal memuat data.");
-    router.push('/mitra/properti');
+    router.push('/mitra/properti-list'); // Redirect jika gagal load
   } finally {
     isFetching.value = false;
   }
@@ -48,13 +58,18 @@ const submitUpdate = async () => {
   isLoading.value = true;
   try {
     const id = route.params.id;
-    // Kirim hanya data yg perlu diupdate
+    
     await api.updatePlace(id, formData);
+    
     alert("Data berhasil diperbarui!");
-    router.push('/mitra/properti');
+    
+    // === PERUBAHAN DI SINI (Redirect ke Properti List) ===
+    router.push('/mitra/properti-list'); 
+    // =====================================================
+
   } catch (e) {
     console.error(e);
-    alert("Gagal update.");
+    alert("Gagal update: " + (e.response?.data?.message || "Server Error"));
   } finally {
     isLoading.value = false;
   }
@@ -65,7 +80,7 @@ onMounted(() => loadData());
 
 <template>
   <div class="form-page-wrapper">
-    <div v-if="isFetching">Memuat data lama...</div>
+    <div v-if="isFetching" class="loading-text">Memuat data lama...</div>
 
     <div v-else class="form-card">
       <h2 class="form-title">Edit Properti</h2>
@@ -94,14 +109,18 @@ onMounted(() => loadData());
               <option>Hari</option>
             </select></div>
         </div>
+        
         <div class="row">
           <div class="col"><label>Buka</label><input v-model="formData.jamBuka" type="time"></div>
           <div class="col"><label>Tutup</label><input v-model="formData.jamTutup" type="time"></div>
         </div>
 
         <div class="actions">
-          <button type="button" class="btn-cancel" @click="router.back()">Batal</button>
-          <button type="submit" class="btn-save" :disabled="isLoading">Simpan Perubahan</button>
+          <button type="button" class="btn-cancel" @click="router.push('/mitra/properti-list')">Batal</button>
+          
+          <button type="submit" class="btn-save" :disabled="isLoading">
+            {{ isLoading ? 'Menyimpan...' : 'Simpan Perubahan' }}
+          </button>
         </div>
       </form>
     </div>

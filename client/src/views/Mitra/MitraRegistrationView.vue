@@ -126,7 +126,7 @@ async function submitRegistration() {
     // Gambar item sebaiknya dihandle di fitur "Edit Tempat" nanti.
     submissionData.append('items', JSON.stringify(formData.items));
 
-    // Pastikan di api.js tidak memaksa 'Content-Type': 'application/json' 
+    // Pastikan di api.js tidak memaksa 'Content-Type': 'application/json'
     // Axios biasanya otomatis mendeteksi FormData dan ganti header jadi 'multipart/form-data'
     const result = await authStore.registerMitra(submissionData);
 
@@ -145,8 +145,7 @@ async function submitRegistration() {
 
 function finishRegistration() {
   showSuccessModal.value = false;
-  // Pastikan route 'mitra-landing' atau 'home' ada di router.js
-  router.push('/');
+  router.push({ name: 'mitra-property' });
 }
 </script>
 
@@ -307,7 +306,7 @@ function finishRegistration() {
             <label class="checkbox-container">
               <input type="checkbox" v-model="formData.agreedToTerms">
               <span class="checkmark"></span>
-              <span class="agreement-text">Saya menyetujui <a href="#">Syarat & Ketentuan</a>.</span>
+              Saya menyetujui <a href="#" @click.prevent="showTermsModal = true">Syarat & Ketentuan</a>.
             </label>
           </div>
         </div>
@@ -329,13 +328,33 @@ function finishRegistration() {
       </div>
     </div>
 
-    <div v-if="showTermsModal" class="modal-overlay">
+    <div v-if="showTermsModal" class="modal-overlay" @click.self="showTermsModal = false">
       <div class="modal-content terms-modal">
-        <h2>Syarat & Ketentuan</h2>
+        <h2>Syarat & Ketentuan Mitra</h2>
+
         <div class="terms-scroll-area">
-          <p>...</p>
+          <h3>1. Pendahuluan</h3>
+          <p>Selamat datang di platform GasMancing. Dengan mendaftar sebagai Mitra, Anda menyetujui seluruh aturan yang berlaku demi kenyamanan bersama antara pemilik kolam dan pemancing.</p>
+
+          <h3>2. Kewajiban Mitra</h3>
+          <p>a. Mitra wajib memberikan informasi yang benar, akurat, dan terbaru mengenai lokasi pemancingan, harga, dan fasilitas.</p>
+          <p>b. Foto properti yang diunggah harus asli dan tidak melanggar hak cipta pihak lain.</p>
+          <p>c. Mitra bertanggung jawab menjaga keamanan dan kenyamanan di lokasi pemancingan fisik.</p>
+
+          <h3>3. Sistem Pemesanan & Pembayaran</h3>
+          <p>a. Setiap pesanan yang masuk melalui aplikasi akan diteruskan ke dashboard Mitra.</p>
+          <p>b. GasMancing berhak memotong biaya layanan sebesar 5% (dummy) dari setiap transaksi yang berhasil.</p>
+          <p>c. Pencairan dana (withdraw) dapat dilakukan setiap hari kerja dengan proses maksimal 1x24 jam.</p>
+
+          <h3>4. Pembatalan & Refund</h3>
+          <p>a. Jika pelanggan membatalkan pesanan H-1, dana akan dikembalikan 100% kepada pelanggan.</p>
+          <p>b. Jika Mitra membatalkan pesanan secara sepihak tanpa alasan jelas lebih dari 3 kali, akun Mitra dapat dibekukan sementara.</p>
+
+          <h3>5. Larangan</h3>
+          <p>Dilarang keras menggunakan platform ini untuk transaksi perjudian, narkoba, atau kegiatan ilegal lainnya sesuai hukum di Indonesia.</p>
         </div>
-        <button class="modal-close-btn" @click="showTermsModal = false">Tutup</button>
+
+        <button class="modal-close-btn" @click="showTermsModal = false">Saya Mengerti</button>
       </div>
     </div>
   </main>

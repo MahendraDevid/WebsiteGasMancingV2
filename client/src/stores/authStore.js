@@ -3,17 +3,11 @@ import { defineStore } from 'pinia'
 import api from '@/services/api'
 
 export const useAuthStore = defineStore('auth', () => {
-  // ==========================================
-  // STATE
-  // ==========================================
   const user = ref(null)
   const token = ref(localStorage.getItem('token') || null)
   const loading = ref(false)
   const error = ref(null)
 
-  // ==========================================
-  // GETTERS
-  // ==========================================
   const isAuthenticated = computed(() => !!token.value)
   const currentUser = computed(() => user.value)
 
@@ -27,9 +21,6 @@ export const useAuthStore = defineStore('auth', () => {
     )
   })
 
-  // ==========================================
-  // ACTIONS: USER BIASA
-  // ==========================================
   const login = async (credentials) => {
     try {
       loading.value = true
@@ -92,11 +83,6 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  // ==========================================
-  // ACTIONS: MITRA (UPDATE: Pastikan id_mitra tersimpan dengan benar)
-  // ==========================================
-
-  // 1. Register Mitra
   const registerMitra = async (mitraData) => {
     try {
       loading.value = true
@@ -121,7 +107,6 @@ export const useAuthStore = defineStore('auth', () => {
         // Simpan ke LocalStorage agar tidak hilang saat refresh
         localStorage.setItem('token', tokenRes)
         localStorage.setItem('user', JSON.stringify(userRes))
-        // ===================================================
 
         return {
           success: true,
@@ -141,7 +126,6 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  // 2. Login Mitra (UPDATE: Pastikan id_mitra tersimpan dan validasi)
   const loginMitra = async (credentials) => {
     try {
       loading.value = true
@@ -182,20 +166,13 @@ export const useAuthStore = defineStore('auth', () => {
       loading.value = false
     }
   }
-
-  // ==========================================
-  // ACTIONS: UMUM (LOGOUT & PROFILE)
-  // ==========================================
   const logout = () => {
     token.value = null
     user.value = null
     localStorage.removeItem('token')
     localStorage.removeItem('user')
-    // Opsional: Redirect ke halaman home
-    // window.location.href = '/'
   }
 
-  // UPDATE: Tambah validasi saat load dari localStorage untuk memastikan id_mitra tersimpan
   const loadUserFromStorage = () => {
     const storedToken = localStorage.getItem('token')
     const storedUser = localStorage.getItem('user')
@@ -301,11 +278,11 @@ export const useAuthStore = defineStore('auth', () => {
     isAuthenticated,
     currentUser,
     isAdmin,
-    isMitra, // Export getter baru
+    isMitra,
     login,
     register,
-    loginMitra, // Export action baru
-    registerMitra, // Export action baru
+    loginMitra,
+    registerMitra,
     logout,
     fetchProfile,
     updateProfile,

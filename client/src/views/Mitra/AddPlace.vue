@@ -32,8 +32,6 @@ const handleFile = (e) => {
 const submitForm = async () => {
   if (!formData.namaProperti || !formData.hargaSewa) return alert("Nama dan Harga wajib diisi");
 
-
-
   // DEBUGGING: Cek apakah ID Mitra terbaca?
   console.log("User saat ini:", user);
   console.log("ID Mitra yang akan dikirim:", user.id_mitra);

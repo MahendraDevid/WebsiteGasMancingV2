@@ -17,7 +17,7 @@ const items = ref([]) // Data akan diisi dari API
 const isLoading = ref(true) // Status loading
 const error = ref(null) // Status error
 
-// --- 1. Fetch Data dari API ---
+// fetch data dari API
 const fetchEnsiklopedia = async () => {
   isLoading.value = true
   error.value = null
@@ -37,7 +37,6 @@ const fetchEnsiklopedia = async () => {
   }
 }
 
-// --- Filter Pencarian (Client-Side) ---
 const filteredItems = computed(() => {
   // Jika ada error atau masih loading, kembalikan array kosong
   if (isLoading.value || error.value) return []
@@ -57,7 +56,6 @@ watch(searchQuery, () => {
   currentPage.value = 1
 })
 
-// --- 2. Pagination Dinamis ---
 const itemsPerPage = 12
 const currentPage = ref(1)
 // Menghitung total halaman berdasarkan filteredItems (data dari API)
@@ -72,8 +70,6 @@ const goToPage = (p) => {
   if (p >= 1 && p <= totalPages.value) currentPage.value = p
 }
 
-
-// --- Modal ---
 const openModal = (item) => {
   selectedItem.value = item
   isModalVisible.value = true
@@ -84,9 +80,8 @@ const closeModal = () => {
   selectedItem.value = null
 }
 
-// --- Logic Auto Buka Modal (On Mounted) ---
 onMounted(() => {
-  fetchEnsiklopedia() // Panggil data pertama kali
+  fetchEnsiklopedia()
 
   // Watch items changes for auto-open modal (karena data dimuat asynchronously)
   watch(items, (newItems) => {
@@ -97,7 +92,7 @@ onMounted(() => {
         openModal(found)
       }
     }
-  }, { immediate: true }) // Jalankan segera saat data dimuat
+  }, { immediate: true })
 })
 </script>
 

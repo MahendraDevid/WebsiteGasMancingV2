@@ -9,7 +9,7 @@ const router = useRouter()
 const place = ref(null)
 const loading = ref(true)
 
-// --- 🔗 KONFIGURASI URL GAMBAR (Backend) ---
+// konfigurasi URL gambar backend
 const API_URL = 'http://localhost:3000/uploads/'
 
 // Fungsi Helper untuk menampilkan gambar
@@ -82,12 +82,8 @@ onMounted(() => {
     <div v-else-if="place" class="detail-content">
       <div class="image-header">
         <div class="image-frame">
-            <img
-              :src="getImageUrl(place.image_url)"
-              :alt="place.title"
-              loading="lazy"
-              @error="$event.target.src = '/img/kolam.png'"
-            />
+          <img :src="getImageUrl(place.image_url)" :alt="place.title" loading="lazy"
+            @error="$event.target.src = '/img/kolam.png'" />
         </div>
         <div class="rating-badge">
           <span>⭐ {{ place.average_rating }} ({{ place.total_reviews_count }})</span>
@@ -102,7 +98,8 @@ onMounted(() => {
           </div>
 
           <div class="header-booking-box">
-            <p class="booking-price-header">Rp. {{ place.base_price?.toLocaleString('id-ID') }} / {{ place.price_unit }}</p>
+            <p class="booking-price-header">Rp. {{ place.base_price?.toLocaleString('id-ID') }} / {{ place.price_unit }}
+            </p>
             <button class="booking-button" @click.stop="goToBooking">Booking Sekarang</button>
           </div>
         </div>
@@ -128,12 +125,8 @@ onMounted(() => {
           <div class="equipment-grid">
             <div v-for="(item, index) in place.item_sewa" :key="index" class="equipment-card">
               <div class="item-icon">
-                <img
-                  :src="getImageUrl(item.image_url)" 
-                  :alt="item.nama_item"
-                  class="equipment-image"
-                  @error="handleImageError"
-                />
+                <img :src="getImageUrl(item.image_url)" :alt="item.nama_item" class="equipment-image"
+                  @error="handleImageError" />
               </div>
               <p class="item-name">{{ item.nama_item }}</p>
               <p class="item-price">Rp. {{ item.price }} / {{ item.price_unit }}</p>

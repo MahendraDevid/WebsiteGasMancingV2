@@ -44,21 +44,12 @@ function handleCopy() {
 <template>
   <div class="confirmation-page-wrapper">
 
-    <!-- LOADING -->
     <div v-if="loading">Memuat detail pesanan...</div>
 
-    <!-- ERROR -->
     <div v-else-if="error" class="error-box">{{ error }}</div>
 
-    <!-- CONTENT -->
     <div v-else class="confirmation-content-box">
-
-      <!-- JUDUL -->
       <h1 class="page-title">Detail Pesanan</h1>
-
-      <!-- =======================
-          TOP SECTION (TOTAL + NOMOR PESANAN)
-      ============================ -->
       <div class="payment-box-wrapper">
         <h2 class="section-subtitle">Informasi Pembayaran</h2>
         <div class="payment-box-header">
@@ -90,20 +81,11 @@ function handleCopy() {
           <span class="code-value">{{ order.metode_pembayaran || "Tidak ada" }}</span>
         </div>
       </div>
-
-      <!-- ==========================
-            DETAIL PESANAN BOX UTAMA
-      =========================== -->
       <section class="confirmation-details-wrapper">
 
         <h2 class="section-subtitle">Informasi Sewa</h2>
-
-        <!-- ==========================
-             INFO SEWA + ITEMS
-        =========================== -->
         <div class="rental-info-container">
 
-          <!-- INFO LOKASI, TANGGAL, ORANG -->
           <div class="location-date-person">
 
             <div class="info-item">
@@ -126,7 +108,6 @@ function handleCopy() {
 
           </div>
 
-          <!-- PERALATAN DISEWA -->
           <div class="rented-items-box">
             <h3 class="items-title">Peralatan yang Disewa :</h3>
 
@@ -145,4 +126,4 @@ function handleCopy() {
   </div>
 </template>
 
-<style scoped src="./DetailPesanan.style.css"></style>  
+<style scoped src="./DetailPesanan.style.css"></style>

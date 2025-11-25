@@ -1,16 +1,14 @@
-/* --- Desktop/Base Styles --- */
 body {
     background-color: var(--bay-of-many);
 }
-/* Style Hero Section */
 .hero-section {
     position: relative;
     width: 100%;
-    height: 100vh; /* Tinggi penuh di desktop */
+    height: 100vh;
     overflow: hidden;
     display: flex;
-    align-items: center; /* Digunakan untuk centering di desktop */
-    justify-content: center; /* Digunakan untuk centering di desktop */
+    align-items: center;
+    justify-content: center;
     margin-top: -30px;
     top: 50%;
 }
@@ -48,10 +46,9 @@ body {
     z-index: 1;
 }
 
-/* Style Judul Hero (Desktop) */
 .hero-content {
     position: absolute;
-    top: 42%; /* Posisi vertikal di desktop */
+    top: 42%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 90%;
@@ -65,7 +62,7 @@ body {
     font-weight: 800;
     height: 100px;
     color: white;
-    margin-top: -200px; /* Nilai awal, akan ditimpa oleh hero-content top/transform */
+    margin-top: -200px;
     text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     margin-bottom: 10px;
     line-height: 1.2;
@@ -78,10 +75,9 @@ body {
     filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.25));
 }
 
-/* Style Search Section (Desktop) */
 .search-section {
     position: absolute;
-    top: 60%; /* Posisi vertikal di desktop */
+    top: 60%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 95%;
@@ -93,7 +89,7 @@ body {
 .search-container-custom {
     max-width: 1150px;
     margin: 0 auto;
-    display: flex; /* Flexbox horizontal di desktop */
+    display: flex;
     align-items: center;
     gap: 10px;
     background-color: white;
@@ -141,7 +137,7 @@ body {
     color: var(--sonic-silver);
     opacity: 1;
 }
-/* Style spesifik untuk input type="date" */
+
 .search-input-custom[type="date"] {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -187,7 +183,6 @@ body {
     height: 24px;
 }
 
-/* Style Section Utama */
 .homepage {
     background-color: white;
 }
@@ -218,7 +213,6 @@ body {
     margin-bottom: 40px;
 }
 
-/* --- Popular Cards Grid Styles --- */
 .cards-grid {
     max-width: 1520px;
     margin: 0 auto;
@@ -276,7 +270,7 @@ body {
     margin-bottom: 12px;
     text-align: left;
 }
-/* ... (lanjutan style card: location, rating, description, facilities, button) ... */
+
 .card-location {
     display: flex;
     align-items: center;
@@ -372,7 +366,6 @@ body {
     box-shadow: 0 4px 12px rgba(19, 62, 135, 0.3);
 }
 
-/* --- Carousel Tips Section Styles --- */
 .carousel-wrapper {
     position: relative;
     max-width: 1200px;
@@ -523,7 +516,7 @@ body {
 .carousel-nav-btn.next {
     right: 0;
 }
-/* Style untuk Ikon (jika ada di elemen lain) */
+
 .item-icon {
     width: 100%;
     height: 100px;
@@ -550,8 +543,6 @@ body {
     object-fit: cover;
 }
 
-/* --- Responsive Adjustments --- */
-
 @media (max-width: 1200px) {
     .hero-title-text {
         font-size: 50px;
@@ -559,11 +550,9 @@ body {
 }
 
 @media (max-width: 1024px) {
-    /* Penyesuaian Hero Content untuk Tablet/Laptop Kecil */
     .hero-content {
-        /* Kembali ke penempatan absolut yang lebih tinggi untuk tablet/1024px */
         top: 50%px;
-        transform: translate(-50%, 0); /* Hanya centring horizontal */
+        transform: translate(-50%, 0);
     }
 
     .search-container-custom {
@@ -597,26 +586,21 @@ body {
         gap: 30px;
     }
 }
-
-/* KODE PERBAIKAN UTAMA UNTUK MOBILE (768px kebawah) */
-/* ===========================
-   RESPONSIVE (LAYAR MOBILE)
-   =========================== */
 @media (max-width: 768px) {
     .hero-section {
-        height: 80vh; /* Lebih kecil dari 100vh */
+        height: 80vh;
         top: 0;
         margin-top: 0;
     }
 
     .hero-content {
         top: 45%;
-        margin-top: 0; /* HAPUS margin negatif */
+        margin-top: 0;
     }
 
     .hero-title-text {
         font-size: 34px;
-        font-weight: 700; /* Hapus penggeseran */
+        font-weight: 700;
         height: auto;
     }
 
@@ -629,7 +613,7 @@ body {
     }
 
     .search-container-custom {
-        flex-direction: column; /* TATA VERTIKAL DI MOBILE */
+        flex-direction: column;
         gap: 12px;
         padding: 15px;
     }
@@ -671,21 +655,20 @@ body {
         padding-top: 0 !important;
         position: relative;
         top: 0;
-        height: 55vh; /* Lebih pendek lagi */
+        height: 55vh;
         min-height: 400px;
     }
 
     .hero-content {
-        padding-top: 80px; /* Sesuaikan jarak ke atas */
+        padding-top: 80px;
     }
 
     .hero-title-text {
         font-size: 30px;
     }
 
-    /* ** 2. Perubahan Search Section ** */
     .search-section {
-        margin-top: -30px; /* KRITIS: Kurangi lagi tarik ke atas */
+        margin-top: -30px;
         padding: 0 10px 30px;
     }
 
@@ -772,8 +755,6 @@ body {
     }
 }
 
-/* --- MITRA SECTION STYLES --- */
-
 .mitra-section {
     width: 100%;
     display: flex;
@@ -783,61 +764,55 @@ body {
 
 .mitra-banner-wrapper {
     position: relative;
-    /* Mengurangi lebar menjadi sekitar 80% dari sebelumnya (1520px -> 1200px) */
     max-width: 1400px;
     width: 95%;
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    /* Agar wrapper berada di tengah */
     margin: 0 auto;
 }
 
 .mitra-image {
-  width: 100%;
+    width: 100%;
     height: 380px;
     display: block;
     object-fit: cover;
-    /* Sedikit mengurangi min-height agar proporsional */
     min-height: 350px;
-    /* Opsional: Gelapkan sedikit gambar agar tulisan putih terbaca */
     filter: brightness(0.85);
 }
 
-/* --- TEKS AJAKAN --- */
 .mitra-text-overlay {
     position: absolute;
-    top: 10%; /* Posisi di atas */
+    top: 10%;
     left: 6%;
     max-width: 1000px;
     z-index: 10;
     color: var(--white);
     text-align: left;
-
 }
 
 .mitra-text-overlay h2 {
     font-size: 77px;
     font-weight: 800;
     margin-bottom: 10px;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.5); /* Bayangan agar teks jelas */
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     line-height: 0.9;
     color: #f0f0f0;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9), -1px -1px 3px rgba(0, 0, 0, 0.7);
+    text-shadow:
+        2px 2px 8px rgba(0, 0, 0, 0.9),
+        -1px -1px 3px rgba(0, 0, 0, 0.7);
 }
 
 .mitra-text-overlay p {
     font-size: 21px;
     font-weight: 500;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
     color: #f0f0f0;
     text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.9);
 }
 
-/* --- TOMBOL --- */
 .mitra-button {
     position: absolute;
-    /* Rasio 5:1 (Total 6 bagian, tombol di 5/6 = ~83%) */
     top: 80%;
     right: 6%;
     transform: translateY(-50%);
@@ -853,7 +828,7 @@ body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
     z-index: 10;
-    white-space: nowrap; /* Agar teks tidak turun baris */
+    white-space: nowrap;
 }
 
 .mitra-button:hover {
@@ -862,11 +837,9 @@ body {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
-/* --- Responsive --- */
-
 @media (max-width: 1024px) {
-  .mitra-banner-wrapper {
-        width: 95%; /* Di HP biarkan agak lebar biar jelas */
+    .mitra-banner-wrapper {
+        width: 95%;
         height: 300px;
     }
     .mitra-text-overlay h2 {
@@ -884,19 +857,18 @@ body {
 
 @media (max-width: 768px) {
     .mitra-banner-wrapper {
-        width: 95%; /* Di HP biarkan agak lebar biar jelas */
+        width: 95%;
         height: 300px;
     }
 
     .mitra-image {
-        min-height: 250px; /* Tinggi minimal di HP */
+        min-height: 250px;
     }
 
     .mitra-text-overlay {
         top: 15%;
         left: 5%;
         right: 5%;
-
     }
 
     .mitra-text-overlay h2 {
@@ -905,7 +877,7 @@ body {
 
     .mitra-text-overlay p {
         font-size: 14px;
-        display: block; /* Pastikan tetap muncul */
+        display: block;
     }
 
     .mitra-button {
@@ -917,14 +889,12 @@ body {
 }
 
 @media (max-width: 480px) {
-    /* Penyesuaian untuk layar kecil sekali */
     .mitra-text-overlay h2 {
         font-size: 18px;
         margin-bottom: 5px;
     }
     .mitra-text-overlay p {
         font-size: 12px;
-        max-width: 70%; /* Supaya tidak nabrak tombol kalau layar sempit */
     }
     .mitra-button {
         top: 82%;

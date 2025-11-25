@@ -4,8 +4,8 @@
       <div class="modal-wrapper">
         <div class="modal-container">
           <slot></slot>
-          
-</div>
+
+        </div>
       </div>
     </div>
   </Transition>
@@ -25,7 +25,6 @@ defineEmits(['close']);
 </script>
 
 <style scoped>
-/* Modal Overlay/Mask */
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -38,7 +37,6 @@ defineEmits(['close']);
   transition: opacity 0.3s ease;
 }
 
-/* Modal Content Container */
 .modal-wrapper {
   flex-grow: 1;
 }
@@ -54,24 +52,21 @@ defineEmits(['close']);
   position: relative;
 }
 
-/* Arrowhead */
 .modal-container::before {
   content: '';
   position: absolute;
-  top: -15px; 
+  top: -15px;
   right: 15px;
   border-width: 0 15px 15px 15px;
   border-style: solid;
   border-color: transparent transparent #fff transparent;
-  filter: drop-shadow(0 -2px 2px rgba(0,0,0,0.1));
+  filter: drop-shadow(0 -2px 2px rgba(0, 0, 0, 0.1));
 }
 
-/* Sembunyikan footer bawaan */
 .modal-footer {
   display: none;
 }
 
-/* Vue Transition CSS */
 .modal-enter-from,
 .modal-leave-to {
   opacity: 0;

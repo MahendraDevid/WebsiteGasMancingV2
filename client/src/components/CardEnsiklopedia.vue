@@ -24,7 +24,7 @@ const props = defineProps({
 const handleImageError = (event) => {
   //Ambil title dari props, beri fallback 'Gambar' jika title kosong
   const title = props.data.title || 'Gambar'
-  
+
   //Gunakan title tersebut di URL placeholder
   //encodeURIComponent() penting untuk menangani spasi (misal: "Ikan Nila")
   event.target.src = `https://placehold.co/300x200/608BC1/ffffff?text=${encodeURIComponent(title)}`
@@ -42,10 +42,12 @@ const handleImageError = (event) => {
   flex-direction: column;
   padding: 24px;
 }
+
 .card:hover {
   transform: translateY(-8px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
+
 .card-image {
   width: 100%;
   height: 220px;
@@ -54,27 +56,32 @@ const handleImageError = (event) => {
   margin-bottom: 20px;
   background-color: #e9ecef;
 }
+
 .card-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
 }
+
 .card:hover .card-image img {
   transform: scale(1.1);
 }
+
 .card-content {
   padding: 8px;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
+
 .card-title {
   font-size: 22px;
   font-weight: 600;
   color: var(--bay-of-many);
   margin-bottom: 14px;
 }
+
 .card-description {
   font-size: 15px;
   color: #6c757d;
@@ -100,6 +107,7 @@ const handleImageError = (event) => {
   cursor: pointer;
   transition: all 0.3s ease;
 }
+
 .btn-detail:hover {
   background-color: #4f7aa8;
   transform: translateY(-2px);

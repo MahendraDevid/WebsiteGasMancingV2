@@ -7,17 +7,16 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
-/* Responsive Image Frame Template */
 .image-header {
   position: relative;
 }
 
 .image-frame img {
-    width: 100%;
-    height: 400px; /* Tentukan tinggi tetap */
-    object-fit: cover; /* Agar gambar mengisi penuh */
-    object-position: center;
-    border-radius: 12px;
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 12px;
 }
 
 .place-image {
@@ -171,7 +170,6 @@
   display: block;
   margin: 0 auto;
 }
-
 
 .item-name {
   font-weight: 600;
@@ -356,7 +354,6 @@ hr {
   box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
 }
 
-/*   Responsive adjustments */
 @media (max-width: 768px) {
   .place-detail-page {
     max-width: 95%;

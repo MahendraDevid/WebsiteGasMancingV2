@@ -9,13 +9,13 @@ const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 
-// --- KONFIGURASI URL GAMBAR (Backend) ---
+// konfigurasi URL gambar backend
 const API_URL = 'http://localhost:3000/uploads/'
 
 // Helper Gambar
 const getImageUrl = (filename) => {
-  if (!filename || filename === 'default_place.jpg') return '/img/kolam.png' // Default Place
-  if (filename === '/img/placeholder-icon.png') return '/img/placeholder-icon.png' // Default Icon
+  if (!filename || filename === 'default_place.jpg') return '/img/kolam.png'
+  if (filename === '/img/placeholder-icon.png') return '/img/placeholder-icon.png'
 
   if (filename.startsWith('http') || filename.startsWith('/img')) return filename
 
@@ -204,17 +204,18 @@ const selectedEquipmentParams = computed(() => {
 
 <template>
   <main class="booking-page-wrapper">
-    
+
     <div v-if="showErrorModal" class="modal-overlay">
       <div class="modal-content">
         <div class="error-icon-circle">
-          <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="x-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="x-icon">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </div>
         <h2>Aksi Gagal!</h2>
-        <p v-html="errorMessage"></p> 
+        <p v-html="errorMessage"></p>
         <button class="modal-close-btn" @click="closeErrorModal">Tutup</button>
       </div>
     </div>
@@ -235,18 +236,16 @@ const selectedEquipmentParams = computed(() => {
 
     <template v-else>
       <section class="spot-info-card">
-        
-        <img
-          :src="getImageUrl(spotInfo.image)" 
-          :alt="spotInfo.title"
-          class="spot-info-image"
-          @error="$event.target.src = '/img/kolam.png'"
-        />
+
+        <img :src="getImageUrl(spotInfo.image)" :alt="spotInfo.title" class="spot-info-image"
+          @error="$event.target.src = '/img/kolam.png'" />
 
         <div class="spot-info-content">
           <h1>{{ spotInfo.title }}</h1>
           <p>
-            <svg class="location-icon-card" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="location-icon-card" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
               <circle cx="12" cy="10" r="3" />
             </svg>
@@ -276,22 +275,17 @@ const selectedEquipmentParams = computed(() => {
         <div class="equipment-section">
           <h2>Peralatan Tambahan</h2>
           <div class="equipment-grid">
-            <div
-              v-for="item in equipmentList"
-              :key="item.id_item"
-              :class="['equipment-box', { active: equipment[item.id_item] > 0 }]"
-            >
-              <img
-                :src="getImageUrl(item.icon)" 
-                :alt="item.name"
-                @error="$event.target.src = '/img/placeholder-icon.png'"
-              />
-              
+            <div v-for="item in equipmentList" :key="item.id_item"
+              :class="['equipment-box', { active: equipment[item.id_item] > 0 }]">
+              <img :src="getImageUrl(item.icon)" :alt="item.name"
+                @error="$event.target.src = '/img/placeholder-icon.png'" />
+
               <span class="equipment-name">{{ item.name }}</span>
               <span class="equipment-price">{{ formatCurrency(item.price) }}</span>
 
               <div class="qty-control">
-                <button @click="decreaseQty(item.id_item)" :disabled="equipment[item.id_item] === 0" class="qty-btn">-</button>
+                <button @click="decreaseQty(item.id_item)" :disabled="equipment[item.id_item] === 0"
+                  class="qty-btn">-</button>
                 <span class="qty-display">{{ equipment[item.id_item] }}</span>
                 <button @click="increaseQty(item.id_item)" class="qty-btn">+</button>
               </div>
@@ -300,13 +294,8 @@ const selectedEquipmentParams = computed(() => {
         </div>
       </section>
 
-      <FooterPayment
-        variant="checkout"
-        :leftTitle="'Total'"
-        :leftSubtitle="totalPriceFormatted"
-        :buttonText="'Lanjut ke Pembayaran'"
-        @click="handleCheckoutClick"
-      />
+      <FooterPayment variant="checkout" :leftTitle="'Total'" :leftSubtitle="totalPriceFormatted"
+        :buttonText="'Lanjut ke Pembayaran'" @click="handleCheckoutClick" />
     </template>
   </main>
 </template>

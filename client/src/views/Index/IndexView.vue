@@ -6,22 +6,22 @@
       <strong>Nama Kelompok:</strong> GasMancing <br>
       <strong>Nomor Kelompok:</strong> Kelompok 4 </br>
       <br>
-    <br>
-    <strong>Anggota Kelompok:</strong> </br>
-    <ol class="number">
+      <br>
+      <strong>Anggota Kelompok:</strong> </br>
+      <ol class="number">
         <li>
-            Arya Purnama Sauri (NIM : 2408521)
+          Arya Purnama Sauri (NIM : 2408521)
         </li>
         <li>
-            Imam Azizun Hakim (NIM : 2404420)
+          Imam Azizun Hakim (NIM : 2404420)
         </li>
         <li>
-            Mahendra Devid Putra Anwar (NIM : 2407792)
+          Mahendra Devid Putra Anwar (NIM : 2407792)
         </li>
         <li>
-            Muhammad Rangga Nur Praditha (NIM: 2400297)
+          Muhammad Rangga Nur Praditha (NIM: 2400297)
         </li>
-    </ol>
+      </ol>
 
     </div>
 
@@ -39,7 +39,7 @@
         <li><router-link to="/detailpesanan/1">9. Detail Pesanan</router-link></li>
         <li><router-link to="/mitra">10. Landing View Kemitraan</router-link></li>
         <li><router-link to="/mitra/daftar">11. Daftar Kemitraan</router-link></li>
-        </ul>
+      </ul>
     </nav>
   </div>
 </template>

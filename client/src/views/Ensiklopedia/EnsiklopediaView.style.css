@@ -4,7 +4,6 @@
   min-height: 100vh;
 }
 
-/* Header Section */
 .header-section {
   text-align: center;
   margin-bottom: 50px;
@@ -26,8 +25,6 @@
   line-height: 1.6;
 }
 
-/* BARU: Style untuk Search Bar 
-*/
 .search-container {
   position: relative;
   margin-top: 30px;
@@ -39,9 +36,9 @@
 
 .search-input {
   width: 100%;
-  padding: 16px 20px 16px 50px; /* Jarak untuk ikon */
+  padding: 16px 20px 16px 50px;
   font-size: 16px;
-  border-radius: 50px; /* Sangat bulat */
+  border-radius: 50px;
   border: 1px solid #d6d6d6;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
@@ -62,7 +59,6 @@
   color: #999;
 }
 
-/* Grid Container */
 .grid-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -71,8 +67,6 @@
   margin: 0 auto;
 }
 
-
-/*  Style untuk "Hasil Tidak Ditemukan" */
 .no-results {
   text-align: center;
   margin-top: 50px;
@@ -86,7 +80,6 @@
 .no-results p {
   font-size: 16px;
 }
-
 
 .pagination {
   display: flex;
@@ -123,8 +116,6 @@
   cursor: not-allowed;
 }
 
-
-/* Responsive Layout */
 @media screen and (max-width: 1400px) {
   .grid-container {
     grid-template-columns: repeat(3, 1fr);

@@ -1,12 +1,10 @@
-/* Latar belakang utama halaman */
 .payment-page {
   min-height: 100vh;
-  padding: 24px 24px 120px 24px; 
+  padding: 24px 24px 120px 24px;
 }
 
-/* Kontainer utama konten di tengah */
 .payment-content {
-  max-width: 900px; /* Batasi lebar konten */
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -17,19 +15,18 @@
 .payment-title {
   font-size: 28px;
   font-weight: 700;
-  color: #1a202c; /* Teks hitam pekat */
+  color: #1a202c;
 }
 
-/* Box Putih: Total Harga & Nomor Pesanan */
 .order-summary {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-radius: 16px;
   padding: 24px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 24px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .order-total {
@@ -39,7 +36,7 @@
 
 .order-total span {
   font-size: 16px;
-  color: #718096; /* Teks abu-abu */
+  color: #718096;
   margin-bottom: 4px;
 }
 
@@ -55,21 +52,20 @@
   gap: 8px;
   font-size: 16px;
   font-weight: 600;
-  color: #4A5568;
+  color: #4a5568;
 }
 
 .order-badge {
-  background-color: #E53E3E; /* Merah */
-  color: #FFFFFF;
+  background-color: #e53e3e;
+  color: #ffffff;
   padding: 2px 8px;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 700;
 }
 
-/* Box Abu-abu: Metode Pembayaran */
 .payment-methods {
-  background-color: #FFFFFF; /* Abu-abu container */
+  background-color: #ffffff;
   border-radius: 16px;
   padding: 24px;
 }
@@ -81,22 +77,21 @@
   margin-bottom: 16px;
 }
 
-/* Setiap kategori (Transfer Bank, E-Wallet, dll) */
 .method-category {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-radius: 12px;
   margin-bottom: 16px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  overflow: hidden; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
 }
 
 .method-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    cursor: pointer;
-    width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  cursor: pointer;
+  width: 100%;
 }
 
 .method-info {
@@ -118,7 +113,7 @@
 }
 
 .method-logos img {
-  height: 20px; /* Atur tinggi logo seragam */
+  height: 20px;
   object-fit: contain;
 }
 
@@ -135,17 +130,16 @@
 
 .method-content {
   padding: 0 20px 20px 20px;
-  border-top: 1px solid #EDF2F7;
+  border-top: 1px solid #edf2f7;
 }
 
 .payment-option-list {
   display: flex;
   flex-direction: column;
-  gap: 10px; /* Jarak antar opsi */
-  padding-top: 15px; /* Jarak dari garis pemisah */
+  gap: 10px;
+  padding-top: 15px;
 }
 
-/* Style untuk setiap baris opsi (BRI, BNI, dll) */
 .payment-option {
   display: flex;
   align-items: center;
@@ -157,12 +151,11 @@
 }
 
 .payment-option:hover {
-  border-color: #0D47A1; /* Warna biru saat di-hover */
+  border-color: #0d47a1;
 }
 
-/* Style untuk logo di dalam daftar */
 .payment-logo {
-  height: 24px; /* Ukuran logo  */
+  height: 24px;
   margin-right: 12px;
   object-fit: contain;
 }
@@ -172,9 +165,8 @@
   color: #333;
 }
 
-/* Pindahkan radio button ke paling kanan */
 .payment-option input[type="radio"] {
-  margin-left: auto; 
+  margin-left: auto;
   width: 20px;
   height: 20px;
   cursor: pointer;

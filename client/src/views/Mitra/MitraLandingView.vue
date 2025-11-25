@@ -6,7 +6,7 @@ import { useAuthStore } from '@/stores/authStore';
 const router = useRouter();
 const authStore = useAuthStore();
 
-// 2. Gunakan Data dari Store (Lebih Aman & Reaktif)
+// Gunakan Data dari Store (Lebih Aman & Reaktif)
 const currentUser = computed(() => authStore.user);
 const isMitra = computed(() => authStore.isMitra);
 const isAuthenticated = computed(() => authStore.isAuthenticated);

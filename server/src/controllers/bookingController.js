@@ -1,5 +1,3 @@
-// controllers/bookingController.js
-
 const BookingModel = require("../models/bookingModel");
 
 // =======================================================

@@ -1,5 +1,3 @@
-// controllers/itemSewaController.js
-
 const ItemSewaModel = require('../models/itemSewaModel');
 
 exports.getByPlaceId = async (req, res) => {

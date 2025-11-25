@@ -119,11 +119,14 @@ const handleAuthSuccess = () => {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: #FFFFFF;
 }
 
 .main-content {
   flex-grow: 1;
+  background-color: #FFFFFF;
 }
+
 .nav-filler {
   background-color: var(--bay-of-many);
   height: 75px;

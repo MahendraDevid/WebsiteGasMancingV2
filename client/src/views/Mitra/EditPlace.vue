@@ -2,7 +2,6 @@
 import { reactive, ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import api from '@/services/api';
-import './EditPlace.style.css'; // Import CSS Terpisah
 
 const router = useRouter();
 const route = useRoute(); // Ambil ID dari URL
@@ -78,21 +77,26 @@ onMounted(() => loadData());
         </div>
 
         <div class="form-group">
-           <label>Foto Saat Ini</label>
-           <img :src="formData.fotoPreview" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px;">
-           <small style="color: #666;">*Upload ulang foto belum tersedia di mode edit cepat.</small>
+          <label>Foto Saat Ini</label>
+          <img :src="formData.fotoPreview" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px;">
+          <small style="color: #666;">*Upload ulang foto belum tersedia di mode edit cepat.</small>
         </div>
 
-        <div class="form-group"><label>Deskripsi</label><textarea v-model="formData.deskripsi" rows="3"></textarea></div>
-        <div class="form-group"><label>Alamat</label><textarea v-model="formData.alamatProperti" rows="2"></textarea></div>
+        <div class="form-group"><label>Deskripsi</label><textarea v-model="formData.deskripsi" rows="3"></textarea>
+        </div>
+        <div class="form-group"><label>Alamat</label><textarea v-model="formData.alamatProperti" rows="2"></textarea>
+        </div>
 
         <div class="row">
-           <div class="col"><label>Harga</label><input v-model="formData.hargaSewa" type="number"></div>
-           <div class="col"><label>Satuan</label><select v-model="formData.satuanSewa"><option>Jam</option><option>Hari</option></select></div>
+          <div class="col"><label>Harga</label><input v-model="formData.hargaSewa" type="number"></div>
+          <div class="col"><label>Satuan</label><select v-model="formData.satuanSewa">
+              <option>Jam</option>
+              <option>Hari</option>
+            </select></div>
         </div>
         <div class="row">
-           <div class="col"><label>Buka</label><input v-model="formData.jamBuka" type="time"></div>
-           <div class="col"><label>Tutup</label><input v-model="formData.jamTutup" type="time"></div>
+          <div class="col"><label>Buka</label><input v-model="formData.jamBuka" type="time"></div>
+          <div class="col"><label>Tutup</label><input v-model="formData.jamTutup" type="time"></div>
         </div>
 
         <div class="actions">
@@ -104,4 +108,4 @@ onMounted(() => loadData());
   </div>
 </template>
 
-
+<style scoped src="./EditPlace.style.css"></style>

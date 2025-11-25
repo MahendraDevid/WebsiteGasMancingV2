@@ -1,13 +1,13 @@
-/* =========================================================
-   WRAPPER PAGE
-========================================================= */
 .pesanan-page-wrapper {
   background-color: var(--bg-blue);
   padding: 60px 40px 80px 40px;
   min-height: 100vh;
   max-width: 1200px;
   margin: 0 auto;
-  font-family: 'Inter', -apple-system, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    sans-serif;
 }
 
 .pesanan-title {
@@ -18,9 +18,6 @@
   margin-bottom: 40px;
 }
 
-/* =========================================================
-   ORDER LIST
-========================================================= */
 .order-list {
   max-width: 1524px;
   margin: 0 auto;
@@ -36,9 +33,6 @@
   padding: 50px;
 }
 
-/* =========================================================
-   ORDER CARD
-========================================================= */
 .order-card {
   background-color: var(--white);
   border-radius: 15px;
@@ -46,17 +40,16 @@
   display: flex;
   overflow: hidden;
   min-height: 350px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .order-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* =======================
-   IMAGE SECTION
-======================= */
 .card-image-section {
   width: 45%;
   min-width: 300px;
@@ -70,9 +63,6 @@
   object-fit: cover;
 }
 
-/* =======================
-   CONTENT SECTION
-======================= */
 .card-content-section {
   padding: 30px 40px;
   flex-grow: 1;
@@ -81,9 +71,6 @@
   flex-direction: column;
 }
 
-/* =======================
-   STATUS BADGE
-======================= */
 .card-status-badge {
   position: absolute;
   top: 25px;
@@ -96,23 +83,20 @@
 }
 
 .card-status-badge.lunas {
-  background-color: #D4EDDA;
+  background-color: #d4edda;
   color: #155724;
 }
 
 .card-status-badge.menunggu {
-  background-color: #FFF3CD;
+  background-color: #fff3cd;
   color: #856404;
 }
 
 .card-status-badge.dibatalkan {
-  background-color: #F8D7DA;
+  background-color: #f8d7da;
   color: #721c24;
 }
 
-/* =======================
-   CARD TITLE
-======================= */
 .card-title {
   font-size: 32px;
   font-weight: 600;
@@ -121,14 +105,13 @@
   margin-bottom: 10px;
 }
 
-/* =======================
-   RATING SECTION
-======================= */
-.card-rating { margin-bottom: 10px; }
+.card-rating {
+  margin-bottom: 10px;
+}
 
 .rating-box {
   background-color: var(--travertine);
-  box-shadow: 0px 2px 10px rgba(0,0,0,0.25);
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
   border-radius: 5px;
   padding: 5px 10px;
   display: flex;
@@ -137,13 +120,20 @@
   width: fit-content;
 }
 
-.rating-box img { width: 18px; height: 18px; }
-.rating-value { font-size: 20px; font-weight: 600; color: var(--licorice); }
-.review-count { font-size: 15px; color: var(--licorice); }
+.rating-box img {
+  width: 18px;
+  height: 18px;
+}
+.rating-value {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--licorice);
+}
+.review-count {
+  font-size: 15px;
+  color: var(--licorice);
+}
 
-/* =======================
-   LOCATION SECTION
-======================= */
 .card-location {
   display: flex;
   align-items: center;
@@ -160,9 +150,6 @@
   fill: none;
 }
 
-/* =======================
-   INFO GRID
-======================= */
 .card-info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -197,9 +184,6 @@
   color: var(--bay-of-many);
 }
 
-/* =========================================================
-   ACTION BUTTONS
-========================================================= */
 .card-buttons {
   display: flex;
   flex-direction: column;
@@ -242,49 +226,40 @@
   background-color: #0d2f64;
 }
 
-/* Cancel = Outline Red */
 .button-cancel.red-style {
   background-color: transparent;
-  color: #DC3545;
-  border: 2px solid #DC3545;
+  color: #dc3545;
+  border: 2px solid #dc3545;
 }
 
 .button-cancel.red-style:hover {
   background-color: rgba(220, 53, 69, 0.1);
 }
 
-/* Review full width */
 .button-review {
   width: 100%;
 }
 
-/* =========================================================
-   MESSAGES (Loading / Error / Empty)
-========================================================= */
 .loading-message,
 .error-message {
   text-align: center;
   padding: 60px 20px;
   background: white;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* =========================================================
-   CUSTOM MODAL (Konfirmasi Batal Pesanan)
-========================================================= */
 .custom-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);  /* gelap lembut */
-  backdrop-filter: blur(2px);       /* efek blur */
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000; /* pastikan di atas card lainnya */
+  z-index: 2000;
 }
 
-/* BOX UTAMA MODAL */
 .custom-modal {
   background: #ffffff;
   width: 90%;
@@ -307,7 +282,6 @@
   }
 }
 
-/* Judul */
 .modal-title {
   font-size: 20px;
   font-weight: 700;
@@ -315,7 +289,6 @@
   margin-bottom: 12px;
 }
 
-/* Tombol di modal */
 .modal-actions {
   display: flex;
   justify-content: space-between;
@@ -342,8 +315,8 @@
   padding: 12px;
   font-size: 15px;
   border-radius: 8px;
-  border: 2px solid #DC3545;
-  color: #DC3545;
+  border: 2px solid #dc3545;
+  color: #dc3545;
   background: none;
 }
 
@@ -351,9 +324,6 @@
   background-color: rgba(220, 53, 69, 0.1);
 }
 
-/* =========================================================
-   SUCCESS/ERROR MESSAGE BOX
-========================================================= */
 .message-box {
   position: fixed;
   top: 90px; /* Di bawah navbar */
@@ -385,13 +355,13 @@
 }
 
 .message-box.success {
-  background-color: #D4EDDA;
+  background-color: #d4edda;
   color: #155724;
   border: 2px solid #28a745;
 }
 
 .message-box.error {
-  background-color: #F8D7DA;
+  background-color: #f8d7da;
   color: #721c24;
   border: 2px solid #dc3545;
 }
@@ -413,9 +383,6 @@
   opacity: 1;
 }
 
-/* =========================================================
-   RESPONSIVE
-========================================================= */
 @media (max-width: 992px) {
   .order-card {
     flex-direction: column;

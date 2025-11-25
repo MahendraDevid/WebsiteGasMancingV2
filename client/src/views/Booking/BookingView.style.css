@@ -1,31 +1,27 @@
-/* Variabel Warna (Asumsi) */
 :root {
-    --bg-blue: #F0F4F8; /* Latar belakang halaman yang terang */
+    --bg-blue: #f0f4f8;
     --white: #ffffff;
-    --licorice: #3A3A3A; /* Teks gelap */
-    --dove-gray: #6B7280; /* Teks abu-abu */
-    --bon-jour: #E5E7EB; /* Garis batas terang */
-    --btn-blue: #3B82F6; /* Tombol biru */
-    --bay-of-many: #143A7C; /* Biru gelap untuk aktif/hover */
-    --cultured-pearl: #F3F4F6; /* Hover ringan */
+    --licorice: #3a3a3a;
+    --dove-gray: #6b7280;
+    --bon-jour: #e5e7eb;
+    --btn-blue: #3b82f6;
+    --bay-of-many: #143a7c;
+    --cultured-pearl: #f3f4f6;
 }
 
-/* Wrapper Utama Halaman */
 .booking-page-wrapper {
     background-color: var(--bg-blue);
-    /* Padding bawah 150px untuk memberi ruang pada FooterPayment fixed */
-    padding: 120px 40px 150px 40px; 
+    padding: 120px 40px 150px 40px;
     min-height: 100vh;
 }
 
-/* 1. Kartu Info Spot */
 .spot-info-card {
     display: flex;
     align-items: center;
     gap: 25px;
     background-color: var(--white);
     border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto 40px auto;
@@ -39,29 +35,26 @@
     flex-shrink: 0;
 }
 
-/* --- Styling Tambahan untuk Error 404 di BookingView --- */
-
 .error-container-404 {
     display: flex;
     justify-content: center;
     padding: 40px 20px;
-    margin: 40px auto; 
+    margin: 40px auto;
     width: 100%;
-    max-width: 800px; 
+    max-width: 800px;
 }
 
 .error-content-404 {
     background: #ffffff;
     border-radius: 8px;
     padding: 50px;
-    /* Box Shadow yang halus untuk meniru tampilan kartu */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     text-align: center;
     width: 100%;
 }
 
 .error-title-404 {
-    color: #e74c3c; /* Merah terang */
+    color: #e74c3c;
     font-size: 1.8rem;
     font-weight: bold;
     margin-bottom: 10px;
@@ -74,7 +67,7 @@
 }
 
 .error-button-404 {
-    background-color: #3498db; /* Warna biru */
+    background-color: #3498db;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -87,8 +80,6 @@
 .error-button-404:hover {
     background-color: #2980b9;
 }
-
-/* ... Style BookingView lainnya ... */
 
 .spot-info-content h1 {
     font-size: 28px;
@@ -112,11 +103,10 @@
     flex-shrink: 0;
 }
 
-/* 2. Form Booking */
 .booking-form-section {
     background-color: var(--white);
     border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     padding: 30px;
     max-width: 1200px;
     margin: 0 auto;
@@ -131,7 +121,6 @@
     border-bottom: 1px solid var(--bon-jour);
 }
 
-/* Input Tanggal, Durasi, Jumlah */
 .booking-inputs {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -166,7 +155,6 @@
     border-color: var(--btn-blue);
 }
 
-/* 3. Grid Peralatan */
 .equipment-section {
     margin-top: 30px;
 }
@@ -209,9 +197,8 @@
     color: var(--dove-gray);
 }
 
-/* Style saat aktif (biru transparan) */
 .equipment-box.active {
-    background-color: rgba(20, 58, 124, 0.1); 
+    background-color: rgba(20, 58, 124, 0.1);
     border-color: var(--bay-of-many);
 }
 
@@ -219,8 +206,6 @@
     background-color: var(--cultured-pearl);
 }
 
-
-/* TAMBAHAN BARU: HANYA UNTUK MERAPIKAN TOMBOL + DAN - */
 .qty-control {
     display: flex;
     align-items: center;
@@ -233,7 +218,7 @@
 .qty-btn {
     width: 24px;
     height: 24px;
-    border: 1px solid var(--btn-blue); /* Garis tipis biru */
+    border: 1px solid var(--btn-blue);
     background-color: var(--white);
     color: var(--btn-blue);
     border-radius: 4px;
@@ -290,8 +275,14 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .modal-content h2 {
@@ -306,7 +297,7 @@
 }
 
 .modal-close-btn {
-    background-color: var(--btn-blue); /* Menggunakan variabel default blue */
+    background-color: var(--btn-blue);
     color: white;
     border: none;
     padding: 10px 20px;
@@ -320,12 +311,11 @@
     background-color: var(--bay-of-many);
 }
 
-/* Gaya Ikon Sukses */
 .success-icon-circle {
     width: 70px;
     height: 70px;
     border-radius: 50%;
-    background-color: #28a745; /* Hijau */
+    background-color: #28a745;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -335,12 +325,11 @@
     stroke: white;
 }
 
-/* GAYA KHUSUS UNTUK ERROR */
 .error-icon-circle {
     width: 70px;
     height: 70px;
     border-radius: 50%;
-    background-color: #dc3545; /* Merah */
+    background-color: #dc3545;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -351,20 +340,30 @@
     stroke: white;
 }
 
-/* Animasi Shake (Opsional, untuk efek error) */
 @keyframes shake {
-  0% { transform: translateX(0); }
-  20% { transform: translateX(-10px); }
-  40% { transform: translateX(10px); }
-  60% { transform: translateX(-10px); }
-  80% { transform: translateX(10px); }
-  100% { transform: translateX(0); }
+    0% {
+        transform: translateX(0);
+    }
+    20% {
+        transform: translateX(-10px);
+    }
+    40% {
+        transform: translateX(10px);
+    }
+    60% {
+        transform: translateX(-10px);
+    }
+    80% {
+        transform: translateX(10px);
+    }
+    100% {
+        transform: translateX(0);
+    }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .booking-page-wrapper {
-        padding: 100px 20px 120px 20px; 
+        padding: 100px 20px 120px 20px;
     }
     .spot-info-card {
         flex-direction: column;
@@ -379,7 +378,7 @@
         font-size: 24px;
     }
     .booking-inputs {
-        grid-template-columns: 1fr; 
+        grid-template-columns: 1fr;
         gap: 15px;
     }
     .booking-form-section {

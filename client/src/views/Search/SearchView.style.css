@@ -26,7 +26,7 @@
 .search-container-custom {
     max-width: 1150px;
     margin: 0 auto;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     border-radius: 10px;
     padding: 10px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
@@ -105,7 +105,9 @@
     justify-content: center;
     cursor: pointer;
     color: var(--white);
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    transition:
+        background-color 0.3s ease,
+        transform 0.3s ease;
     flex-shrink: 0;
 }
 
@@ -271,7 +273,7 @@
 .card-price {
     font-size: 28px;
     font-weight: 600;
-    color: #FFA500;
+    color: #ffa500;
     margin-top: 10px;
     margin-bottom: 15px;
     align-items: right;
@@ -405,7 +407,7 @@
 .no-results-message {
     text-align: center;
     padding: 60px 20px;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     border-radius: 15px;
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
 }
@@ -422,44 +424,44 @@
 }
 
 .pagination-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 50px;
-  gap: 8px;
-  padding-bottom: 40px; /* Jarak dari footer */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    gap: 8px;
+    padding-bottom: 40px; /* Jarak dari footer */
 }
 
 .page-nav,
 .page-number {
-  border: 1px solid #d6d6d6;
-  background-color: #ffffff;
-  color: var(--bay-of-many); /* (Asumsi Anda punya variabel ini) */
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 8px;
-  min-width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    border: 1px solid #d6d6d6;
+    background-color: #ffffff;
+    color: var(--bay-of-many); /* (Asumsi Anda punya variabel ini) */
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    min-width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .page-nav:disabled {
-  color: #ccc;
-  cursor: not-allowed;
+    color: #ccc;
+    cursor: not-allowed;
 }
 
 .page-number:hover,
 .page-nav:hover:not(:disabled) {
-  background-color: #f0f5fa;
-  border-color: var(--btn-blue); /* (Asumsi Anda punya variabel ini) */
+    background-color: #f0f5fa;
+    border-color: var(--btn-blue); /* (Asumsi Anda punya variabel ini) */
 }
 
 .page-number.active {
-  background-color: var(--btn-blue);
-  color: white;
-  border-color: var(--btn-blue);
-  font-weight: 700;
+    background-color: var(--btn-blue);
+    color: white;
+    border-color: var(--btn-blue);
+    font-weight: 700;
 }

@@ -1,20 +1,17 @@
 <script setup>
-import { ref, onMounted, nextTick } from 'vue' // <--- 1. TAMBAHKAN nextTick
+import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '@/services/api'
-// Tambahkan import API Anda
 
 const router = useRouter()
 
-// --- 🎣 State untuk Data API ---
 const popularPlaces = ref([])
 const tipsList = ref([])
 const loadingPlaces = ref(true)
 const loadingTips = ref(true)
 const searchKeyword = ref('')
 
-// --- 🔗 KONFIGURASI URL GAMBAR ---
-// Ganti port sesuai backend kamu (3000)
+// konfigurasi URL gambar dari backend
 const API_URL = 'http://localhost:3000/uploads/';
 
 // Fungsi Helper untuk menampilkan gambar dari Backend
@@ -25,8 +22,6 @@ const getImageUrl = (filename) => {
   // Gabungkan URL Server + Nama File
   return `${API_URL}${filename}`;
 }
-
-// --- 🌍 Logika Pemanggilan API ---
 
 const loadPopularPlaces = async () => {
   loadingPlaces.value = true
@@ -54,11 +49,7 @@ const loadTipsList = async () => {
 
     if (Array.isArray(data)) {
       tipsList.value = data.slice(0, 5)
-
-      // ✅ PENTING: Tunggu Vue selesai render BARU scroll ke tengah
       await nextTick()
-
-      // ✅ Tambahkan delay kecil untuk memastikan layout selesai
       setTimeout(() => {
         initializeCarousel()
       }, 100)
@@ -70,7 +61,6 @@ const loadTipsList = async () => {
   }
 }
 
-// --- Navigasi ---
 const goToSearch = () => {
   const keyword = searchKeyword.value.trim()
   router.push({
@@ -174,22 +164,26 @@ onMounted(() => {
           <h1 class="hero-title-text">Temukan Spot Pemancingan Terbaik di Indonesia</h1>
         </div>
         <section class="search-section">
-            <div class="search-container-custom">
+          <div class="search-container-custom">
             <div class="search-field-custom">
               <img src="/img/loc.png" alt="Lokasi" class="search-icon" />
-              <input type="text" v-model="searchKeyword" class="search-input-custom" placeholder="Mau mancing dimana?" />
+              <input type="text" v-model="searchKeyword" class="search-input-custom"
+                placeholder="Mau mancing dimana?" />
             </div>
             <div class="search-field-custom">
               <img src="/img/calendar.png" alt="Tanggal" class="search-icon" />
-              <input type="text" class="search-input-custom" placeholder="Tanggal Mancing" onfocus="(this.type='date')" onblur="(this.type='text')" />
+              <input type="text" class="search-input-custom" placeholder="Tanggal Mancing" onfocus="(this.type='date')"
+                onblur="(this.type='text')" />
             </div>
             <div class="search-field-custom">
-               <img src="/img/fasilitas.png" alt="Fasilitas" class="search-icon" />
-               <input type="text" class="search-input-custom" placeholder="Fasilitas" />
+              <img src="/img/fasilitas.png" alt="Fasilitas" class="search-icon" />
+              <input type="text" class="search-input-custom" placeholder="Fasilitas" />
             </div>
             <button class="search-button-custom" @click="goToSearch">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="28" height="28">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" width="28" height="28">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
               </svg>
             </button>
           </div>
@@ -211,13 +205,9 @@ onMounted(() => {
         <div v-else class="cards-grid">
           <div class="card" v-for="place in popularPlaces" :key="place.id_tempat">
 
-            <img
-                :src="getImageUrl(place.image_url)"
-                :alt="place.title"
-                class="card-image"
-            />
+            <img :src="getImageUrl(place.image_url)" :alt="place.title" class="card-image" />
             <span class="card-price-overlay">
-              Rp.{{ Number(place.base_price || 0).toLocaleString('id-ID') }}/{{ place.price_unit || 'Hari' }}
+              Rp {{ Number(place.base_price || 0).toLocaleString('id-ID') }}/{{ place.price_unit || 'Hari' }}
             </span>
 
             <div class="card-content">
@@ -227,7 +217,8 @@ onMounted(() => {
               </div>
               <div class="card-rating">
                 <img src="/img/star.png" alt="Rating" class="rating-star-icon" />
-                <span class="rating-score">{{ place.average_rating ? Number(place.average_rating).toFixed(1) : 'N/A' }}</span>
+                <span class="rating-score">{{ place.average_rating ? Number(place.average_rating).toFixed(1) : 'N/A'
+                  }}</span>
                 <span class="rating-count">({{ place.total_reviews_count || 0 }} Ulasan)</span>
               </div>
               <p class="card-description">{{ place.description ? place.description.substring(0, 100) + '...' : '' }}</p>
@@ -260,27 +251,33 @@ onMounted(() => {
           <p>Memuat artikel ensiklopedia...</p>
         </div>
         <div v-else-if="tipsList.length === 0" class="empty-state">
-           <p>Belum ada tips.</p>
+          <p>Belum ada tips.</p>
         </div>
         <div v-else class="carousel-wrapper">
-             <button class="carousel-nav-btn prev" @click="scrollCarousel(-1)" :disabled="isAtStart">
-               <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-             </button>
+          <button class="carousel-nav-btn prev" @click="scrollCarousel(-1)" :disabled="isAtStart">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
 
-             <div class="carousel" ref="carouselContainer" @scroll="updateCarouselState">
-                <div class="carousel-card" v-for="tip in tipsList" :key="tip.id_artikel">
-                   <div class="carousel-card-header">
-                     <img src="/img/book.png" alt="Tips Icon" class="card-icon" />
-                     <h3>{{ tip.title }}</h3>
-                   </div>
-                   <p>{{ tip.description ? tip.description.substring(0, 150) + '...' : '' }}</p>
-                   <a :href="`/ensiklopedia?id=${tip.id_artikel}`" class="read-more">Baca Selengkapnya &rarr;</a>
-                </div>
-             </div>
+          <div class="carousel" ref="carouselContainer" @scroll="updateCarouselState">
+            <div class="carousel-card" v-for="tip in tipsList" :key="tip.id_artikel">
+              <div class="carousel-card-header">
+                <img src="/img/book.png" alt="Tips Icon" class="card-icon" />
+                <h3>{{ tip.title }}</h3>
+              </div>
+              <p>{{ tip.description ? tip.description.substring(0, 150) + '...' : '' }}</p>
+              <a :href="`/ensiklopedia?id=${tip.id_artikel}`" class="read-more">Baca Selengkapnya &rarr;</a>
+            </div>
+          </div>
 
-             <button class="carousel-nav-btn next" @click="scrollCarousel(1)" :disabled="isAtEnd">
-                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-             </button>
+          <button class="carousel-nav-btn next" @click="scrollCarousel(1)" :disabled="isAtEnd">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
         </div>
       </section>
 

@@ -1,5 +1,3 @@
-// models/ensiklopediaModel.js
-
 const db = require("../config/database");
 
 class EnsiklopediaModel {

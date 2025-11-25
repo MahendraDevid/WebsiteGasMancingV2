@@ -30,43 +30,29 @@ const triggerSearch = () => {
 <template>
   <section class="search-section">
     <div class="search-container-custom">
-      
+
       <div class="search-field-custom">
         <img src="/img/loc.png" alt="Lokasi" class="search-icon">
-        <input 
-          type="text" 
-          class="search-input-custom" 
-          placeholder="Mau mancing dimana?" 
-          v-model="searchKeyword"
-          @keyup.enter="triggerSearch" 
-        />
+        <input type="text" class="search-input-custom" placeholder="Mau mancing dimana?" v-model="searchKeyword"
+          @keyup.enter="triggerSearch" />
       </div>
-      
+
       <div class="search-field-custom">
         <img src="/img/calendar.png" alt="Tanggal" class="search-icon">
-        <input 
-          type="text" 
-          class="search-input-custom" 
-          placeholder="Tanggal Mancing" 
-          onfocus="(this.type='date')" 
-          onblur="(this.type='text')" 
-          v-model="searchDate"
-        />
+        <input type="text" class="search-input-custom" placeholder="Tanggal Mancing" onfocus="(this.type='date')"
+          onblur="(this.type='text')" v-model="searchDate" />
       </div>
-      
+
       <div class="search-field-custom">
         <img src="/img/fasilitas.png" alt="Fasilitas" class="search-icon">
-        <input 
-          type="text" 
-          class="search-input-custom" 
-          placeholder="Fasilitas"  
-          v-model="searchPeople"
-        />
+        <input type="text" class="search-input-custom" placeholder="Fasilitas" v-model="searchPeople" />
       </div>
-      
+
       <button class="search-button-custom" @click="triggerSearch">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="28" height="28">
-          <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          width="28" height="28">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
         </svg>
       </button>
     </div>
@@ -77,8 +63,7 @@ const triggerSearch = () => {
 .search-section {
   position: relative;
   z-index: 10;
-  /* Biarkan HomeView.vue yang mengatur margin-top-nya */
-  margin-top: -80px; 
+  margin-top: -80px;
   padding: 0 20px 60px;
 }
 
@@ -92,7 +77,7 @@ const triggerSearch = () => {
   display: flex;
   gap: 10px;
   align-items: center;
-  flex-wrap: nowrap; 
+  flex-wrap: nowrap;
 }
 
 .search-field-custom {
@@ -105,7 +90,7 @@ const triggerSearch = () => {
   align-items: center;
   gap: 10px;
   border: 1px solid var(--bon-jour);
-  transition: border-color 0.3s ease; 
+  transition: border-color 0.3s ease;
 }
 
 .search-field-custom:focus-within {
@@ -117,7 +102,7 @@ const triggerSearch = () => {
   flex-shrink: 0;
   width: 22px;
   height: 22px;
-  object-fit: contain; 
+  object-fit: contain;
 }
 
 .search-input-custom {
@@ -135,7 +120,6 @@ const triggerSearch = () => {
   opacity: 1;
 }
 
-/* Styles khusus untuk input tanggal dan tombol */
 .search-button-custom {
   background-color: var(--bay-of-many);
   border: none;
@@ -159,15 +143,17 @@ const triggerSearch = () => {
 /* --- RESPONSIVE UNTUK SEARCH BAR --- */
 @media (max-width: 1024px) {
   .search-container-custom {
-    flex-wrap: wrap; 
+    flex-wrap: wrap;
     padding: 15px;
   }
+
   .search-field-custom {
-    flex: 1 1 calc(50% - 10px); 
+    flex: 1 1 calc(50% - 10px);
     min-width: unset;
   }
+
   .search-button-custom {
-    width: 100%; 
+    width: 100%;
     height: 50px;
   }
 }
@@ -177,15 +163,18 @@ const triggerSearch = () => {
     margin-top: -60px;
     padding: 0 15px 40px;
   }
+
   .search-container-custom {
-    flex-direction: column; 
+    flex-direction: column;
     gap: 8px;
     padding: 10px;
   }
+
   .search-field-custom {
-    width: 100%; 
+    width: 100%;
     flex: none;
   }
+
   .search-button-custom {
     height: 45px;
   }

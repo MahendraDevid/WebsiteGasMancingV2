@@ -3,7 +3,6 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
 import api from '@/services/api';
-import './Properti.style.css'; // Import CSS Terpisah
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -17,7 +16,7 @@ const formatRupiah = (num) => Number(num).toLocaleString('id-ID');
 // Fetch Data Kolam
 const fetchPlaces = async () => {
   if (!authStore.isAuthenticated || !authStore.isMitra) {
-      router.push('/'); return;
+    router.push('/'); return;
   }
 
   try {
@@ -49,8 +48,8 @@ const handleDelete = async (id) => {
 };
 
 onMounted(() => {
-    if (!authStore.user) authStore.loadUserFromStorage();
-    fetchPlaces();
+  if (!authStore.user) authStore.loadUserFromStorage();
+  fetchPlaces();
 });
 </script>
 
@@ -58,9 +57,9 @@ onMounted(() => {
   <div class="crud-page-wrapper">
 
     <div class="top-nav">
-        <button class="btn-back" @click="backToDashboard">
-            ← Kembali ke Pesanan Masuk
-        </button>
+      <button class="btn-back" @click="backToDashboard">
+        ← Kembali ke Pesanan Masuk
+      </button>
     </div>
 
     <div class="header-action">
@@ -74,8 +73,8 @@ onMounted(() => {
     </div>
 
     <div v-if="isLoading" class="loading-state">
-        <div class="spinner"></div>
-        <p>Memuat data kolam...</p>
+      <div class="spinner"></div>
+      <p>Memuat data kolam...</p>
     </div>
 
     <div v-else class="table-container">
@@ -92,20 +91,20 @@ onMounted(() => {
         <tbody>
           <tr v-for="p in places" :key="p.id_tempat">
             <td>
-                <div class="img-wrapper">
-                    <img :src="p.image_url || 'https://placehold.co/100x70?text=No+Img'" class="thumb-img" alt="Foto Kolam">
-                </div>
+              <div class="img-wrapper">
+                <img :src="p.image_url || 'https://placehold.co/100x70?text=No+Img'" class="thumb-img" alt="Foto Kolam">
+              </div>
             </td>
             <td>
-                <strong class="place-title">{{ p.title }}</strong>
-                <div class="place-hours">🕒 {{ p.jam_buka }} - {{ p.jam_tutup }}</div>
+              <strong class="place-title">{{ p.title }}</strong>
+              <div class="place-hours">🕒 {{ p.jam_buka }} - {{ p.jam_tutup }}</div>
             </td>
             <td>
-                <div class="place-location">{{ p.location }}</div>
+              <div class="place-location">{{ p.location }}</div>
             </td>
             <td>
-                <div class="place-price">Rp {{ formatRupiah(p.base_price) }}</div>
-                <small class="price-unit">/ {{ p.price_unit }}</small>
+              <div class="place-price">Rp {{ formatRupiah(p.base_price) }}</div>
+              <small class="price-unit">/ {{ p.price_unit }}</small>
             </td>
             <td>
               <div class="btn-group">
@@ -126,3 +125,5 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
+<style scoped src="./Properti.style.css"></style>

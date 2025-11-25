@@ -4,19 +4,13 @@
       <button class="close-button" @click="closeModal">&times;</button>
 
       <div class="media-box">
-        
+
         <!-- Slider Track: Bagian yang bergerak -->
         <div class="slider-track" :style="trackStyle">
           <!-- Loop semua media (video/gambar) -->
-          <div 
-            v-for="(media, index) in item.media" 
-            :key="index" 
-            class="slide"
-          >
+          <div v-for="(media, index) in item.media" :key="index" class="slide">
             <template v-if="media.type === 'video'">
-              <iframe 
-                :src="media.url" 
-                frameborder="0"
+              <iframe :src="media.url" frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen>
               </iframe>
@@ -33,13 +27,8 @@
 
         <!-- Dots Indikator -->
         <div class="slider-dots">
-          <span 
-            v-for="(media, index) in item.media" 
-            :key="index"
-            class="dot"
-            :class="{ active: currentSlide === index }"
-            @click="goToSlide(index)"
-          ></span>
+          <span v-for="(media, index) in item.media" :key="index" class="dot"
+            :class="{ active: currentSlide === index }" @click="goToSlide(index)"></span>
         </div>
 
       </div>
@@ -167,12 +156,14 @@ const handleImageError = (event) => {
   right: 20px;
   background: transparent;
   border: none;
-  color: #999; 
+  color: #999;
   font-size: 36px;
   cursor: pointer;
-  z-index: 1060; /* Di atas segalanya */
+  z-index: 1060;
+  /* Di atas segalanya */
   line-height: 1;
 }
+
 .close-button:hover {
   color: #000;
 }
@@ -221,12 +212,15 @@ const handleImageError = (event) => {
   z-index: 1051;
   transition: background-color 0.2s;
 }
+
 .slider-nav:hover {
   background-color: rgba(0, 0, 0, 0.7);
 }
+
 .slider-nav.prev {
   left: 10px;
 }
+
 .slider-nav.next {
   right: 10px;
 }
@@ -241,6 +235,7 @@ const handleImageError = (event) => {
   gap: 8px;
   z-index: 1051;
 }
+
 .dot {
   width: 10px;
   height: 10px;
@@ -249,9 +244,11 @@ const handleImageError = (event) => {
   cursor: pointer;
   transition: background-color 0.2s;
 }
+
 .dot:hover {
   background-color: rgba(255, 255, 255, 0.8);
 }
+
 .dot.active {
   background-color: white;
 }
@@ -262,7 +259,7 @@ const handleImageError = (event) => {
   flex: 1;
   padding: 40px;
   /* KUNCI UNTUK SCROLL: */
-  overflow-y: auto; 
+  overflow-y: auto;
   position: relative;
 }
 
@@ -277,7 +274,7 @@ const handleImageError = (event) => {
 .content-description {
   font-size: 16px;
   color: #333;
-  white-space: pre-wrap; 
+  white-space: pre-wrap;
   line-height: 1.7;
 }
 
@@ -288,16 +285,19 @@ const handleImageError = (event) => {
     height: 90vh;
     max-height: 800px;
   }
+
   .media-box {
     flex: 1;
     min-height: 250px;
   }
+
   .content-box {
     flex: 1;
     padding: 25px;
   }
+
   .close-button {
-  
+
     color: white;
     top: 10px;
     right: 15px;

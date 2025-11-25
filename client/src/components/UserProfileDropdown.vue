@@ -1,17 +1,13 @@
 <template>
   <div v-if="isVisible" class="dropdown-overlay" @click.self="$emit('close')">
-    
+
     <div class="dropdown-menu">
       <div class="dropdown-header">
         Akun Saya
       </div>
       <ul class="dropdown-list">
-        
-        <router-link 
-          to="/profile" 
-          class="dropdown-item" 
-          @click="$emit('close')"
-        >
+
+        <router-link to="/profile" class="dropdown-item" @click="$emit('close')">
           <span>Edit Profil</span>
         </router-link>
 
@@ -45,10 +41,11 @@ defineEmits(['close', 'logout'])
   height: 100%;
   z-index: 1040;
 }
+
 .dropdown-menu {
   position: absolute;
-  top: 75px; 
-  right: 20px; 
+  top: 75px;
+  right: 20px;
   background: var(--white, #ffffff);
   border-radius: 8px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
@@ -57,10 +54,12 @@ defineEmits(['close', 'logout'])
   border: 1px solid #f0f0f0;
   overflow: hidden;
 }
+
 .dropdown-header {
   padding: 16px;
   font-weight: 700;
 }
+
 .dropdown-list {
   list-style: none;
   padding: 0;
@@ -68,7 +67,7 @@ defineEmits(['close', 'logout'])
 }
 
 .dropdown-item,
-.dropdown-item-link { 
+.dropdown-item-link {
   padding: 14px 16px;
   cursor: pointer;
   display: flex;
@@ -79,13 +78,16 @@ defineEmits(['close', 'logout'])
   transition: background-color 0.2s ease;
   text-decoration: none;
 }
+
 .dropdown-item:hover,
 .dropdown-item-link:hover {
   background-color: var(--cultured-pearl, #f5f5ff);
 }
+
 .dropdown-item.logout {
   color: #d9534f;
 }
+
 .dropdown-item.logout:hover {
   background-color: #fbeae9;
 }

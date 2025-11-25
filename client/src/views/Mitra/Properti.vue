@@ -10,6 +10,30 @@ const authStore = useAuthStore();
 const places = ref([]);
 const isLoading = ref(true);
 
+// --- 1. Konfigurasi URL Gambar (Backend) ---
+const API_URL = 'http://localhost:3000/uploads/';
+
+// --- 2. Fungsi Helper Image ---
+const getImageUrl = (filename) => {
+  // Jika filename kosong/null/undefined
+  if (!filename || filename === 'default_place.jpg') {
+    return '/img/kolam.png'; // Pastikan ada gambar default di folder public/img
+  }
+  
+  // Jika filename sudah berupa URL lengkap (misal dari Google)
+  if (filename.startsWith('http') || filename.startsWith('https')) {
+    return filename;
+  }
+
+  // Gabungkan URL backend dengan nama file
+  return `${API_URL}${filename}`;
+};
+
+// Handler jika gambar rusak/tidak ditemukan
+const handleImageError = (event) => {
+  event.target.src = '/img/kolam.png';
+};
+
 // Helper Format Rupiah
 const formatRupiah = (num) => Number(num).toLocaleString('id-ID');
 
@@ -20,10 +44,7 @@ const fetchPlaces = async () => {
   }
 
   try {
-    // Ambil ID Mitra dari Store
     const mitraId = authStore.user?.id_mitra || authStore.user?.id;
-
-    // Panggil API (backend harus support ?mitra_id=...)
     const res = await api.getPlacesByMitra(mitraId);
     places.value = res.data.data || [];
   } catch (error) {
@@ -58,7 +79,7 @@ onMounted(() => {
 
     <div class="top-nav">
       <button class="btn-back" @click="backToDashboard">
-        ← Kembali ke Pesanan Masuk
+        ← Kembali ke Dashboard
       </button>
     </div>
 
@@ -92,12 +113,18 @@ onMounted(() => {
           <tr v-for="p in places" :key="p.id_tempat">
             <td>
               <div class="img-wrapper">
-                <img :src="p.image_url || 'https://placehold.co/100x70?text=No+Img'" class="thumb-img" alt="Foto Kolam">
+                <img 
+                  :src="getImageUrl(p.image_url)" 
+                  class="thumb-img" 
+                  alt="Foto Kolam"
+                  @error="handleImageError"
+                  loading="lazy"
+                >
               </div>
             </td>
+            
             <td>
               <strong class="place-title">{{ p.title }}</strong>
-              <div class="place-hours">🕒 {{ p.jam_buka }} - {{ p.jam_tutup }}</div>
             </td>
             <td>
               <div class="place-location">{{ p.location }}</div>

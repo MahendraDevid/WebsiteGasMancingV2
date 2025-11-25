@@ -1,141 +1,143 @@
 <script setup>
-import { reactive, ref, onMounted } from 'vue'; 
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/authStore'; 
+import { useAuthStore } from '@/stores/authStore';
 import api from '@/services/api';
 
 const router = useRouter();
 const authStore = useAuthStore();
 const isLoading = ref(false);
 
-// --- State Facility Options (Dinamis dari API) ---
-const facilityOptions = ref([]); 
-
-// --- Load Facilities from Backend ---
-const loadFacilities = async () => {
-  try {
-    const response = await api.getAllFacilities();
-    if (response.data.success) {
-      facilityOptions.value = response.data.data;
-    }
-  } catch (error) {
-    console.error("Gagal memuat fasilitas:", error);
-    // Fallback hanya jika API error
-    facilityOptions.value = [
-      { id: 1, name: 'Toilet' }, { id: 2, name: 'Musholla' }, { id: 3, name: 'Parkiran' }
-    ];
-  }
-};
-
-onMounted(() => {
-  loadFacilities(); 
+// State Data Tempat
+const form = ref({
+  title: '',
+  description: '',
+  location: '',
+  price: '',
+  unit: 'jam',
+  jam_buka: '07:00',
+  jam_tutup: '17:00',
+  fasilitas: [] 
 });
 
-const user = authStore.currentUser; 
+const mainImageFile = ref(null);
+const mainImagePreview = ref(null);
+const items = ref([]);
 
-if (!user || user.role !== 'mitra') {
-    // alert("Akses ditolak."); 
-    // router.push('/login');
-}
-
-const formData = reactive({
-  namaProperti: '',
-  deskripsi: '',
-  alamatProperti: '',
-  hargaSewa: '',
-  satuanSewa: 'Jam',
-  jamBuka: '08:00',
-  jamTutup: '17:00',
-  fasilitas: [], 
-  items: [],
-  fotoProperti: null,
-  fotoPreview: null
+// --- CEK SESI SAAT LOAD ---
+onMounted(async () => {
+  if (!authStore.user) {
+    await authStore.loadUserFromStorage();
+  }
+  console.log("Current User Data:", authStore.user);
 });
 
-const itemTypeOptions = ['Peralatan', 'Umpan', 'Fasilitas Berbayar', 'Lainnya'];
-const itemUnitOptions = ['Pcs/Item', 'Kg', 'Bungkus', 'Jam', 'Hari', 'Tiket'];
-
-const handleFile = (e) => {
-  const file = e.target.files[0];
-  if (file) {
-    formData.fotoProperti = file;
-    formData.fotoPreview = URL.createObjectURL(file);
-  }
-};
-
-// --- [BARU] Handle Upload Foto per Item ---
-const handleItemImageUpload = (event, index) => {
+const handleMainImageUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
-    formData.items[index].image_file = file;
-    formData.items[index].image_preview = URL.createObjectURL(file);
+    mainImageFile.value = file;
+    mainImagePreview.value = URL.createObjectURL(file);
   }
 };
 
+// ✅ PERBAIKAN: Gunakan nama field yang sama dengan v-model
 const addItem = () => {
-  formData.items.push({
-    // --- [BARU] Tambah field untuk gambar
-    nama_item: '', price: '', price_unit: 'Pcs/Item', tipe_item: 'Peralatan', 
-    image_file: null, image_preview: null 
+  items.value.push({ 
+    nama_item: '',      // ✅ Sesuai dengan v-model di template
+    price: '',          // ✅ Sesuai dengan v-model di template
+    price_unit: 'pcs',  // ✅ Sesuai dengan v-model di template
+    file: null, 
+    preview: null 
   });
 };
 
-const removeItem = (index) => { formData.items.splice(index, 1); };
+const removeItem = (index) => {
+  items.value.splice(index, 1);
+};
+
+const handleItemImageUpload = (event, index) => {
+  const file = event.target.files[0];
+  if (file) {
+    items.value[index].file = file; 
+    items.value[index].preview = URL.createObjectURL(file);
+  }
+};
 
 const submitForm = async () => {
-  if (!formData.namaProperti || !formData.hargaSewa) return alert("Nama dan Harga wajib diisi");
+  // 1. Validasi Input Dasar
+  if (!form.value.title || !form.value.price) {
+    alert("Mohon lengkapi data wajib (Nama & Harga)");
+    return;
+  }
 
-  // DEBUGGING: Cek apakah ID Mitra terbaca?
-  console.log("User saat ini:", user);
-  console.log("ID Mitra yang akan dikirim:", user.id_mitra);
+  // 2. Validasi Items - Pastikan tidak ada field kosong
+  const hasInvalidItems = items.value.some(item => 
+    !item.nama_item || !item.price || !item.price_unit
+  );
+  
+  if (hasInvalidItems) {
+    alert("Mohon lengkapi semua data item (Nama, Harga, Satuan)");
+    return;
+  }
 
-  if (!user.id_mitra) {
-    alert("Error: ID Mitra tidak ditemukan. Silakan logout dan login ulang.");
+  // 3. AMBIL ID MITRA
+  const mitraId = authStore.user?.id_mitra || authStore.user?.id || authStore.user?.user_id;
+
+  console.log("Mengirim dengan ID Mitra:", mitraId);
+  console.log("Items yang akan dikirim:", items.value); // Debug items
+
+  // 4. Validasi ID Mitra
+  if (!mitraId) {
+    alert("Gagal mengidentifikasi Mitra. Sesi Anda mungkin berakhir. Silakan login ulang.");
     return;
   }
 
   isLoading.value = true;
+
   try {
-    const submissionData = new FormData();
+    const formData = new FormData();
 
-    submissionData.append('id_mitra', user.id_mitra || user.id); 
-    submissionData.append('namaProperti', formData.namaProperti);
-    submissionData.append('alamatProperti', formData.alamatProperti);
-    submissionData.append('hargaSewa', formData.hargaSewa);
-    submissionData.append('satuanSewa', formData.satuanSewa);
-    submissionData.append('jamBuka', formData.jamBuka);
-    submissionData.append('jamTutup', formData.jamTutup);
-    submissionData.append('deskripsi', formData.deskripsi);
+    // Append Text Data
+    formData.append('title', form.value.title);
+    formData.append('description', form.value.description);
+    formData.append('location', form.value.location);
+    formData.append('base_price', form.value.price);
+    formData.append('price_unit', form.value.unit);
+    formData.append('jam_buka', form.value.jam_buka);
+    formData.append('jam_tutup', form.value.jam_tutup);
+    formData.append('fasilitas', JSON.stringify(form.value.fasilitas)); 
+    formData.append('mitra_id', mitraId); 
 
-    if(formData.fotoProperti) {
-        submissionData.append('fotoProperti', formData.fotoProperti);
+    // Append Main Image
+    if (mainImageFile.value) {
+      formData.append('image_url', mainImageFile.value);
     }
 
-    submissionData.append('fasilitas', JSON.stringify(formData.fasilitas));
-    
-    // --- [UPDATE] Loop item agar gambar terkirim ---
-    formData.items.forEach((item, index) => {
-        submissionData.append(`items[${index}][nama_item]`, item.nama_item);
-        submissionData.append(`items[${index}][price]`, item.price);
-        submissionData.append(`items[${index}][price_unit]`, item.price_unit);
-        submissionData.append(`items[${index}][tipe_item]`, item.tipe_item);
-
-        // Kirim gambar item jika ada
-        if (item.image_file) {
-            submissionData.append(`items[${index}][image]`, item.image_file);
-        }
+    // ✅ PERBAIKAN: Gunakan nama field yang benar
+    items.value.forEach((item, index) => {
+      formData.append(`items[${index}][nama_item]`, item.nama_item);    // ✅
+      formData.append(`items[${index}][price]`, item.price);            // ✅
+      formData.append(`items[${index}][price_unit]`, item.price_unit);  // ✅
+      if (item.file) {
+        formData.append(`items[${index}][image_url]`, item.file);
+      }
     });
 
-    await api.createPlace(submissionData); 
-    
-    alert("Berhasil menambahkan tempat pemancingan!");
-    
-    // --- [UPDATE] Redirect ke Properti List ---
-    router.push('/mitra/properti-list'); 
+    // Debug: Tampilkan isi FormData
+    console.log("=== FormData Contents ===");
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ': ' + pair[1]);
+    }
 
-  } catch (e) {
-    console.error(e);
-    alert("Gagal menyimpan data: " + (e.response?.data?.message || e.message));
+    await api.createPlace(formData); 
+    
+    alert("Kolam berhasil ditambahkan!");
+    router.push('/mitra/properti');
+
+  } catch (error) {
+    console.error("Error Submit:", error);
+    const msg = error.response?.data?.message || "Gagal menambahkan kolam.";
+    alert(`Gagal: ${msg}`);
   } finally {
     isLoading.value = false;
   }
@@ -143,102 +145,128 @@ const submitForm = async () => {
 </script>
 
 <template>
-  <div class="form-page-wrapper">
-    <div class="form-card">
-      <h2 class="form-title">Tambah Tempat Pemancingan</h2>
-
-      <form @submit.prevent="submitForm">
-        <div class="form-group">
-          <label>Nama Tempat</label>
-          <input v-model="formData.namaProperti" type="text" placeholder="Contoh: Kolam Harian Berkah" required>
-        </div>
+  <div class="add-place-container">
+    <h1>Tambah Kolam Baru</h1>
+    
+    <div class="form-wrapper">
+      <section class="form-section">
+        <h3>Informasi Umum</h3>
         
         <div class="form-group">
-          <label>Foto Utama</label>
-          <div class="upload-box">
-            <input type="file" @change="handleFile" accept="image/*">
-            <div v-if="!formData.fotoPreview" class="placeholder">📸 Upload Foto</div>
-            <img v-else :src="formData.fotoPreview" class="preview">
-          </div>
+          <label>Nama Tempat *</label>
+          <input v-model="form.title" type="text" placeholder="Cth: Pemancingan Barokah" required>
         </div>
 
         <div class="form-group">
-          <label>Deskripsi</label>
-          <textarea v-model="formData.deskripsi" rows="3"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>Alamat Lengkap</label>
-          <textarea v-model="formData.alamatProperti" rows="2" required></textarea>
-        </div>
-
-        <div class="row">
-          <div class="col">
-            <label>Harga (Rp)</label>
-            <input v-model="formData.hargaSewa" type="number" required>
+          <label>Foto Utama Tempat</label>
+          <div class="image-upload-box" @click="$refs.mainInput.click()">
+            <input 
+              ref="mainInput"
+              type="file" 
+              @change="handleMainImageUpload" 
+              accept="image/*"
+              style="display: none;"
+            >
+            <div v-if="mainImagePreview" class="preview-box">
+              <img :src="mainImagePreview" alt="Preview">
+              <p style="margin-top:10px; font-size:0.8rem; color:#666;">Klik untuk ganti foto</p>
+            </div>
+            <div v-else>
+              <span style="font-size: 2rem;">📷</span>
+              <p>Klik untuk upload foto utama</p>
+            </div>
           </div>
-          <div class="col">
+        </div>
+
+        <div class="row-group">
+          <div class="form-group">
+            <label>Harga Dasar (Rp) *</label>
+            <input v-model="form.price" type="number" placeholder="50000">
+          </div>
+          <div class="form-group">
             <label>Satuan</label>
-            <select v-model="formData.satuanSewa">
-              <option>Jam</option>
-              <option>Hari</option>
-              <option>Kg</option>
-              <option>Tiket</option>
+            <select v-model="form.unit">
+              <option value="jam">Per Jam</option>
+              <option value="hari">Per Hari</option>
+              <option value="kg">Per Kg (Ikan)</option>
             </select>
           </div>
         </div>
 
-        <div class="row">
-          <div class="col"><label>Buka</label><input v-model="formData.jamBuka" type="time"></div>
-          <div class="col"><label>Tutup</label><input v-model="formData.jamTutup" type="time"></div>
+        <div class="form-group">
+          <label>Lokasi / Alamat</label>
+          <textarea v-model="form.location" rows="2" placeholder="Alamat lengkap lokasi"></textarea>
         </div>
 
-        <div class="section facilities-section">
-          <h2>Fasilitas</h2>
-          <div class="checkbox-grid">
-            <label v-for="fac in facilityOptions" :key="fac.id" class="checkbox-card">
-                <input type="checkbox" :value="fac.id" v-model="formData.fasilitas">
-                <span>{{ fac.name }}</span>
-            </label>
+        <div class="form-group">
+          <label>Deskripsi Lengkap</label>
+          <textarea v-model="form.description" rows="4" placeholder="Jelaskan keunggulan kolam Anda..."></textarea>
+        </div>
+
+        <div class="row-group">
+          <div class="form-group">
+            <label>Jam Buka</label>
+            <input v-model="form.jam_buka" type="time">
+          </div>
+          <div class="form-group">
+            <label>Jam Tutup</label>
+            <input v-model="form.jam_tutup" type="time">
           </div>
         </div>
+      </section>
 
-        <div class="divider">Item Sewa & Jualan</div>
-        
-        <div class="items-container">
-             <div v-for="(item, index) in formData.items" :key="index" class="item-card">
-                <div class="item-header">
-                    <h4>Item #{{ index + 1 }}</h4>
-                    <button type="button" class="btn-remove" @click="removeItem(index)">Hapus</button>
-                </div>
-                
-                <div class="item-body">
-                  <div class="item-image-upload">
-                    <div class="preview-box" :style="{ backgroundImage: item.image_preview ? `url(${item.image_preview})` : 'none' }">
-                        <input type="file" accept="image/*" @change="(e) => handleItemImageUpload(e, index)">
-                        <span v-if="!item.image_preview">+</span>
-                    </div>
-                  </div>
-                  <div class="item-inputs">
-                    <div class="form-group"><label>Nama</label><input type="text" v-model="item.nama_item"></div>
-                    <div class="row">
-                        <div class="col"><label>Harga</label><input type="number" v-model="item.price"></div>
-                        <div class="col"><label>Satuan</label><select v-model="item.price_unit"><option v-for="o in itemUnitOptions">{{o}}</option></select></div>
-                    </div>
-                    <div class="form-group"><label>Tipe</label><select v-model="item.tipe_item"><option v-for="o in itemTypeOptions">{{o}}</option></select></div>
-                  </div>
-                </div>
-             </div>
-             <button type="button" class="btn-add-item" @click="addItem">+ Tambah Item</button>
+      <section class="form-section">
+        <div class="section-header">
+          <h3>Peralatan Sewa / Tambahan</h3>
+          <button type="button" class="btn-small" @click="addItem">+ Tambah Item</button>
+        </div>
+        <p class="hint">Masukkan alat pancing, umpan, atau item yang bisa disewa pengunjung.</p>
+
+        <div v-if="items.length === 0" style="text-align: center; color: #999; padding: 20px;">
+          Belum ada item sewa. Klik "+ Tambah Item" jika ada.
         </div>
 
-        <div class="actions">
-          <button type="button" class="btn-cancel" @click="router.back()">Batal</button>
-          <button type="submit" class="btn-save" :disabled="isLoading">
-            {{ isLoading ? 'Menyimpan...' : 'Simpan Properti' }}
-          </button>
+        <div v-for="(item, index) in items" :key="index" class="item-card">
+          <div class="item-header">
+            <span>Item #{{ index + 1 }}</span>
+            <button type="button" class="btn-remove" @click="removeItem(index)">Hapus</button>
+          </div>
+          
+          <div class="item-grid">
+            <div class="item-image-col">
+              <div class="mini-upload">
+                <input type="file" @change="(e) => handleItemImageUpload(e, index)" accept="image/*">
+                <div v-if="item.preview" class="mini-preview">
+                  <img :src="item.preview" />
+                </div>
+                <div v-else class="placeholder">
+                  <span>➕</span>
+                  <small>Foto</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="item-data-col">
+              <input v-model="item.nama_item" type="text" placeholder="Nama Alat (Cth: Joran)" required>
+              <div class="price-row">
+                <input v-model="item.price" type="number" placeholder="Harga">
+                <select v-model="item.price_unit">
+                  <option value="pcs">/ Pcs</option>
+                  <option value="pax">/ Pax</option>
+                  <option value="kg">/ Kg</option>
+                </select>
+              </div>
+            </div>
+          </div>
         </div>
-      </form>
+      </section>
+
+      <div class="form-actions">
+        <button class="btn-cancel" @click="$router.back()">Batal</button>
+        <button class="btn-submit" @click="submitForm" :disabled="isLoading">
+          {{ isLoading ? 'Menyimpan Data...' : 'Simpan Data' }}
+        </button>
+      </div>
     </div>
   </div>
 </template>

@@ -1,7 +1,6 @@
 // server/src/controllers/placeController.js
 
-const PlaceModel = require('../models/placeModel'); // Pastikan ini ada di paling atas
-const placeModel = require('../models/placeModel'); // Opsional: Hapus duplikat ini jika sudah ada baris di atas
+const PlaceModel = require('../models/placeModel');
 
 // 1. GET ALL PLACES
 exports.getAllPlaces = async (req, res) => {
@@ -9,9 +8,6 @@ exports.getAllPlaces = async (req, res) => {
     const { mitra_id } = req.query;
     let places;
     if (mitra_id) {
-      // Pastikan method getPlacesByMitraId ada di model, atau pakai findAll dengan filter manual
-      // places = await placeModel.getPlacesByMitraId(mitra_id); 
-      // Jika belum ada, gunakan findAll lalu filter di JS sementara:
       const all = await PlaceModel.findAll();
       places = all.filter(p => p.id_mitra == mitra_id);
     } else {
@@ -49,65 +45,122 @@ exports.getPlaceById = async (req, res) => {
   }
 };
 
-// 4. CREATE PLACE (YANG DIPERBAIKI UNTUK MENANGANI JAM BUKA/TUTUP)
+// 4. CREATE PLACE - DIPERBAIKI ✅
 exports.createPlace = async (req, res) => {
   try {
-    const data = req.body; 
-    const file = req.file; 
+    const data = req.body;
+    const uploadedFiles = req.files || [];
 
-    // Validasi ID Mitra
-    if (!data.id_mitra) {
-        return res.status(400).json({ success: false, message: "ID Mitra tidak ditemukan." });
+    console.log("=== DEBUG CREATE PLACE ===");
+    console.log("📦 req.body:", data);
+    console.log("📁 req.files:", uploadedFiles);
+
+    // 1. Validasi ID Mitra
+    const mitraId = data.mitra_id || data.id_mitra;
+    if (!mitraId) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "ID Mitra tidak ditemukan" 
+      });
     }
 
-    // Parsing JSON
+    // 2. Handle Gambar UTAMA
+    let mainImageName = "default_place.jpg";
+    const mainFile = uploadedFiles.find(file => file.fieldname === 'image_url');
+    if (mainFile) {
+      mainImageName = mainFile.filename;
+    }
+    console.log("🖼️  Main Image:", mainImageName);
+
+    // 3. ✅ PERBAIKAN: Parse Items dari FormData format items[0][nama_item]
     let itemsParsed = [];
-    let fasilitasParsed = [];
-    if (data.items) itemsParsed = typeof data.items === 'string' ? JSON.parse(data.items) : data.items;
-    if (data.fasilitas) fasilitasParsed = typeof data.fasilitas === 'string' ? JSON.parse(data.fasilitas) : data.fasilitas;
-
-    // Handle Gambar
-    let imageName = "default_place.jpg";
-    if (file) imageName = file.filename;
-
-    // === LOGIKA PENGGABUNGAN JAM KE DESKRIPSI ===
-    let finalDescription = data.deskripsi || "";
     
-    // Cek apakah ada input jam buka/tutup
-    if (data.jamBuka && data.jamTutup) {
-        // Tambahkan info jam di awal deskripsi singkat
-        // Contoh hasil: "Buka: 08:00 - 17:00. Kolam pemancingan nyaman..."
-        finalDescription = `Buka: ${data.jamBuka} - ${data.jamTutup}. ${finalDescription}`;
-    }
-    // ==============================================
+    // Cara 1: Jika backend sudah auto-parse ke array (dengan body-parser atau multer options)
+    if (data.items && Array.isArray(data.items)) {
+      itemsParsed = data.items.map((item, index) => {
+        const itemImageField = `items[${index}][image_url]`;
+        const itemFile = uploadedFiles.find(f => f.fieldname === itemImageField);
 
+        return {
+          nama_item: item.nama_item,    // ✅ Gunakan nama_item (bukan item.nama)
+          price: item.price,            // ✅ Gunakan price (bukan item.harga)
+          price_unit: item.price_unit,  // ✅ Gunakan price_unit (bukan item.unit)
+          image_url: itemFile ? itemFile.filename : null
+        };
+      });
+    } 
+    // Cara 2: Manual parsing jika format masih items[0][nama_item]
+    else {
+      let i = 0;
+      while (data[`items[${i}][nama_item]`] !== undefined) {
+        const itemImageField = `items[${i}][image_url]`;
+        const itemFile = uploadedFiles.find(f => f.fieldname === itemImageField);
+        
+        itemsParsed.push({
+          nama_item: data[`items[${i}][nama_item]`],
+          price: data[`items[${i}][price]`],
+          price_unit: data[`items[${i}][price_unit]`],
+          image_url: itemFile ? itemFile.filename : null
+        });
+        i++;
+      }
+    }
+
+    console.log("🛠️  Parsed Items:", itemsParsed);
+
+    // 4. Handle Fasilitas
+    let fasilitasParsed = [];
+    if (data.fasilitas) {
+      try {
+        fasilitasParsed = typeof data.fasilitas === 'string' 
+          ? JSON.parse(data.fasilitas) 
+          : data.fasilitas;
+      } catch (e) { 
+        fasilitasParsed = []; 
+      }
+    }
+
+    // 5. Deskripsi & Jam
+    let finalDescription = data.description || "";
+    const jamBuka = data.jam_buka;
+    const jamTutup = data.jam_tutup;
+
+    if (jamBuka && jamTutup) {
+      finalDescription = `Buka: ${jamBuka} - ${jamTutup}. ${finalDescription}`;
+    }
+
+    // 6. Simpan ke Database
     const placeData = {
-        title: data.namaProperti,
-        location: data.alamatProperti,
-        base_price: data.hargaSewa,
-        price_unit: data.satuanSewa,
-        
-        // Masukkan deskripsi yang sudah digabung tadi
-        description: finalDescription, 
-        full_description: data.deskripsi, // Deskripsi lengkap tetap original
-        
-        image_url: imageName,
-        fasilitas: fasilitasParsed,
-        item_sewa: itemsParsed,
-        id_mitra: data.id_mitra
+      title: data.title,
+      location: data.location,
+      base_price: data.base_price,
+      price_unit: data.price_unit,
+      description: finalDescription,
+      full_description: data.description,
+      image_url: mainImageName,
+      fasilitas: fasilitasParsed,
+      item_sewa: itemsParsed,        // ✅ Array sudah benar
+      id_mitra: mitraId,
+      jam_buka: jamBuka,
+      jam_tutup: jamTutup
     };
+
+    console.log("💾 Data yang akan disimpan:", JSON.stringify(placeData, null, 2));
 
     const newPlace = await PlaceModel.create(placeData);
 
     res.status(201).json({
-        success: true,
-        message: "Tempat berhasil ditambahkan",
-        data: newPlace
+      success: true,
+      message: "Tempat berhasil ditambahkan",
+      data: newPlace
     });
 
   } catch (error) {
-    console.error("Create Place Error:", error);
-    res.status(500).json({ success: false, message: error.message });
+    console.error("❌ Create Place Error:", error);
+    res.status(500).json({ 
+      success: false, 
+      message: error.message 
+    });
   }
 };
 
@@ -117,44 +170,44 @@ exports.updatePlace = async (req, res) => {
     const id = req.params.id;
     const data = req.body;
 
-    // === LOGIKA PENGGABUNGAN JAM KE DESKRIPSI (Sama seperti Create) ===
-    let finalDescription = undefined; // undefined agar tidak diupdate jika user tidak kirim deskripsi
+    let finalDescription = undefined;
     
-    // Jika user mengirim deskripsi atau jam, kita rakit ulang stringnya
     if (data.deskripsi || (data.jamBuka && data.jamTutup)) {
-        const descText = data.deskripsi || ""; 
-        // Jika jam diisi, gabungkan. Jika tidak, pakai deskripsi saja.
-        if (data.jamBuka && data.jamTutup) {
-            finalDescription = `Buka: ${data.jamBuka} - ${data.jamTutup}. ${descText}`;
-        } else {
-            finalDescription = descText;
-        }
+      const descText = data.deskripsi || "";
+      if (data.jamBuka && data.jamTutup) {
+        finalDescription = `Buka: ${data.jamBuka} - ${data.jamTutup}. ${descText}`;
+      } else {
+        finalDescription = descText;
+      }
     }
-    // =================================================================
 
-    // Mapping dari Frontend (formData) ke Database Columns
     const updateData = {
-        title: data.namaProperti,
-        location: data.alamatProperti,
-        base_price: data.hargaSewa,
-        price_unit: data.satuanSewa,
-        description: finalDescription,      // Deskripsi pendek + Jam
-        full_description: data.deskripsi,   // Deskripsi lengkap (teks asli)
-        // image_url: handle nanti jika ada upload
+      title: data.namaProperti,
+      location: data.alamatProperti,
+      base_price: data.hargaSewa,
+      price_unit: data.satuanSewa,
+      description: finalDescription,
+      full_description: data.deskripsi,
     };
 
-    // Hapus key yang undefined/null agar tidak menimpa data lama dengan kosong
-    Object.keys(updateData).forEach(key => updateData[key] === undefined && delete updateData[key]);
+    Object.keys(updateData).forEach(key => 
+      updateData[key] === undefined && delete updateData[key]
+    );
 
     const success = await PlaceModel.update(id, updateData);
     
     if (!success) {
-        // Cek apakah ID-nya ada?
-        const check = await PlaceModel.findById(id);
-        if (!check) return res.status(404).json({ success: false, message: "Tempat tidak ditemukan" });
-        
-        // Jika ID ada tapi success false, berarti tidak ada perubahan data (tetap sukses secara teknis)
-        return res.json({ success: true, message: "Tidak ada perubahan data" });
+      const check = await PlaceModel.findById(id);
+      if (!check) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Tempat tidak ditemukan" 
+        });
+      }
+      return res.json({ 
+        success: true, 
+        message: "Tidak ada perubahan data" 
+      });
     }
 
     res.json({ success: true, message: "Berhasil update tempat" });
@@ -169,15 +222,19 @@ exports.updatePlace = async (req, res) => {
 exports.deletePlace = async (req, res) => {
   try {
     const id = req.params.id;
-    
-    // Panggil method delete di Model
     const success = await PlaceModel.delete(id);
     
     if (!success) {
-        return res.status(404).json({ success: false, message: "Gagal hapus. Tempat tidak ditemukan." });
+      return res.status(404).json({ 
+        success: false, 
+        message: "Gagal hapus. Tempat tidak ditemukan." 
+      });
     }
     
-    res.json({ success: true, message: "Berhasil menghapus tempat pemancingan." });
+    res.json({ 
+      success: true, 
+      message: "Berhasil menghapus tempat pemancingan." 
+    });
     
   } catch (error) {
     console.error("Delete Error:", error);
@@ -185,13 +242,18 @@ exports.deletePlace = async (req, res) => {
   }
 };
 
-// Controller lainnya (getFacilities) biarkan saja jika ada
+// 7. GET ALL FACILITIES
 exports.getAllFacilities = async (req, res) => {
-    const db = require('../config/database');
-    try {
-        const [facilities] = await db.query("SELECT id_fasilitas AS id, nama_fasilitas AS name FROM fasilitas");
-        res.status(200).json({ success: true, data: facilities });
-    } catch (error) {
-        res.status(500).json({ success: false, message: "Gagal ambil fasilitas" });
-    }
+  const db = require('../config/database');
+  try {
+    const [facilities] = await db.query(
+      "SELECT id_fasilitas AS id, nama_fasilitas AS name FROM fasilitas"
+    );
+    res.status(200).json({ success: true, data: facilities });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false, 
+      message: "Gagal ambil fasilitas" 
+    });
+  }
 };

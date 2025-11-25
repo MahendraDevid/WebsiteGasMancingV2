@@ -39,6 +39,9 @@ export default {
   getAllPlaces() {
     return apiClient.get('/places')
   },
+  getFacilitiesList() {
+    return apiClient.get('/places/facilities/list');
+  },
   getPlaceById(id) {
     return apiClient.get(`/places/${id}`)
   },
@@ -48,9 +51,16 @@ export default {
   searchPlaces(params) {
     return apiClient.get('/places/search', { params: params })
   },
+  
+  // ✅ PERBAIKAN: Tambahkan header multipart/form-data untuk createPlace
   createPlace(data) {
-    return apiClient.post('/places', data)
+    return apiClient.post('/places', data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
   },
+  
   updatePlace(id, data) {
     // Endpoint: PUT /api/places/:id
     return apiClient.put(`/places/${id}`, data);
@@ -151,7 +161,6 @@ export default {
   },
 
   // ============ Mitra API ============
-
   createMitra(data) {
     return apiClient.post('/mitra/register', data, {
       headers: {

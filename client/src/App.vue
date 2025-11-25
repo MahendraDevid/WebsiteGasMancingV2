@@ -21,7 +21,6 @@
       @login="handleUserLogin" @register="handleUserRegistration" @open-modal="openModal"
       @success="handleAuthSuccess" />
 
-
     <!-- PROFILE DROPDOWN -->
     <UserProfileDropdown :is-visible="isProfileVisible" @close="handleToggleProfile(false)" @logout="handleLogout"
       @edit-profile="handleOpenEditProfile" />
@@ -115,6 +114,9 @@ const handleAuthSuccess = () => {
 
 
 <style scoped>
+body {
+  background-color: #FFFFFF;
+}
 #app-wrapper {
   min-height: 100vh;
   display: flex;

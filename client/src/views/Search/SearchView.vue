@@ -1,6 +1,16 @@
 <script setup>
 defineOptions({ name: 'SearchPage' })
 
+const formatHarga = (value) => {
+  if (!value) return 'Rp 0';
+
+  const angka = Number(value);
+  if (isNaN(angka)) return 'Rp 0';
+
+  return `Rp ${angka.toLocaleString('id-ID')}`;
+};
+
+
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import api from '@/services/api'
@@ -171,7 +181,7 @@ const handleBooking = (id) => {
             <div class="card-rating">
               <div class="rating-box">
                 <svg width="18" height="18" fill="#FFC107">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02
                     12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                 </svg>
                 <span class="rating-value">{{
@@ -194,10 +204,9 @@ const handleBooking = (id) => {
             </p>
 
             <div class="card-price">
-              Rp. {{ item.base_price?.toLocaleString('id-ID') || 0 }}/{{
-                item.price_unit || 'Hari'
-              }}
-            </div>
+                {{ formatHarga(item.base_price) }} / {{ item.price_unit || 'Hari' }}
+              </div>
+
 
             <div class="card-button-container">
               <div class="card-facilities">

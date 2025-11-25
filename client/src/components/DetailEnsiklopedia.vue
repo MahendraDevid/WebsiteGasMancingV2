@@ -9,14 +9,14 @@
         <div class="slider-track" :style="trackStyle">
           <!-- Loop semua media (video/gambar) -->
           <div v-for="(media, index) in item.media" :key="index" class="slide">
-            <template v-if="media.type === 'video'">
-              <iframe :src="media.url" frameborder="0"
+            <template v-if="media.media_type === 'video'">
+              <iframe :src="media.media_url" frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen>
               </iframe>
             </template>
             <template v-else>
-              <img :src="media.url" :alt="item.title" @error="handleImageError" />
+              <img :src="getImageUrl(media.media_url)" :alt="item.judul" @error="handleImageError" />
             </template>
           </div>
         </div>
@@ -34,8 +34,8 @@
       </div>
 
       <div class="content-box">
-        <h2 class="content-title">{{ item.title || 'Judul Ensiklopedia' }}</h2>
-        <p class="content-description" v-html="item.details"></p>
+        <h2 class="content-title">{{ item.judul || 'Judul Ensiklopedia' }}</h2>
+        <p class="content-description" v-html="item.description || 'Tidak ada deskripsi.'"></p>
       </div>
 
     </div>
@@ -44,6 +44,17 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+
+const API_URL = 'http://localhost:3000/uploads/';
+
+const getImageUrl = (imagePath) => {
+  if (!imagePath) return '/img/book.png';
+  if (imagePath.startsWith('http')) return imagePath;
+  if (imagePath.startsWith('/img/')) return imagePath;
+
+  const cleanFilename = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+  return `${API_URL}${cleanFilename}`;
+}
 
 const props = defineProps({
   isVisible: Boolean,
@@ -118,8 +129,11 @@ const closeModal = () => {
 
 // Fallback jika gambar gagal dimuat
 const handleImageError = (event) => {
-  const title = props.item.title || 'Media'
-  event.target.src = `https://placehold.co/600x450/1e1e1e/ffffff?text=${encodeURIComponent(title)}`
+  // [PENTING] Gunakan 'judul' karena backend kirimnya 'judul'
+  const text = props.item.judul || 'Media'
+
+  // Ganti source gambar ke placeholder
+  event.target.src = `https://placehold.co/600x450/1e1e1e/ffffff?text=${encodeURIComponent(text)}`
 }
 </script>
 

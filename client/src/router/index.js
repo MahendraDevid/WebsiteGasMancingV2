@@ -20,7 +20,7 @@ import MitraLandingView from '@/views/Mitra/MitraLandingView.vue'
 import MitraRegistrationView from '@/views/Mitra/MitraRegistrationView.vue'
 
 // 1. Dashboard Pesanan (Halaman Utama Mitra)
-import MitraProperty from '@/views/Mitra/MitraProperty.vue' // [TAMBAHAN 2]
+import MitraProperty from '@/views/Mitra/MitraProperty.vue'
 
 // 2. CRUD Tempat (Kelola Kolam)
 import Properti from '@/views/Mitra/Properti.vue'

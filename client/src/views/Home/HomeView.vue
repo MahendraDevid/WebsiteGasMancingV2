@@ -74,7 +74,20 @@ function goToDetail(id) {
   router.push({ name: 'DetailTempatPemancing', params: { id } })
 }
 
+<<<<<<< HEAD
 // --- CAROUSEL LOGIC (START DI TENGAH) ---
+=======
+const goToEnsiklopedia = (id) => {
+  // Mengarah ke halaman ensiklopedia dengan membawa Query Parameter ID
+  // Hasil URL nanti: /ensiklopedia?id=1
+  router.push({
+    name: 'ensiklopedia',
+    query: { id: id }
+  });
+}
+
+// --- Logika Carousel (Tidak Ada Perubahan Signifikan) ---
+>>>>>>> 7e2b326fd3d7572b6859b12feeef0f1cc6f6a8c4
 const carouselContainer = ref(null)
 const isAtStart = ref(false)
 const isAtEnd = ref(false)
@@ -222,9 +235,13 @@ onMounted(() => {
           <div class="card" v-for="place in popularPlaces" :key="place.id_tempat">
             <img :src="getImageUrl(place.image_url)" :alt="place.title" class="card-image" />
             <span class="card-price-overlay">
+<<<<<<< HEAD
               Rp. {{ Number(place.base_price || 0).toLocaleString('id-ID') }}/{{
                 place.price_unit || 'Hari'
               }}
+=======
+              Rp {{ Number(place.base_price || 0).toLocaleString('id-ID') }} / {{ place.price_unit || 'Hari' }}
+>>>>>>> 7e2b326fd3d7572b6859b12feeef0f1cc6f6a8c4
             </span>
             <div class="card-content">
               <h3 class="card-title">{{ place.title }}</h3>
@@ -276,10 +293,12 @@ onMounted(() => {
             <div class="carousel-card" v-for="tip in tipsList" :key="tip.id_artikel">
               <div class="carousel-card-header">
                 <img src="/img/book.png" alt="Tips Icon" class="card-icon" />
-                <h3>{{ tip.title }}</h3>
+                <h3>{{ tip.judul }}</h3>
               </div>
               <p>{{ tip.description ? tip.description.substring(0, 150) + '...' : '' }}</p>
-              <a :href="`/ensiklopedia?id=${tip.id_artikel}`" class="read-more">Baca Selengkapnya &rarr;</a>
+              <a href="#" @click.prevent="goToEnsiklopedia(tip.id_artikel)" class="read-more">
+                Baca Selengkapnya &rarr;
+              </a>
             </div>
           </div>
 

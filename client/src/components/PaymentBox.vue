@@ -50,7 +50,7 @@ defineProps({
 }
 
 .order-summary {
-  background-color: #f7f7f7;
+  background-color: #ffffff;
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 30px;
@@ -74,7 +74,7 @@ defineProps({
   display: block;
   font-size: 1.5rem;
   font-weight: 800;
-  color: #27ae60;
+  color: #2d3748;
 }
 
 .order-number strong {

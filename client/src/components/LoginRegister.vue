@@ -191,7 +191,9 @@ async function handleAuth() {
       if (result.success) {
         emit('success', { type: 'register', role: 'user' })
         setTimeout(() => { switchModal() }, 100)
-      } else {
+      }
+
+      else {
         showError(result.error || 'Registrasi gagal')
       }
     }
@@ -211,6 +213,13 @@ async function handleAuth() {
       if (result.success) {
         emit('success', { type: 'login', role: userRole.value })
         closeModal()
+
+        // --- Redirect Khusus Mitra ---
+        if (userRole.value === 'mitra') {
+            // Mengarahkan ke Dashboard Mitra (Pastikan nama route sesuai di index.js)
+            router.push({ name: 'mitra-property' });
+        }
+
       } else {
         showError(result.error || 'Login gagal')
       }
@@ -409,9 +418,13 @@ async function handleAuth() {
   border-radius: 8px;
   cursor: pointer;
   border: none;
-  background-color: var(--btn-blue);
+  background-color: var(--bay-of-many);
   color: var(--white);
   margin-top: 6px;
+}
+
+.login-button:hover {
+  background-color: #0f2f6c;
 }
 
 .login-button:disabled {

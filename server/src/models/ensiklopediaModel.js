@@ -2,15 +2,15 @@ const db = require("../config/database");
 
 class EnsiklopediaModel {
   // =======================================================
-  // GET ALL ARTICLES
+  // GET ALL ARTICLES (PERBAIKAN QUERY)
   // =======================================================
   static async getAll() {
     let query = `
         SELECT 
-          id_artikel AS id,
-          judul AS title,
-          description AS description,
-          image_url AS image,
+          id_artikel,      -- JANGAN DI-ALIAS jadi 'id'
+          judul,           -- JANGAN DI-ALIAS jadi 'title'
+          description,
+          image_url,       -- JANGAN DI-ALIAS jadi 'image'
           tgl_terbit
         FROM ensiklopedia
         ORDER BY tgl_terbit DESC
@@ -24,18 +24,18 @@ class EnsiklopediaModel {
     for (let article of articles) {
       const mediaQuery = `
         SELECT 
-          media_type AS type,
-          media_url AS url,
+          media_type,
+          media_url,
           keterangan
         FROM ensiklopedia_media
         WHERE id_artikel = ?
         ORDER BY id_media ASC
       `.trim();
 
-      const [mediaData] = await db.query(mediaQuery, [article.id]);
+      const [mediaData] = await db.query(mediaQuery, [article.id_artikel]);
 
       article.description = article.description || "";
-      article.details = article.description;
+      // article.details = article.description; // Opsional
       article.media = mediaData;
     }
 
@@ -46,16 +46,8 @@ class EnsiklopediaModel {
   // GET ARTICLE BY ID
   // =======================================================
   static async findById(id) {
-    // Query Utama untuk mengambil data artikel dari tabel ensiklopedia
     const query = `
-            SELECT 
-                id_artikel AS id,
-                judul AS title,
-                description AS description,
-                image_url AS image,  -- FIX: Alias image_url menjadi 'image'
-                tgl_terbit
-            FROM ensiklopedia
-            WHERE id_artikel = ?
+            SELECT * FROM ensiklopedia WHERE id_artikel = ?
         `.trim();
 
     const [articles] = await db.query(query, [id]);
@@ -64,22 +56,15 @@ class EnsiklopediaModel {
 
     const article = articles[0];
 
-    // Ambil media artikel dari tabel ensiklopedia_media
     const mediaQuery = `
-            SELECT
-                media_type AS type,
-                media_url AS url,
-                keterangan
-            FROM ensiklopedia_media
+            SELECT * FROM ensiklopedia_media
             WHERE id_artikel = ?
             ORDER BY id_media ASC
         `.trim();
 
     const [mediaData] = await db.query(mediaQuery, [id]);
 
-    // Pemrosesan Data Final untuk Frontend
     article.description = article.description || "";
-    article.details = article.description; // Properti 'details' dipertahankan untuk kompatibilitas frontend
     article.media = mediaData;
 
     return article;

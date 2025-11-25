@@ -13,41 +13,36 @@ const route = useRoute()
 const router = useRouter()
 
 // --- State Data Dinamis ---
-const items = ref([]) // Data akan diisi dari API
-const isLoading = ref(true) // Status loading
-const error = ref(null) // Status error
+const items = ref([])
+const isLoading = ref(true)
+const error = ref(null)
 
 // fetch data dari API
 const fetchEnsiklopedia = async () => {
   isLoading.value = true
   error.value = null
   try {
-    // Panggil endpoint API Anda
     const response = await api.getAllEnsiklopedia()
-
-    // Asumsi: Data Ensiklopedia ada di response.data.data
-    // Model di backend sudah memastikan setiap item memiliki 'media' array dan 'details'.
-    items.value = response.data.data
-
+    // Ambil data dari response
+    items.value = response.data.data || response.data
   } catch (err) {
     console.error('Gagal memuat Ensiklopedia:', err)
-    error.value = 'Gagal memuat data Ensiklopedia. Pastikan backend server aktif dan terkoneksi ke database.'
+    error.value = 'Gagal memuat data Ensiklopedia.'
   } finally {
     isLoading.value = false
   }
 }
 
 const filteredItems = computed(() => {
-  // Jika ada error atau masih loading, kembalikan array kosong
   if (isLoading.value || error.value) return []
-
   if (!searchQuery.value) return items.value
+
   const q = searchQuery.value.toLowerCase()
 
-  // Filter berdasarkan judul atau deskripsi (disesuaikan dengan data dari DB)
   return items.value.filter(i =>
-    i.title.toLowerCase().includes(q) ||
-    i.description.toLowerCase().includes(q)
+    // [PERBAIKAN] Ganti 'i.title' jadi 'i.judul'
+    (i.judul || '').toLowerCase().includes(q) ||
+    (i.description || '').toLowerCase().includes(q)
   )
 })
 
@@ -58,7 +53,6 @@ watch(searchQuery, () => {
 
 const itemsPerPage = 12
 const currentPage = ref(1)
-// Menghitung total halaman berdasarkan filteredItems (data dari API)
 const totalPages = computed(() => Math.ceil(filteredItems.value.length / itemsPerPage))
 
 const paginatedItems = computed(() => {
@@ -83,13 +77,19 @@ const closeModal = () => {
 onMounted(() => {
   fetchEnsiklopedia()
 
-  // Watch items changes for auto-open modal (karena data dimuat asynchronously)
+  // Watch items agar modal bisa terbuka otomatis dari HomeView (Carousel)
   watch(items, (newItems) => {
-    const id = parseInt(route.query.id)
-    if (id && newItems.length > 0) {
-      const found = newItems.find(i => i.id === id)
+    // Ambil ID dari URL (misal: /ensiklopedia?id=1)
+    const idFromUrl = parseInt(route.query.id)
+
+    if (idFromUrl && newItems.length > 0) {
+      // [SESUAI SQL] Gunakan 'id_artikel' untuk mencocokkan data
+      const found = newItems.find(i => i.id_artikel === idFromUrl)
+
       if (found) {
         openModal(found)
+        // Opsional: Bersihkan URL agar bersih
+        // router.replace({ query: null });
       }
     }
   }, { immediate: true })
@@ -124,7 +124,12 @@ onMounted(() => {
 
     <div v-else class="content-wrapper">
       <div class="grid-container">
-        <DataEnsiklopedia v-for="item in paginatedItems" :key="item.id" :data="item" @show-detail="openModal" />
+        <DataEnsiklopedia
+            v-for="item in paginatedItems"
+            :key="item.id_artikel"
+            :data="item"
+            @show-detail="openModal"
+        />
       </div>
 
       <div v-if="totalPages > 1" class="pagination">

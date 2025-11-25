@@ -1,10 +1,10 @@
 <template>
   <div class="card">
     <div class="card-image">
-      <img :src="data.image" :alt="data.title" @error="handleImageError">
+      <img :src="getImageUrl(data.image_url)" :alt="data.judul" @error="handleImageError" loading="lazy">
     </div>
     <div class="card-content">
-      <h3 class="card-title">{{ data.title }}</h3>
+      <h3 class="card-title">{{ data.judul }}</h3>
       <p class="card-description">{{ data.description }}</p>
       <button class="btn-detail" @click="$emit('show-detail', data)">Lihat Detail</button>
     </div>
@@ -12,7 +12,6 @@
 </template>
 
 <script setup>
-//simpan 'defineProps' ke dalam variabel 'props' agar bisa diakses oleh fungsi di bawah
 const props = defineProps({
   data: {
     type: Object,
@@ -20,10 +19,20 @@ const props = defineProps({
   }
 })
 
+const API_URL = 'http://localhost:3000/uploads/';
+const getImageUrl = (imagePath) => {
+  if (!imagePath || imagePath === 'default_place.jpg') return '/img/book.png';
+  if (imagePath.startsWith('http')) return imagePath;
+  if (imagePath.startsWith('/img/')) return imagePath;
+
+  const cleanFilename = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+  return `${API_URL}${cleanFilename}`;
+}
+
 //Fungsi fallback image sekarang DINAMIS
 const handleImageError = (event) => {
   //Ambil title dari props, beri fallback 'Gambar' jika title kosong
-  const title = props.data.title || 'Gambar'
+  const title = props.data.judul || 'Gambar'
 
   //Gunakan title tersebut di URL placeholder
   //encodeURIComponent() penting untuk menangani spasi (misal: "Ikan Nila")

@@ -55,7 +55,7 @@ function handleCopy() {
         <div class="payment-box-header">
           <div class="total-harga-section">
             <span class="total-harga-label">Total Harga</span>
-            <span class="total-harga-value">Rp {{ order.total_biaya.toLocaleString('id-ID') }}</span>
+            <span class="total-harga-value">Rp {{ Number(order.total_biaya || 0).toLocaleString('id-ID') }}</span>
           </div>
 
           <div class="nomor-pesanan">

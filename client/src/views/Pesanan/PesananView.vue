@@ -278,7 +278,7 @@ function goToLogin() {
             </div>
 
             <div class="total-price">
-              <span>Total: Rp {{ order.totalBiaya.toLocaleString('id-ID') }}</span>
+              <span>Total: Rp {{ Number(order.totalBiaya || 0).toLocaleString('id-ID') }}</span>
             </div>
 
             <div class="card-buttons">

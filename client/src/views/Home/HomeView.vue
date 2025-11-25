@@ -216,7 +216,7 @@ onMounted(() => {
 
             <img :src="getImageUrl(place.image_url)" :alt="place.title" class="card-image" />
             <span class="card-price-overlay">
-              Rp {{ Number(place.base_price || 0).toLocaleString('id-ID') }}/{{ place.price_unit || 'Hari' }}
+              Rp {{ Number(place.base_price || 0).toLocaleString('id-ID') }} / {{ place.price_unit || 'Hari' }}
             </span>
 
             <div class="card-content">

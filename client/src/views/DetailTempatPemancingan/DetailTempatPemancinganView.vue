@@ -98,7 +98,7 @@ onMounted(() => {
           </div>
 
           <div class="header-booking-box">
-            <p class="booking-price-header">Rp. {{ place.base_price?.toLocaleString('id-ID') }} / {{ place.price_unit }}
+            <p class="booking-price-header">Rp {{ Number(place.base_price || 0).toLocaleString('id-ID')  }} / {{ place.price_unit }}
             </p>
             <button class="booking-button" @click.stop="goToBooking">Booking Sekarang</button>
           </div>

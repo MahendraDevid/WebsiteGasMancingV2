@@ -74,9 +74,6 @@ function goToDetail(id) {
   router.push({ name: 'DetailTempatPemancing', params: { id } })
 }
 
-<<<<<<< HEAD
-// --- CAROUSEL LOGIC (START DI TENGAH) ---
-=======
 const goToEnsiklopedia = (id) => {
   // Mengarah ke halaman ensiklopedia dengan membawa Query Parameter ID
   // Hasil URL nanti: /ensiklopedia?id=1
@@ -86,8 +83,7 @@ const goToEnsiklopedia = (id) => {
   });
 }
 
-// --- Logika Carousel (Tidak Ada Perubahan Signifikan) ---
->>>>>>> 7e2b326fd3d7572b6859b12feeef0f1cc6f6a8c4
+// --- Logika Carousel (Tidak Ada Perubahan Signifikan)pt ---
 const carouselContainer = ref(null)
 const isAtStart = ref(false)
 const isAtEnd = ref(false)
@@ -235,13 +231,9 @@ onMounted(() => {
           <div class="card" v-for="place in popularPlaces" :key="place.id_tempat">
             <img :src="getImageUrl(place.image_url)" :alt="place.title" class="card-image" />
             <span class="card-price-overlay">
-<<<<<<< HEAD
               Rp. {{ Number(place.base_price || 0).toLocaleString('id-ID') }}/{{
                 place.price_unit || 'Hari'
               }}
-=======
-              Rp {{ Number(place.base_price || 0).toLocaleString('id-ID') }} / {{ place.price_unit || 'Hari' }}
->>>>>>> 7e2b326fd3d7572b6859b12feeef0f1cc6f6a8c4
             </span>
             <div class="card-content">
               <h3 class="card-title">{{ place.title }}</h3>

@@ -1,4 +1,3 @@
-/* Wrapper Utama */
 .mitra-landing-wrapper {
   background-color: var(--bg-blue);
   min-height: 100vh;
@@ -9,12 +8,9 @@
   text-align: center;
 }
 
-/* --- PERBAIKAN DISINI: Ganti nama class jadi unik (pakai awalan mitra-) --- */
-
 .mitra-hero-section {
   max-width: 1000px;
   width: 100%;
-  /* Pastikan tidak mengganggu layout parent jika di-import */
   margin: 0 auto;
 }
 
@@ -46,7 +42,7 @@
   background: var(--white);
   padding: 30px;
   border-radius: 15px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   flex: 1;
   min-width: 250px;
 }
@@ -66,7 +62,9 @@
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  transition: transform 0.2s, background-color 0.2s;
+  transition:
+    transform 0.2s,
+    background-color 0.2s;
   box-shadow: 0 10px 20px rgba(13, 47, 100, 0.3);
 }
 

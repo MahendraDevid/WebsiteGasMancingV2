@@ -8,17 +8,17 @@ import './PesananView.style.css';
 const router = useRouter();
 const authStore = useAuthStore();
 
-// --- 🔗 KONFIGURASI URL GAMBAR (Backend) ---
-const API_URL = 'http://localhost:3000/uploads/'; 
+// konfigurasi URL gambar (backend)
+const API_URL = 'http://localhost:3000/uploads/';
 
 // Fungsi Helper untuk menampilkan gambar
 const getImageUrl = (filename) => {
   if (!filename || filename === 'default_place.jpg') {
-    return 'https://placehold.co/600x400/CCCCCC/FFFFFF?text=No+Image'; 
+    return 'https://placehold.co/600x400/CCCCCC/FFFFFF?text=No+Image';
   }
   // Cek apakah filename sudah mengandung http
   if (filename.startsWith('http')) return filename;
-  
+
   return `${API_URL}${filename}`;
 }
 
@@ -85,11 +85,11 @@ async function fetchOrders() {
     allOrders.value = response.data.data.map(order => ({
       id: order.id_pesanan,
       nomorPesanan: order.nomor_pesanan || '-',
-      
+
       // PERBAIKAN DI SINI: Gunakan getImageUrl
       // Pastikan backend mengirim field 'place_image'
-      image: getImageUrl(order.place_image), 
-      
+      image: getImageUrl(order.place_image),
+
       title: order.place_name || 'Tempat Pemancingan',
       location: order.place_location || 'Lokasi Tidak Diketahui',
       rating: Number(order.place_rating) || 0,
@@ -221,12 +221,8 @@ function goToLogin() {
         <div v-else class="order-card" v-for="order in allOrders" :key="order.id">
 
           <div class="card-image-section">
-            <img 
-                :src="order.image" 
-                :alt="order.title" 
-                loading="lazy"
-                @error="$event.target.src = 'https://placehold.co/600x400/CCCCCC/FFFFFF?text=No+Image'"
-            >
+            <img :src="order.image" :alt="order.title" loading="lazy"
+              @error="$event.target.src = 'https://placehold.co/600x400/CCCCCC/FFFFFF?text=No+Image'">
           </div>
 
           <div class="card-content-section">
@@ -308,4 +304,4 @@ function goToLogin() {
   </main>
 </template>
 
-<style src="./PesananView.style.css" scoped></style>
+<style scoped src="./PesananView.style.css"></style>

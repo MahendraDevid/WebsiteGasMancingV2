@@ -1,5 +1,3 @@
-// server/src/routes/mitraRoutes.js (VERSI FINAL & DIPERBAIKI)
-
 const express = require("express");
 const router = express.Router();
 const mitraController = require("../controllers/mitraController");

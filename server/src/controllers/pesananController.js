@@ -1,5 +1,3 @@
-// controllers/pesanan.controller.js - Mengelola logika bisnis untuk entitas Pesanan.
-
 const PesananModel = require("../models/pesananModel");
 
 // Fungsi pembantu untuk mengekstrak ID Pengguna dari request (Simulasi Auth)

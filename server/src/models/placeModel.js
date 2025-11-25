@@ -1,5 +1,3 @@
-// server/src/models/placeModel.js
-
 const db = require("../config/database");
 
 class PlaceModel {

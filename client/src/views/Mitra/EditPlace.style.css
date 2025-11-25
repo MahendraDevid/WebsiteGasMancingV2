@@ -12,11 +12,11 @@
   border-radius: 12px;
   width: 100%;
   max-width: 600px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
 .form-title {
-  color: #0D2F64;
+  color: #0d2f64;
   margin-bottom: 20px;
   border-bottom: 1px solid #eee;
   padding-bottom: 10px;
@@ -34,7 +34,9 @@ label {
   color: #333;
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
@@ -60,7 +62,7 @@ input, textarea, select {
 }
 
 .btn-save {
-  background: #0D2F64;
+  background: #0d2f64;
   color: white;
   padding: 10px 25px;
   border: none;

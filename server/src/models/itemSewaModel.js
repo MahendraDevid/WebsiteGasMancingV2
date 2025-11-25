@@ -1,5 +1,3 @@
-// models/itemSewaModel.js
-
 const db = require('../config/database'); // Pastikan path ke koneksi DB sudah benar
 
 class ItemSewaModel {

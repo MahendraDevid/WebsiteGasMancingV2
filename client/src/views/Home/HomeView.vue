@@ -5,7 +5,6 @@ import api from '@/services/api'
 
 const router = useRouter()
 
-// --- State Data ---
 const popularPlaces = ref([])
 const tipsList = ref([])
 const loadingPlaces = ref(true)
@@ -13,8 +12,8 @@ const loadingTips = ref(true)
 const searchKeyword = ref('')
 const searchPrice = ref('') // Input Harga
 
-// --- Konfigurasi Gambar ---
-const API_URL = 'http://localhost:3000/uploads/'
+// konfigurasi URL gambar dari backend
+const API_URL = 'http://localhost:3000/uploads/';
 
 const getImageUrl = (filename) => {
   if (!filename || filename === 'default_place.jpg') {
@@ -24,7 +23,6 @@ const getImageUrl = (filename) => {
   return `${API_URL}${filename}`
 }
 
-// --- API Calls ---
 const loadPopularPlaces = async () => {
   loadingPlaces.value = true
   try {
@@ -44,13 +42,14 @@ const loadTipsList = async () => {
   loadingTips.value = true
   try {
     const response = await api.getAllEnsiklopedia()
-    const data = response.data.data || response.data
+    const data = response.data.data || response.data;
 
     if (Array.isArray(data)) {
       tipsList.value = data.slice(0, 5)
-      // Tunggu render selesai, baru atur posisi carousel
       await nextTick()
-      initializeCarousel()
+      setTimeout(() => {
+        initializeCarousel()
+      }, 100)
     }
   } catch (error) {
     console.error('Error load tips:', error)
@@ -59,7 +58,6 @@ const loadTipsList = async () => {
   }
 }
 
-// --- Navigasi ---
 const goToSearch = () => {
   router.push({
     name: 'search',
@@ -185,46 +183,23 @@ onMounted(() => {
           <div class="search-container-custom">
             <div class="search-field-custom">
               <img src="/img/loc.png" alt="Lokasi" class="search-icon" />
-              <input
-                type="text"
-                v-model="searchKeyword"
-                class="search-input-custom"
-                placeholder="Mau mancing dimana?"
-              />
+              <input type="text" v-model="searchKeyword" class="search-input-custom"
+                placeholder="Mau mancing dimana?" />
             </div>
             <div class="search-field-custom">
-              <img
-                src="/img/IconMoney.png"
-                alt="Harga"
-                class="search-icon"
-                onerror="this.src='/img/calendar.png'"
-              />
-              <input
-                type="number"
-                v-model="searchPrice"
-                class="search-input-custom"
-                placeholder="Cari Harga (Rp)"
-              />
+              <img src="/img/calendar.png" alt="Tanggal" class="search-icon" />
+              <input type="text" class="search-input-custom" placeholder="Tanggal Mancing" onfocus="(this.type='date')"
+                onblur="(this.type='text')" />
             </div>
             <div class="search-field-custom">
               <img src="/img/fasilitas.png" alt="Fasilitas" class="search-icon" />
               <input type="text" class="search-input-custom" placeholder="Fasilitas" />
             </div>
             <button class="search-button-custom" @click="goToSearch">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                width="28"
-                height="28"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" width="28" height="28">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
               </svg>
             </button>
           </div>
@@ -258,9 +233,8 @@ onMounted(() => {
               </div>
               <div class="card-rating">
                 <img src="/img/star.png" alt="Rating" class="rating-star-icon" />
-                <span class="rating-score">{{
-                  place.average_rating ? Number(place.average_rating).toFixed(1) : 'N/A'
-                }}</span>
+                <span class="rating-score">{{ place.average_rating ? Number(place.average_rating).toFixed(1) : 'N/A'
+                  }}</span>
                 <span class="rating-count">({{ place.total_reviews_count || 0 }} Ulasan)</span>
               </div>
               <p class="card-description">
@@ -285,21 +259,15 @@ onMounted(() => {
           <h2 class="section-title-text">Tips - Tips Memancing</h2>
         </div>
         <div v-if="loadingTips" class="loading-state">
-          <p>Memuat artikel...</p>
+          <p>Memuat artikel ensiklopedia...</p>
+        </div>
+        <div v-else-if="tipsList.length === 0" class="empty-state">
+          <p>Belum ada tips.</p>
         </div>
         <div v-else class="carousel-wrapper">
           <button class="carousel-nav-btn prev" @click="scrollCarousel(-1)" :disabled="isAtStart">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="36"
-              height="36"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="15 18 9 12 15 6"></polyline>
             </svg>
           </button>
@@ -310,25 +278,14 @@ onMounted(() => {
                 <img src="/img/book.png" alt="Tips Icon" class="card-icon" />
                 <h3>{{ tip.title }}</h3>
               </div>
-              <p>{{ tip.description ? tip.description.substring(0, 100) + '...' : '' }}</p>
-              <a :href="`/ensiklopedia?id=${tip.id_artikel}`" class="read-more"
-                >Baca Selengkapnya &rarr;</a
-              >
+              <p>{{ tip.description ? tip.description.substring(0, 150) + '...' : '' }}</p>
+              <a :href="`/ensiklopedia?id=${tip.id_artikel}`" class="read-more">Baca Selengkapnya &rarr;</a>
             </div>
           </div>
 
           <button class="carousel-nav-btn next" @click="scrollCarousel(1)" :disabled="isAtEnd">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="36"
-              height="36"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="9 18 15 12 9 6"></polyline>
             </svg>
           </button>

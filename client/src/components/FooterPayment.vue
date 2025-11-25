@@ -56,14 +56,12 @@ async function onButtonClick() {
 
 <template>
   <div class="footer-bar-container">
-    <!-- VARIAN 1: Tombol penuh -->
     <div v-if="variant === 'button'" class="variant-button">
       <button class="footer-button-white" :disabled="isProcessing" @click="onButtonClick">
         {{ isProcessing ? 'Memproses...' : props.buttonText }}
       </button>
     </div>
 
-    <!-- VARIAN 2: Split kiri-kanan (checkout style) -->
     <div v-else-if="variant === 'checkout'" class="variant-split">
       <div class="split-left">
         <span class="title-white">{{ props.leftTitle }}</span>
@@ -76,7 +74,6 @@ async function onButtonClick() {
       </div>
     </div>
 
-    <!-- VARIAN 3: Info saja -->
     <div v-else-if="variant === 'info'" class="variant-split">
       <div class="split-left">
         <span class="title-white">{{ props.leftTitle }}</span>
@@ -114,9 +111,11 @@ async function onButtonClick() {
   cursor: pointer;
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
+
 .footer-button-white:hover {
   transform: scale(1.03);
 }
+
 .footer-button-white:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -143,6 +142,7 @@ async function onButtonClick() {
   font-size: 16px;
   font-weight: 600;
 }
+
 .subtitle-white {
   font-size: 14px;
   opacity: 0.9;

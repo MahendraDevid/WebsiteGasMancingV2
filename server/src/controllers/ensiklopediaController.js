@@ -1,4 +1,3 @@
-// controllers/ensiklopediaController.js
 const EnsiklopediaModel = require("../models/ensiklopediaModel");
 
 exports.getAll = async (req, res) => {

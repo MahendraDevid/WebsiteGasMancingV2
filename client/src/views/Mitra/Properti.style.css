@@ -1,6 +1,5 @@
-/* --- VARIABEL --- */
 :root {
-  --bay-of-many: #0D2F64;
+  --bay-of-many: #0d2f64;
   --bg-blue: #f4f7fe;
   --white: #ffffff;
   --text-dark: #333;
@@ -8,17 +7,15 @@
   --border-light: #eee;
 }
 
-/* --- LAYOUT UTAMA --- */
 .crud-page-wrapper {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 100px 20px 40px 20px; /* Padding atas agar tidak ketutup navbar */
-  font-family: 'Poppins', sans-serif;
+  padding: 100px 20px 40px 20px;
+  font-family: "Poppins", sans-serif;
   min-height: 90vh;
   background-color: var(--bg-blue);
 }
 
-/* --- NAVIGASI ATAS --- */
 .top-nav {
   margin-bottom: 20px;
 }
@@ -40,7 +37,6 @@
   text-decoration: underline;
 }
 
-/* --- HEADER HALAMAN --- */
 .header-action {
   display: flex;
   justify-content: space-between;
@@ -63,7 +59,6 @@
   margin: 0;
 }
 
-/* --- TOMBOL TAMBAH --- */
 .btn-add {
   background-color: var(--bay-of-many);
   color: var(--white);
@@ -89,19 +84,18 @@
   line-height: 1;
 }
 
-/* --- TABEL --- */
 .table-container {
   background: var(--white);
   border-radius: 12px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-  overflow: hidden; /* Untuk border radius */
-  overflow-x: auto; /* Scroll horizontal jika layar kecil */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  overflow-x: auto;
 }
 
 .custom-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 800px; /* Lebar minimum agar tidak gepeng */
+  min-width: 800px;
 }
 
 .custom-table th {
@@ -128,9 +122,10 @@
   border-bottom: none;
 }
 
-.text-center { text-align: center; }
+.text-center {
+  text-align: center;
+}
 
-/* --- ISI TABEL --- */
 .img-wrapper {
   width: 100px;
   height: 70px;
@@ -162,7 +157,7 @@
 .place-location {
   line-height: 1.4;
   color: var(--text-gray);
-  max-width: 250px; /* Batasi lebar agar tidak terlalu panjang */
+  max-width: 250px;
 }
 
 .place-price {
@@ -175,14 +170,14 @@
   font-size: 12px;
 }
 
-/* --- TOMBOL AKSI (EDIT/HAPUS) --- */
 .btn-group {
   display: flex;
   justify-content: center;
   gap: 8px;
 }
 
-.btn-edit, .btn-del {
+.btn-edit,
+.btn-del {
   width: 36px;
   height: 36px;
   border-radius: 8px;
@@ -215,14 +210,14 @@
   transform: scale(1.05);
 }
 
-/* --- EMPTY & LOADING STATE --- */
-.loading-state, .empty-state {
+.loading-state,
+.empty-state {
   text-align: center;
   padding: 80px 20px;
   color: var(--text-gray);
   background: var(--white);
   border-radius: 12px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
 }
 
 .empty-icon {
@@ -257,11 +252,14 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-/* --- RESPONSIVE --- */
 @media (max-width: 768px) {
   .header-action {
     flex-direction: column;
@@ -271,5 +269,4 @@
     width: 100%;
     justify-content: center;
   }
-  /* Tabel bisa discroll horizontal */
 }

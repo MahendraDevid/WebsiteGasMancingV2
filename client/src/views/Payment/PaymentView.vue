@@ -1,68 +1,53 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import api from '@/services/api' // Pastikan ini mengarah ke file api.js yang benar
-
-import Navbar from '@/components/NavBar.vue'
+import api from '@/services/api'
 import PaymentBox from '@/components/PaymentBox.vue'
 import FooterPayment from '@/components/FooterPayment.vue'
-
-import './PaymentView.style.css'
 
 const route = useRoute()
 const router = useRouter()
 
-// =======================================================
-// Data Status & Inputs
-// =======================================================
 const submitting = ref(false)
 const selectedOption = ref('bri')
 const openCategory = ref('bank')
 
 // Ambil parameter dari URL
 const orderId = route.query.orderId
-const totalHargaString = ref(route.query.total || 'Rp 0') 
+const totalHargaString = ref(route.query.total || 'Rp 0')
 const equipmentString = route.query.equipment || '[]'
 
 // 1. Variabel Data Booking (Reactive)
-const dataBooking = ref(null) 
+const dataBooking = ref(null)
 
-// =======================================================
-// LIFECYCLE: Ambil Data Pesanan
-// =======================================================
 onMounted(async () => {
   if (orderId) {
     try {
       console.log("Mencari Order ID:", orderId);
       const response = await api.getBookingById(orderId)
-      
+
       if (response.data.success) {
         console.log("Data Ditemukan:", response.data.data);
-        
-        // 1. Simpan seluruh data response ke dataBooking
+
         dataBooking.value = response.data.data
-        
-        // 2. Format Total Harga
+
         if (response.data.data.totalCost) {
-           const numericPrice = parseFloat(response.data.data.totalCost);
-           totalHargaString.value = 'Rp ' + numericPrice.toLocaleString('id-ID');
+          const numericPrice = parseFloat(response.data.data.totalCost);
+          totalHargaString.value = 'Rp ' + numericPrice.toLocaleString('id-ID');
         }
-        
-        // HAPUS BARIS INI (Ini penyebab error karena nomorPesanan tidak didefinisikan sebagai ref)
-        // nomorPesanan.value = response.data.data.nomor_pesanan || '-'; 
+
+
       }
     } catch (error) {
       console.error("Gagal mengambil detail pesanan:", error)
     }
   }
 })
-// =======================================================
-// Fungsi Utility & Handle Payment
-// =======================================================
+
 const cleanCurrencyString = (currencyStr) => {
-    if (!currencyStr) return 0;
-    const cleanStr = currencyStr.replace(/Rp/g, '').replace(/\./g, '').replace(/,/g, '').trim();
-    return parseFloat(cleanStr);
+  if (!currencyStr) return 0;
+  const cleanStr = currencyStr.replace(/Rp/g, '').replace(/\./g, '').replace(/,/g, '').trim();
+  return parseFloat(cleanStr);
 };
 
 const bankOptions = ['bri', 'bni', 'VISA', 'MASTERCARD']
@@ -94,11 +79,11 @@ async function handlePayment() {
 
   submitting.value = true
   const paymentAmount = cleanCurrencyString(totalHargaString.value)
-  
+
   if (paymentAmount <= 0) {
-      alert('Total biaya tidak valid.')
-      submitting.value = false
-      return
+    alert('Total biaya tidak valid.')
+    submitting.value = false
+    return
   }
 
   const payload = {
@@ -110,7 +95,7 @@ async function handlePayment() {
   try {
     const response = await api.createPayment(payload)
     const paymentData = response.data.data
-    
+
     router.push({
       path: '/paymentconfirmation',
       query: {
@@ -136,12 +121,9 @@ async function handlePayment() {
 <template>
   <div class="payment-page">
     <main class="payment-content">
-      
-      <PaymentBox
-        title="Pembayaran"
-        :totalPrice="totalHargaString" 
-        :nomorPesanan="dataBooking?.orderNumber || 'Memuat...'"
-      />
+
+      <PaymentBox title="Pembayaran" :totalPrice="totalHargaString"
+        :nomorPesanan="dataBooking?.orderNumber || 'Memuat...'" />
 
       <section class="payment-methods">
         <h2 class="methods-title">Metode Pembayaran</h2>
@@ -185,9 +167,8 @@ async function handlePayment() {
       </section>
     </main>
   </div>
-  
-  <FooterPayment 
-    :buttonText="buttonText" 
-    @click-action="handlePayment" 
-  />
+
+  <FooterPayment :buttonText="buttonText" @click-action="handlePayment" />
 </template>
+
+<style scoped src="./PaymentView.style.css"></style>

@@ -3,7 +3,7 @@ import axios from 'axios'
 const apiClient = axios.create({
   baseURL: 'http://localhost:3000/api',
   headers: {
-    'Content-Type': 'application/json', // Default global adalah JSON
+    'Content-Type': 'application/json',
   },
 })
 
@@ -153,7 +153,6 @@ export default {
   // ============ Mitra API ============
 
   createMitra(data) {
-    // Override header untuk multipart/form-data, tanpa Authorization
     return apiClient.post('/mitra/register', data, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -179,7 +178,6 @@ export default {
 
   // ============ DASHBOARD PESANAN MITRA (MitraProperty.vue) ============
   getPropertyBookings(mitraId) {
-    // UPDATE: Tambah '/mitra' di path agar cocok dengan server.js
     return apiClient.get(`/mitra/property/bookings/${mitraId}`)
   },
   updatePropertyBookingStatus(id, status) {

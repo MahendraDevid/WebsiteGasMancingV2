@@ -1,21 +1,15 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
-// IMPORT STORE (PENTING!)
 import { useAuthStore } from '@/stores/authStore'
 
 const isMenuOpen = ref(false)
 const route = useRoute();
 const router = useRouter();
-const authStore = useAuthStore(); // Inisialisasi Store
-
-// HAPUS PROPS ISLOGGEDIN (KITA PAKAI STORE AGAR REAKTIF)
-// defineProps({ isLoggedIn: { type: Boolean, default: false } })
+const authStore = useAuthStore();
 
 const emit = defineEmits(['openModal', 'toggleProfile', 'logout']);
 
-// Logic Menu Pintar (Pakai Store)
-// Tampilkan menu Mitra jika: (Login sebagai Mitra) ATAU (Sedang di halaman Mitra)
 const showMitraMenu = computed(() => {
   return authStore.isMitra || route.path.startsWith('/mitra');
 });
@@ -133,9 +127,6 @@ const handleProfileClickMobile = () => {
 </template>
 
 <style scoped>
-/* PASTE SEMUA CSS ANDA YANG LAMA DISINI.
-   SAYA TIDAK MENGUBAH SATUPUN KODE CSS.
-*/
 
 .logo-image-file {
   width: 100%;
@@ -144,10 +135,8 @@ const handleProfileClickMobile = () => {
   border-radius: 8px;
 }
 
-/* NAVBAR STYLES */
 .navbar {
   position: fixed;
-  /* Menggunakan 'fixed' agar selalu di atas */
   top: 0;
   left: 0;
   right: 0;
@@ -272,7 +261,6 @@ const handleProfileClickMobile = () => {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* MOBILE MENU STYLES */
 .menu-mobile {
   display: none;
   position: fixed;
@@ -335,8 +323,6 @@ const handleProfileClickMobile = () => {
   text-align: center;
 }
 
-
-/* BARU: Tambahkan style untuk tombol ikon profil */
 .user-profile-button {
   background-color: var(--white);
   color: var(--bay-of-many);
@@ -361,7 +347,6 @@ const handleProfileClickMobile = () => {
   height: 24px;
 }
 
-/* BARU: Style untuk tombol logout di mobile */
 .menu-mobile .menu-item.logout {
   color: #d9534f;
 }
@@ -370,7 +355,6 @@ const handleProfileClickMobile = () => {
   background-color: rgba(217, 83, 79, 0.1);
 }
 
-/* RESPONSIVE NAVBAR */
 @media (max-width: 1024px) {
   .navbar-container {
     padding: 15px 20px;
@@ -400,7 +384,6 @@ const handleProfileClickMobile = () => {
 
 @media (max-width: 480px) {
   .navbar-container {
-    /* padding: 12px 15px; */
     height: 76px;
   }
 

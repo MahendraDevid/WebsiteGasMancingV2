@@ -1,28 +1,21 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-// import api from '../../services/api'; // Opsional: kalau mau pakai api langsung
-import './MitraRegistration.style.css';
-
-// 1. IMPORT AUTH STORE (Ini yang tadi kurang)
-import { useAuthStore } from '@/stores/authStore'; // <--- TAMBAHKAN INI
+import { useAuthStore } from '@/stores/authStore';
 
 const router = useRouter();
 const currentStep = ref(1);
 const showSuccessModal = ref(false);
 const showTermsModal = ref(false);
 
-// 2. Inisialisasi Store (Sekarang tidak akan error karena sudah di-import)
-const authStore = useAuthStore(); 
+const authStore = useAuthStore();
 
-// --- Opsi Data Statis ---
 const facilityOptions = [
   { id: 1, name: 'Toilet' },
   { id: 2, name: 'Musholla' },
   { id: 3, name: 'Parkiran' }
 ];
 
-// ... (Sisa kode ke bawah sama persis, tidak perlu diubah) ...
 const itemTypeOptions = ['Peralatan', 'Umpan', 'Fasilitas Berbayar', 'Lainnya'];
 const itemUnitOptions = ['Pcs/Item', 'Kg', 'Bungkus', 'Jam', 'Hari', 'Tiket'];
 
@@ -79,7 +72,7 @@ const nextStep = () => {
       return alert("Mohon lengkapi Nama dan Alamat Properti.");
     }
     if (!formData.alamat) {
-        formData.alamat = formData.alamatProperti;
+      formData.alamat = formData.alamatProperti;
     }
     currentStep.value = 2;
   } else if (currentStep.value === 2) {
@@ -101,7 +94,7 @@ async function submitRegistration() {
     // === UBAH BAGIAN INI MENJADI FORMDATA ===
     const submissionData = new FormData();
 
-    // 1. Append Data Diri (Teks)
+    // Data Pemilik & Akun
     submissionData.append('nama_lengkap', formData.nama_lengkap);
     submissionData.append('email', formData.email);
     submissionData.append('no_telepon', formData.no_telepon);
@@ -111,7 +104,7 @@ async function submitRegistration() {
     submissionData.append('atas_nama_rekening', formData.atas_nama_rekening);
     submissionData.append('alamat', formData.alamat);
 
-    // 2. Append Data Properti (Teks)
+    // Data Properti & Item
     submissionData.append('namaProperti', formData.namaProperti);
     submissionData.append('alamatProperti', formData.alamatProperti);
     submissionData.append('hargaSewa', formData.hargaSewa);
@@ -119,32 +112,29 @@ async function submitRegistration() {
     submissionData.append('jamBuka', formData.jamBuka);
     submissionData.append('jamTutup', formData.jamTutup);
     submissionData.append('deskripsi', formData.deskripsi);
-    
-    // 3. Append GAMBAR UTAMA (Binary)
+
     // Pastikan formData.fotoProperti berisi FILE object (bukan string URL)
     if (formData.fotoProperti) {
-        submissionData.append('fotoProperti', formData.fotoProperti);
+      submissionData.append('fotoProperti', formData.fotoProperti);
     }
 
-    // 4. Handle Array & Nested Data (Fasilitas & Items)
     // FormData tidak bisa kirim array langsung, harus di-stringify dulu
     submissionData.append('fasilitas', JSON.stringify(formData.fasilitas));
-    
+
     // CATATAN: Upload gambar didalam array items (looping) sangat kompleks.
     // Untuk tahap ini, kita kirim data teks itemnya saja dulu.
     // Gambar item sebaiknya dihandle di fitur "Edit Tempat" nanti.
-    submissionData.append('items', JSON.stringify(formData.items)); 
+    submissionData.append('items', JSON.stringify(formData.items));
 
-    // === PANGGIL STORE DENGAN FORMDATA ===
     // Pastikan di api.js tidak memaksa 'Content-Type': 'application/json' 
     // Axios biasanya otomatis mendeteksi FormData dan ganti header jadi 'multipart/form-data'
     const result = await authStore.registerMitra(submissionData);
 
     if (result.success) {
-       console.log("Sukses:", result.message);
-       showSuccessModal.value = true;
+      console.log("Sukses:", result.message);
+      showSuccessModal.value = true;
     } else {
-       alert("Gagal: " + result.error);
+      alert("Gagal: " + result.error);
     }
 
   } catch (error) {
@@ -156,7 +146,7 @@ async function submitRegistration() {
 function finishRegistration() {
   showSuccessModal.value = false;
   // Pastikan route 'mitra-landing' atau 'home' ada di router.js
-  router.push('/'); 
+  router.push('/');
 }
 </script>
 
@@ -165,16 +155,22 @@ function finishRegistration() {
     <div class="registration-container">
 
       <div class="stepper-wrapper">
-        <div :class="['step-item', { active: currentStep >= 1 }]"><div class="step-circle">1</div><span>Properti</span></div>
+        <div :class="['step-item', { active: currentStep >= 1 }]">
+          <div class="step-circle">1</div><span>Properti</span>
+        </div>
         <div class="step-line"></div>
-        <div :class="['step-item', { active: currentStep >= 2 }]"><div class="step-circle">2</div><span>Pemilik</span></div>
+        <div :class="['step-item', { active: currentStep >= 2 }]">
+          <div class="step-circle">2</div><span>Pemilik</span>
+        </div>
         <div class="step-line"></div>
-        <div :class="['step-item', { active: currentStep >= 3 }]"><div class="step-circle">3</div><span>Konfirmasi</span></div>
+        <div :class="['step-item', { active: currentStep >= 3 }]">
+          <div class="step-circle">3</div><span>Konfirmasi</span>
+        </div>
       </div>
 
       <div class="form-card">
         <h2 class="step-title">
-          {{ currentStep === 1 ? 'Informasi Properti' : currentStep === 2 ? 'Informasi Pemilik & Akun' : 'Konfirmasi Data' }}
+          {{ currentStep === 1 ? 'Informasi Properti' : currentStep === 2 ? 'Informasi Pemilik & Akun' : 'KonfirmasiData' }}
         </h2>
 
         <div v-if="currentStep === 1" class="form-step-content">
@@ -182,29 +178,38 @@ function finishRegistration() {
             <label>Nama Pemancingan</label>
             <input type="text" v-model="formData.namaProperti" placeholder="Contoh: Pemancingan Telaga Biru">
           </div>
-           <div class="form-group">
+          <div class="form-group">
             <label>Foto Lokasi Utama</label>
             <div class="property-photo-uploader">
               <input type="file" accept="image/*" @change="handlePropertyPhotoUpload">
-              <div v-if="!formData.fotoPropertiPreview" class="photo-placeholder"><span>📷</span><p>Klik upload foto</p></div>
+              <div v-if="!formData.fotoPropertiPreview" class="photo-placeholder"><span>📷</span>
+                <p>Klik upload foto</p>
+              </div>
               <img v-else :src="formData.fotoPropertiPreview" class="photo-preview-img">
             </div>
           </div>
-          <div class="form-group"><label>Deskripsi</label><textarea v-model="formData.deskripsi" rows="2"></textarea></div>
-          <div class="form-group"><label>Alamat</label><textarea v-model="formData.alamatProperti" rows="2"></textarea></div>
+          <div class="form-group"><label>Deskripsi</label><textarea v-model="formData.deskripsi" rows="2"></textarea>
+          </div>
+          <div class="form-group"><label>Alamat</label><textarea v-model="formData.alamatProperti" rows="2"></textarea>
+          </div>
           <div class="form-row">
             <div class="form-group"><label>Buka</label><input type="time" v-model="formData.jamBuka"></div>
             <div class="form-group"><label>Tutup</label><input type="time" v-model="formData.jamTutup"></div>
           </div>
           <div class="form-row">
-             <div class="form-group"><label>Harga</label><input type="number" v-model="formData.hargaSewa"></div>
-             <div class="form-group">
+            <div class="form-group"><label>Harga</label><input type="number" v-model="formData.hargaSewa"></div>
+            <div class="form-group">
               <label>Satuan</label>
-              <select v-model="formData.satuanSewa"><option>Jam</option><option>Hari</option><option>Tiket</option><option>Kg</option></select>
+              <select v-model="formData.satuanSewa">
+                <option>Jam</option>
+                <option>Hari</option>
+                <option>Tiket</option>
+                <option>Kg</option>
+              </select>
             </div>
           </div>
           <div class="divider">Fasilitas & Item</div>
-          <br>    
+          <br>
           <div class="checkbox-grid">
             <label v-for="fac in facilityOptions" :key="fac.id" class="checkbox-card">
               <input type="checkbox" :value="fac.id" v-model="formData.fasilitas"><span>{{ fac.name }}</span>
@@ -212,24 +217,32 @@ function finishRegistration() {
           </div>
           <br>
           <div class="items-container">
-             <div v-for="(item, index) in formData.items" :key="index" class="item-card">
-                <div class="item-header"><h4>Item #{{ index + 1 }}</h4><button class="btn-remove" @click="removeItem(index)">Hapus</button></div>
-                <div class="item-body">
-                  <div class="item-image-upload">
-                    <div class="preview-box" :style="{ backgroundImage: item.image_preview ? `url(${item.image_preview})` : 'none' }"><span v-if="!item.image_preview">+</span></div>
-                    <input type="file" accept="image/*" @change="(e) => handleItemImageUpload(e, index)">
-                  </div>
-                  <div class="item-inputs">
-                    <div class="form-group"><label>Nama</label><input type="text" v-model="item.nama_item"></div>
-                    <div class="form-row">
-                      <div class="form-group"><label>Harga</label><input type="number" v-model="item.price"></div>
-                      <div class="form-group"><label>Satuan</label><select v-model="item.price_unit"><option v-for="o in itemUnitOptions">{{o}}</option></select></div>
-                    </div>
-                    <div class="form-group"><label>Tipe</label><select v-model="item.tipe_item"><option v-for="o in itemTypeOptions">{{o}}</option></select></div>
-                  </div>
+            <div v-for="(item, index) in formData.items" :key="index" class="item-card">
+              <div class="item-header">
+                <h4>Item #{{ index + 1 }}</h4><button class="btn-remove" @click="removeItem(index)">Hapus</button>
+              </div>
+              <div class="item-body">
+                <div class="item-image-upload">
+                  <div class="preview-box"
+                    :style="{ backgroundImage: item.image_preview ? `url(${item.image_preview})` : 'none' }"><span
+                      v-if="!item.image_preview">+</span></div>
+                  <input type="file" accept="image/*" @change="(e) => handleItemImageUpload(e, index)">
                 </div>
-             </div>
-             <button class="btn-add-item" @click="addItem">+ Tambah Item</button>
+                <div class="item-inputs">
+                  <div class="form-group"><label>Nama</label><input type="text" v-model="item.nama_item"></div>
+                  <div class="form-row">
+                    <div class="form-group"><label>Harga</label><input type="number" v-model="item.price"></div>
+                    <div class="form-group"><label>Satuan</label><select v-model="item.price_unit">
+                        <option v-for="o in itemUnitOptions">{{ o }}</option>
+                      </select></div>
+                  </div>
+                  <div class="form-group"><label>Tipe</label><select v-model="item.tipe_item">
+                      <option v-for="o in itemTypeOptions">{{ o }}</option>
+                    </select></div>
+                </div>
+              </div>
+            </div>
+            <button class="btn-add-item" @click="addItem">+ Tambah Item</button>
           </div>
         </div>
 
@@ -256,11 +269,18 @@ function finishRegistration() {
           <div class="divider">Informasi Rekening</div><br>
           <div class="form-group">
             <label>Bank</label>
-            <select v-model="formData.nama_bank"><option>BCA</option><option>BRI</option><option>Mandiri</option><option>BNI</option><option>Jago</option></select>
+            <select v-model="formData.nama_bank">
+              <option>BCA</option>
+              <option>BRI</option>
+              <option>Mandiri</option>
+              <option>BNI</option>
+              <option>Jago</option>
+            </select>
           </div>
           <div class="form-row">
             <div class="form-group"><label>No. Rekening</label><input type="text" v-model="formData.no_rekening"></div>
-            <div class="form-group"><label>Atas Nama</label><input type="text" v-model="formData.atas_nama_rekening"></div>
+            <div class="form-group"><label>Atas Nama</label><input type="text" v-model="formData.atas_nama_rekening">
+            </div>
           </div>
         </div>
 
@@ -278,8 +298,9 @@ function finishRegistration() {
               <div class="sum-item"><strong>Nama:</strong> {{ formData.nama_lengkap }}</div>
               <div class="sum-item"><strong>Email:</strong> {{ formData.email }}</div>
               <div class="sum-item"><strong>Kontak:</strong> {{ formData.no_telepon }}</div>
-              <div class="sum-item"><strong>Password:</strong> {{ formData }}</div>
-              <div class="sum-item full"><strong>Bank:</strong> {{ formData.nama_bank }} - {{ formData.no_rekening }}</div>
+              <div class="sum-item"><strong>Password:</strong> {{ formData.password }}</div>
+              <div class="sum-item full"><strong>Bank:</strong> {{ formData.nama_bank }} - {{ formData.no_rekening }}
+              </div>
             </div>
           </div>
           <div class="agreement-box">
@@ -311,9 +332,13 @@ function finishRegistration() {
     <div v-if="showTermsModal" class="modal-overlay">
       <div class="modal-content terms-modal">
         <h2>Syarat & Ketentuan</h2>
-        <div class="terms-scroll-area"><p>...</p></div>
+        <div class="terms-scroll-area">
+          <p>...</p>
+        </div>
         <button class="modal-close-btn" @click="showTermsModal = false">Tutup</button>
       </div>
     </div>
   </main>
 </template>
+
+<style scoped src="./MitraRegistration.style.css"></style>

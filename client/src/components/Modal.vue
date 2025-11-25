@@ -33,7 +33,7 @@ function outsideClick(event) {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -46,7 +46,7 @@ function outsideClick(event) {
   border-radius: 8px;
   width: 300px;
   position: relative;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .close {

@@ -1,4 +1,3 @@
-// controllers/mitraController.js
 const MitraModel = require("../models/mitraModel");
 const PlaceModel = require("../models/placeModel"); // Pastikan Import ini ada
 const bcrypt = require("bcrypt");

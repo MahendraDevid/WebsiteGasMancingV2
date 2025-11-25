@@ -4,7 +4,6 @@ defineOptions({ name: 'SearchPage' })
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import api from '@/services/api'
-import './SearchView.style.css'
 
 const route = useRoute()
 const router = useRouter()
@@ -117,16 +116,12 @@ const handleBooking = (id) => {
       <div class="search-container-custom">
         <div class="search-field-custom">
           <img src="/img/loc.png" class="search-icon" alt="Lokasi" />
-          <input
-            type="text"
-            class="search-input-custom"
-            v-model="searchKeyword"
-            placeholder="Mau mancing dimana?"
-            @keyup.enter="handleSearch"
-          />
+          <input type="text" class="search-input-custom" v-model="searchKeyword" placeholder="Mau mancing dimana?"
+            @keyup.enter="handleSearch" />
         </div>
 
         <div class="search-field-custom">
+<<<<<<< HEAD
           <img src="/img/IconMoney.png" class="search-icon" alt="Harga" />
           <input
             class="search-input-custom"
@@ -146,15 +141,23 @@ const handleBooking = (id) => {
             placeholder="Fasilitas"
             @keyup.enter="handleSearch"
           />
+=======
+          <img src="/img/calendar.png" class="search-icon" alt="Harga" />
+          <input class="search-input-custom" type="text" v-model="searchPrice" placeholder="Cari Harga (Rp.)"
+            @keyup.enter="handleSearch" />
+        </div>
+
+        <div class="search-field-custom">
+          <img src="/img/IconMoney.png" class="search-icon" alt="Fasilitas" />
+          <input type="text" class="search-input-custom" v-model="searchFacilities" placeholder="Fasilitas"
+            @keyup.enter="handleSearch" />
+>>>>>>> bf3a85d2cbb996ba4e46abc67311b555f1d8b139
         </div>
 
         <button class="search-button-custom" @click="handleSearch">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-            <path
-              stroke="currentColor"
-              stroke-width="1.5"
-              d="m21 21-5.2-5.2A7.5 7.5 0 1 0 5.2 5.2a7.5 7.5 0 0 0 10.6 10.6Z"
-            />
+            <path stroke="currentColor" stroke-width="1.5"
+              d="m21 21-5.2-5.2A7.5 7.5 0 1 0 5.2 5.2a7.5 7.5 0 0 0 10.6 10.6Z" />
           </svg>
         </button>
       </div>
@@ -170,12 +173,8 @@ const handleBooking = (id) => {
       <div v-else-if="paginatedResults.length">
         <div class="result-card" v-for="item in paginatedResults" :key="item.id_tempat">
           <div class="card-image-section">
-            <img
-              :src="getImageUrl(item.image_url)"
-              :alt="item.title"
-              loading="lazy"
-              @error="$event.target.src = '/img/kolam.png'"
-            />
+            <img :src="getImageUrl(item.image_url)" :alt="item.title" loading="lazy"
+              @error="$event.target.src = '/img/kolam.png'" />
           </div>
 
           <div class="card-content-section">
@@ -184,14 +183,12 @@ const handleBooking = (id) => {
             <div class="card-rating">
               <div class="rating-box">
                 <svg width="18" height="18" fill="#FFC107">
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 
-                    12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  />
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 
+                    12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                 </svg>
                 <span class="rating-value">{{
                   item.average_rating ? Number(item.average_rating).toFixed(1) : 'N/A'
-                }}</span>
+                  }}</span>
                 <span class="review-count">({{ item.total_reviews_count || 0 }})</span>
               </div>
             </div>
@@ -253,3 +250,5 @@ const handleBooking = (id) => {
     </section>
   </main>
 </template>
+
+<style scoped src="./SearchView.style.css"></style>

@@ -62,6 +62,7 @@ async function fetchBookings() {
       console.log("Status pesanan untuk order ID", order.id_pesanan, ":", order.status_pesanan);
       return {
         id: order.id_pesanan,
+        nama_tempat: order.nama_tempat,
         nomorPesanan: order.nomor_pesanan,
         customerName: order.nama_pemesan,
         customerContact: order.kontak_pemesan,
@@ -112,12 +113,12 @@ onMounted(() => {
   <main class="mitra-property-wrapper">
     <div v-if="errorMessage" class="error-box">{{ errorMessage }}</div>
     <div class="header-section">
-      <h1 class="page-title">Pesanan Masuk</h1>
-      <p class="subtitle">Pantau siapa saja yang menyewa kolam Anda hari ini.</p>
+      <h1 class="page-title">Pengelolaan Tempat</h1>
+      <p class="subtitle">Tempat pemancingan yang terdaftar di akun Anda.</p>
 
       <div class="header-actions">
         <button class="btn-manage" @click="goToManagePlaces">
-          ⚙️ Kelola Daftar Kolam & Harga
+          Kelola Daftar Kolam & Harga
         </button>
       </div>
     </div>
@@ -140,6 +141,7 @@ onMounted(() => {
           <thead>
             <tr>
               <th>No Pesanan</th>
+              <th>Nama Tempat</th>
               <th>Pemesan</th>
               <th>Orang</th>
               <th>Tanggal Sewa</th>
@@ -151,6 +153,7 @@ onMounted(() => {
           <tbody>
             <tr v-for="order in filteredBookings" :key="order.id">
               <td>{{ order.nomorPesanan }}</td>
+              <td>{{ order.nama_tempat }}</td>
               <td>{{ order.customerName }}</td>
               <td>{{ order.customerContact || '-' }}</td>
               <td>{{ order.date }}</td>

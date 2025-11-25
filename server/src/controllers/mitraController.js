@@ -25,6 +25,7 @@ exports.createMitra = async (req, res) => {
 
     const mitraData = {
       nama_lengkap: data.nama_lengkap,
+      nama_tempat: data.nama_tempat,
       email: data.email,
       password_hash: hashedPassword,
       no_telepon: data.no_telepon,
@@ -80,7 +81,6 @@ exports.createMitra = async (req, res) => {
           full_description: data.deskripsi,
           image_url: uploadedImage,
 
-          // GUNAKAN HASIL PARSING TADI
           fasilitas: fasilitasParsed,
           item_sewa: itemsParsed,
 
@@ -102,7 +102,6 @@ exports.createMitra = async (req, res) => {
       }
     }
 
-    // --- LANGKAH 3: AUTO LOGIN (JWT) ---
     const token = jwt.sign(
       { id: newMitraId, role: "mitra", email: data.email },
       JWT_SECRET,
@@ -132,7 +131,6 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // 1. Cek apakah email ada di tabel MITRA
     const mitra = await MitraModel.findByEmail(email);
 
     if (!mitra) {
@@ -142,7 +140,6 @@ exports.login = async (req, res) => {
       });
     }
 
-    // 2. Cek Password
     const isMatch = await bcrypt.compare(password, mitra.password_hash);
 
     if (!isMatch) {
@@ -151,7 +148,6 @@ exports.login = async (req, res) => {
         .json({ success: false, message: "Password salah." });
     }
 
-    // 3. Buat Token
     const token = jwt.sign(
       {
         id: mitra.id_mitra,
@@ -162,7 +158,6 @@ exports.login = async (req, res) => {
       { expiresIn: "1d" }
     );
 
-    // 4. Kirim Response
     res.json({
       success: true,
       message: "Login Mitra Berhasil",
@@ -185,7 +180,6 @@ exports.login = async (req, res) => {
   }
 };
 
-// 2. Get Mitra By ID
 exports.getMitraById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -204,7 +198,6 @@ exports.getMitraById = async (req, res) => {
   }
 };
 
-// 3. Update Mitra
 exports.updateMitra = async (req, res) => {
   try {
     const { id } = req.params;
@@ -230,7 +223,6 @@ exports.updateMitra = async (req, res) => {
   }
 };
 
-// 4. Delete Mitra
 exports.deleteMitra = async (req, res) => {
   try {
     const { id } = req.params;
@@ -249,9 +241,6 @@ exports.deleteMitra = async (req, res) => {
   }
 };
 
-// controllers/mitraController.js (update fungsi-fungsi ini, ganti yang sebelumnya)
-
-// 5. Get Property Bookings by Mitra ID
 exports.getPropertyBookings = async (req, res) => {
   try {
     const { mitraId } = req.params;
@@ -267,7 +256,6 @@ exports.getPropertyBookings = async (req, res) => {
   }
 };
 
-// 6. Update Property Booking Status
 exports.updatePropertyBookingStatus = async (req, res) => {
   try {
     const { id } = req.params;
@@ -285,7 +273,6 @@ exports.updatePropertyBookingStatus = async (req, res) => {
   }
 };
 
-// 7. Delete Property Booking
 exports.deletePropertyBooking = async (req, res) => {
   try {
     const { id } = req.params;

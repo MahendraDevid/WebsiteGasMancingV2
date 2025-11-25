@@ -115,6 +115,9 @@ const handleAuthSuccess = () => {
 
 
 <style scoped>
+body {
+  background-color: #FFFFFF;
+}
 #app-wrapper {
   min-height: 100vh;
   display: flex;

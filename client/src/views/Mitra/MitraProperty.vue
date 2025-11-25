@@ -124,8 +124,10 @@ onMounted(() => {
 
     <div class="pesanan-wrapper">
       <!-- Search Input di Atas Tabel -->
+      <h1>Pesanan Masuk</h1>
       <div class="search-container">
         <input type="text" v-model="searchQuery" placeholder="Cari berdasarkan nama pemesan..." class="search-input">
+        
       </div>
 
       <div v-if="isLoading" class="loading-box">
@@ -171,8 +173,7 @@ onMounted(() => {
         </table>
 
         <div v-if="filteredBookings.length === 0 && !isLoading" class="empty-state">
-          <div style="font-size: 40px; margin-bottom: 10px;">🔍</div>
-          <h3>{{ searchQuery ? 'Tidak ada hasil pencarian' : 'Belum ada pesanan masuk' }}</h3>
+          <h3>{{ searchQuery ? 'Tidak ada hasil pencarian...' : 'Belum ada pesanan masuk' }}</h3>
           <p>{{ searchQuery ? 'Coba kata kunci lain.' : 'Data pesanan dari pelanggan akan muncul di sini.' }}</p>
         </div>
       </div>

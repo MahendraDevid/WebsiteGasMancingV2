@@ -409,9 +409,13 @@ async function handleAuth() {
   border-radius: 8px;
   cursor: pointer;
   border: none;
-  background-color: var(--btn-blue);
+  background-color: var(--bay-of-many);
   color: var(--white);
   margin-top: 6px;
+}
+
+.login-button:hover {
+  background-color: #0f2f6c;
 }
 
 .login-button:disabled {
